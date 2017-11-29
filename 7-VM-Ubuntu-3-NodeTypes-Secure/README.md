@@ -11,6 +11,11 @@ This template allows you to deploy a secure 7 Node,three Node Type Service Fabri
 
 This template assumes that you already have certificates uploaded to your keyvault.  If you want to create a new certificate run the **New-ServiceFabricClusterCertificate.ps1** file in this sample.  That script will output the values necessary for deployment via the parameters file. 
 
+You can download the .PFX from the keyvault from the portal 
+- Got to the keyvalut resource
+- navigate to the secrets tab and download the .pfx
+
+![DownloadCert]
 
 ## Creating a custom ARM template
 
@@ -31,6 +36,7 @@ Unzip the downloaded .zip on your local machine, make any changes to template or
 
 <!--Image references-->
 [DownloadTemplate]: ./DownloadTemplate.png
+[DownloadCert]: ./DownloadCert.PNG
 
 
 

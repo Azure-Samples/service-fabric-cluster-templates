@@ -1,4 +1,4 @@
-# 5 Node secure Windows Service Fabric Cluster with Azure Diagnostics enabled
+# 5 Node secure Windows Service Fabric Cluster 
 
 <a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAzure%2Fazure-quickstart-templates%2Fmaster%2Fservice-fabric-secure-cluster-5-node-1-nodetype%2Fazuredeploy.json" target="_blank">
     <img src="http://azuredeploy.net/deploybutton.png"/>
@@ -9,7 +9,18 @@
 
 This template allows you to deploy a secure 5 node, Single Node Type Service Fabric Cluster running Windows Server 2016 Datacenter with containers on a Standard_D2_v2 Size Virtual Machine Scale set with Azure Diagnostics turned on. 
 
+## Certificate needed for the template if using the 'Deploy to Azure' button above
 This template assumes that you already have certificates uploaded to your keyvault.  If you want to create a new certificate run the **New-ServiceFabricClusterCertificate.ps1** file in this sample.  That script will output the values necessary for deployment via the parameters file. 
+
+You can download the .PFX from the keyvault from the portal 
+- Got to the keyvalut resource
+- navigate to the secrets tab and download the .pfx
+
+![DownloadCert]
+
+## Use Powershell to deploy your cluster
+
+Go through the process of creating the cluster as described in [Creating Service Fabric Cluster via arm](https://docs.microsoft.com/azure/service-fabric/service-fabric-cluster-creation-via-arm.md)
 
 
 ## Creating a custom ARM template
@@ -31,6 +42,7 @@ Unzip the downloaded .zip on your local machine, make any changes to template or
 
 <!--Image references-->
 [DownloadTemplate]: ./DownloadTemplate.png
+[DownloadCert]: ./DownloadCert.PNG
 
 
 
