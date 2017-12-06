@@ -67,7 +67,7 @@
     },
     "loadBalancedAppPort2": {
       "type": "int",
-      "defaultValue": 8081,
+      "defaultValue": 443,
       "metadata": {
         "description": "Input endpoint2 for the application to use. Replace it with what your application uses"
       }
@@ -189,10 +189,11 @@
     "nt0ephemeralEndPort": "65534",
     "nt0fabricTcpGatewayPort": "19000",
     "nt0fabricHttpGatewayPort": "19080",
+    "nt0reverseProxyEndpointPort": "19081",
     "subnet0Name": "Subnet-0",
     "subnet0Prefix": "10.0.0.0/24",
     "subnet0Ref": "[concat(variables('vnetID'),'/subnets/',variables('subnet0Name'))]",
-    "supportLogStorageAccountName": "[toLower( concat( uniqueString(resourceGroup().id),'2'))]",
+    "supportLogStorageAccountName": "[toLower( concat('sflogs', uniqueString(resourceGroup().id),'2'))]",
     "applicationDiagnosticsStorageAccountName": "[toLower(concat('wad',uniqueString(resourceGroup().id), '3' ))]",
     "lbID0": "[resourceId('Microsoft.Network/loadBalancers',concat('LB','-', parameters('clusterName'),'-',variables('vmNodeType0Name')))]",
     "lbIPConfig0": "[concat(variables('lbID0'),'/frontendIPConfigurations/LoadBalancerIPConfig')]",
@@ -664,11 +665,16 @@
             },
             "httpGatewayEndpointPort": "[variables('nt0fabricHttpGatewayPort')]",
             "isPrimary": true,
+            "reverseProxyEndpointPort": "[variables('nt0reverseProxyEndpointPort')]",
             "vmInstanceCount": "[parameters('nt0InstanceCount')]"
           }
         ],
         "provisioningState": "Default",
         "reliabilityLevel": "Silver",
+        "reverseProxyCertificate": {
+          "thumbprint": "[parameters('certificateThumbprint')]",
+          "x509StoreName": "[parameters('certificateStoreValue')]"
+        },
         "upgradeMode": "Automatic",
         "vmImage": "Windows"
       },

@@ -11,18 +11,21 @@
     },
     "clusterName": {
       "type": "string",
+      "defaultValue": "GEN-UNIQUE",
       "metadata": {
         "description": "Name of your cluster - Between 3 and 23 characters. Letters and numbers only"
       }
     },
     "adminUserName": {
       "type": "string",
+      "defaultValue": "GEN-UNIQUE",
       "metadata": {
         "description": "Remote desktop user Id"
       }
     },
     "adminPassword": {
       "type": "securestring",
+      "defaultValue": "GEN-PASSWORD",
       "metadata": {
         "description": "Remote desktop user password. Must be a strong password"
       }
@@ -64,7 +67,7 @@
     },
     "loadBalancedAppPort2": {
       "type": "int",
-      "defaultValue": 8081,
+      "defaultValue": 443,
       "metadata": {
         "description": "Input endpoint2 for the application to use. Replace it with what your application uses"
       }
@@ -93,18 +96,21 @@
     },
     "certificateThumbprint": {
       "type": "string",
+      "defaultValue": "GEN-CUSTOM-DOMAIN-SSLCERT-THUMBPRINT",
       "metadata": {
         "description": "Certificate Thumbprint"
       }
     },
     "sourceVaultValue": {
       "type": "string",
+      "defaultValue": "GEN-KEYVAULT-RESOURCE-ID",
       "metadata": {
         "description": "Resource Id of the key vault, is should be in the format of /subscriptions/<Sub ID>/resourceGroups/<Resource group name>/providers/Microsoft.KeyVault/vaults/<vault name>"
       }
     },
     "certificateUrlValue": {
       "type": "string",
+      "defaultValue": "GEN-KEYVAULT-SSL-SECRET-URI",
       "metadata": {
         "description": "Refers to the location URL in your key vault where the certificate was uploaded, it is should be in the format of https://<name of the vault>.vault.azure.net:443/secrets/<exact location>"
       }
@@ -183,10 +189,11 @@
     "nt0ephemeralEndPort": "65534",
     "nt0fabricTcpGatewayPort": "19000",
     "nt0fabricHttpGatewayPort": "19080",
+    "nt0reverseProxyEndpointPort": "19081",
     "subnet0Name": "Subnet-0",
     "subnet0Prefix": "10.0.0.0/24",
     "subnet0Ref": "[concat(variables('vnetID'),'/subnets/',variables('subnet0Name'))]",
-    "supportLogStorageAccountName": "[toLower( concat( uniqueString(resourceGroup().id),'2'))]",
+    "supportLogStorageAccountName": "[toLower( concat('sflogs', uniqueString(resourceGroup().id),'2'))]",
     "applicationDiagnosticsStorageAccountName": "[toLower(concat('wad',uniqueString(resourceGroup().id), '3' ))]",
     "lbID0": "[resourceId('Microsoft.Network/loadBalancers',concat('LB','-', parameters('clusterName'),'-',variables('vmNodeType0Name')))]",
     "lbIPConfig0": "[concat(variables('lbID0'),'/frontendIPConfigurations/LoadBalancerIPConfig')]",
@@ -558,6 +565,20 @@
             "comments": "allow RDP within the net"
           },
           {
+            "name": "allowSvcFabReverseProxy",
+            "properties": {
+              "access": "Allow",
+              "destinationAddressPrefix": "*",
+              "destinationPortRange": "[variables('nt0reverseProxyEndpointPort')]",
+              "direction": "Inbound",
+              "priority": 3980,
+              "protocol": "*",
+              "sourceAddressPrefix": "*",
+              "sourcePortRange": "*"
+            },
+            "comments": "allow port used to access the fabric cluster using reverse proxy"
+          },
+          {
             "name": "allowAppPort1",
             "properties": {
               "access": "Allow",
@@ -817,11 +838,16 @@
             },
             "httpGatewayEndpointPort": "[variables('nt0fabricHttpGatewayPort')]",
             "isPrimary": true,
+            "reverseProxyEndpointPort": "[variables('nt0reverseProxyEndpointPort')]",
             "vmInstanceCount": "[parameters('nt0InstanceCount')]"
           }
         ],
         "provisioningState": "Default",
         "reliabilityLevel": "Silver",
+        "reverseProxyCertificate": {
+          "thumbprint": "[parameters('certificateThumbprint')]",
+          "x509StoreName": "[parameters('certificateStoreValue')]"
+        },
         "upgradeMode": "Automatic",
         "vmImage": "Windows"
       },
