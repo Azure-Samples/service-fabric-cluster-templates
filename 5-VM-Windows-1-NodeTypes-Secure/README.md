@@ -20,7 +20,7 @@ You can download the .PFX from the keyvault from the portal
 
 ## Use Powershell to deploy your cluster
 
-Go through the process of creating the cluster as described in [Creating Service Fabric Cluster via arm](https://docs.microsoft.com/azure/service-fabric/service-fabric-cluster-creation-via-arm.md)
+Go through the process of creating the cluster as described in [Creating Service Fabric Cluster via arm](https://docs.microsoft.com/azure/service-fabric/service-fabric-cluster-creation-via-arm)
 
 
 ## Creating a custom ARM template
