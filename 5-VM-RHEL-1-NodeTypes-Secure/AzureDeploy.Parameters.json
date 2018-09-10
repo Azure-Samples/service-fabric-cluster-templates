@@ -15,13 +15,13 @@
       "value": "GEN-PASSWORD"
     },
     "vmImagePublisher": {
-      "value": "Canonical"
+      "value": "RedHat"
     },
     "vmImageOffer": {
-      "value": "UbuntuServer"
+      "value": "RHEL"
     },
     "vmImageSku": {
-      "value": "16.04-LTS"
+      "value": "7.4"
     },
     "vmImageVersion": {
       "value": "latest"
