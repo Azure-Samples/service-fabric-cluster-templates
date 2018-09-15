@@ -1,6 +1,6 @@
 # Multiple Node Types Secure Ubuntu Service Fabric Cluster
 
-This template allows you to create multiple node types with each node type have different number of VMSS Instances
+This template allows you to create multiple node types with each node type having different number of VMSS Instances
 
 ## Overview 
 
