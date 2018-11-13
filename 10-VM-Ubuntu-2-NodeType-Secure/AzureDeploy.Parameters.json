@@ -1,78 +1,78 @@
 {
-  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json",
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
-    "clusterLocation": {
-      "value": "westus"
-    },
-    "clusterName": {
-      "value": "GEN-UNIQUE"
-    },
-    "adminUserName": {
-      "value": "GEN-UNIQUE"
-    },
-    "adminPassword": {
-      "value": "GEN-PASSWORD"
-    },
-    "vmImagePublisher": {
-      "value": "Canonical"
-    },
-    "vmImageOffer": {
-      "value": "UbuntuServer"
-    },
-    "vmImageSku": {
-      "value": "16.04-LTS"
-    },
-    "vmImageVersion": {
-      "value": "latest"
-    },
-    "loadBalancedAppPort1": {
-      "value": 80
-    },
-    "loadBalancedAppPort2": {
-      "value": 8081
-    },
-    "clusterProtectionLevel": {
-      "value": "EncryptAndSign"
-    },
-    "certificateStoreValue": {
-      "value": "My"
-    },
-    "certificateThumbprint": {
-      "value": "GEN-CUSTOM-DOMAIN-SSLCERT-THUMBPRINT"
-    },
-    "sourceVaultValue": {
-      "value": "GEN-KEYVAULT-RESOURCE-ID"
-    },
-    "certificateUrlValue": {
-      "value": "GEN-KEYVAULT-SSL-SECRET-URI"
-    },
-    "storageAccountType": {
-      "value": "Standard_LRS"
-    },
-    "supportLogStorageAccountType": {
-      "value": "Standard_LRS"
-    },
-    "applicationDiagnosticsStorageAccountType": {
-      "value": "Standard_LRS"
-    },
-    "nt0InstanceCount": {
-      "value": 5
-    },
-    "vmNodeType0Size": {
-      "value": "Standard_D2_v2"
-    },
-    "nt1InstanceCount": {
-      "value": 1
-    },
-    "vmNodeType1Size": {
-      "value": "Standard_D2_v2"
-    },
-    "nt2InstanceCount": {
-      "value": 1
-    },
-    "vmNodeType2Size": {
-      "value": "Standard_D2_v2"
-    }
+      "clusterName": {
+          "value": "GEN-UNIQUE"
+      },
+      "clusterLocation": {
+          "value": "GEN-UNIQUE-8"
+      },
+      "computeLocation": {
+          "value": "GEN-UNIQUE-8"
+      },
+      "adminUserName": {
+          "value": "GEN-UNIQUE"
+      },
+      "adminPassword": {
+          "value": "GEN-PASSWORD"
+      },
+      "dnsName": {
+          "value": "GEN-UNIQUE"
+      },
+      "certificateThumbprint": {
+        "value": "GEN-CUSTOM-DOMAIN-SSLCERT-THUMBPRINT"
+      },
+      "sourceVaultValue": {
+        "value": "GEN-KEYVAULT-RESOURCE-ID"
+      },
+      "certificateUrlValue": {
+        "value": "GEN-KEYVAULT-SSL-SECRET-URI"
+      },
+      "vmImageSku": {
+          "value": "16.04-LTS"
+      },
+      "vmImageVersion": {
+          "value": "latest"
+      },
+      "vmImagePublisher": {
+          "value": "Canonical"
+      },
+      "nt0ephemeralStartPort": {
+          "value": 49152
+      },
+      "nt0ephemeralEndPort": {
+          "value": 65534
+      },
+      "nt0applicationStartPort": {
+          "value": 20000
+      },
+      "nt0applicationEndPort": {
+          "value": 30000
+      },
+      "nt0fabricTcpGatewayPort": {
+          "value": 19000
+      },
+      "nt0fabricHttpGatewayPort": {
+          "value": 19080
+      },
+      "nt1ephemeralStartPort": {
+          "value": 49152
+      },
+      "nt1ephemeralEndPort": {
+          "value": 65534
+      },
+      "nt1applicationStartPort": {
+          "value": 20000
+      },
+      "nt1applicationEndPort": {
+          "value": 30000
+      },
+      "nt1fabricTcpGatewayPort": {
+          "value": 19000
+      },
+      "nt1fabricHttpGatewayPort": {
+          "value": 19080
+      }
   }
 }
