@@ -555,7 +555,7 @@
             "properties": {
               "access": "Allow",
               "destinationAddressPrefix": "*",
-              "destinationPortRange": "3389-3395",
+              "destinationPortRange": "3389",
               "direction": "Inbound",
               "priority": 3960,
               "protocol": "*",
