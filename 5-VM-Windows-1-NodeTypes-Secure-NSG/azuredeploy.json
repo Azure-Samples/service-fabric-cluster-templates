@@ -177,12 +177,12 @@
     "maxPercentUpgradeDomainDeltaUnhealthyNodes": "100",
     "vnetID": "[resourceId('Microsoft.Network/virtualNetworks',variables('virtualNetworkName'))]",
     "overProvision": "false",
-    "vmssApiVersion": "2017-03-30",
-    "sfrpApiVersion": "2017-07-01-preview",
-    "lbApiVersion": "2015-06-15",
-    "vNetApiVersion": "2015-06-15",
-    "storageApiVersion": "2016-01-01",
-    "publicIPApiVersion": "2015-06-15",
+    "vmssApiVersion": "2018-06-01",
+    "sfrpApiVersion": "2018-02-01",
+    "lbApiVersion": "2018-08-01",
+    "vNetApiVersion": "2018-08-01",
+    "storageApiVersion": "2018-07-01",
+    "publicIPApiVersion": "2018-08-01",
     "nt0applicationStartPort": "20000",
     "nt0applicationEndPort": "30000",
     "nt0ephemeralStartPort": "49152",
@@ -433,7 +433,7 @@
               "frontendIPConfiguration": {
                 "id": "[variables('lbIPConfig0')]"
               },
-              "frontendPortRangeEnd": "4500",
+              "frontendPortRangeEnd": "3395",
               "frontendPortRangeStart": "3389",
               "protocol": "tcp"
             }
@@ -462,9 +462,9 @@
               "priority": 3950,
               "protocol": "*",
               "sourceAddressPrefix": "VirtualNetwork",
-              "sourcePortRange": "*"
-            },
-            "comments": "allow SMB traffic within the net, used by fabric to move packages around"
+              "sourcePortRange": "*",
+              "description": "allow SMB traffic within the net, used by fabric to move packages around"
+            }
           },
           {
             "name": "allowSvcFabCluser",
@@ -476,9 +476,9 @@
               "priority": 3920,
               "protocol": "*",
               "sourceAddressPrefix": "VirtualNetwork",
-              "sourcePortRange": "*"
-            },
-            "comments": "allow ports within vnet that are used by the fabric to talk between nodes"
+              "sourcePortRange": "*",
+              "description": "allow ports within vnet that are used by the fabric to talk between nodes"
+            }
           },
           {
             "name": "allowSvcFabEphemeral",
@@ -490,9 +490,9 @@
               "priority": 3930,
               "protocol": "*",
               "sourceAddressPrefix": "VirtualNetwork",
-              "sourcePortRange": "*"
-            },
-            "comments": "allow fabric ephemeral ports within the vnet"
+              "sourcePortRange": "*",
+              "description": "allow fabric ephemeral ports within the vnet"
+            }
           },
           {
             "name": "allowSvcFabPortal",
@@ -504,9 +504,9 @@
               "priority": 3900,
               "protocol": "*",
               "sourceAddressPrefix": "*",
-              "sourcePortRange": "*"
-            },
-            "comments": "allow port used to access the fabric cluster web portal"
+              "sourcePortRange": "*",
+              "description": "allow port used to access the fabric cluster web portal"
+            }
           },
           {
             "name": "allowSvcFabClient",
@@ -518,9 +518,9 @@
               "priority": 3910,
               "protocol": "*",
               "sourceAddressPrefix": "*",
-              "sourcePortRange": "*"
-            },
-            "comments": "allow port used by the fabric client (includes powershell)"
+              "sourcePortRange": "*",
+              "description": "allow port used by the fabric client (includes powershell)"
+            }
           },
           {
             "name": "allowSvcFabApplication",
@@ -532,9 +532,9 @@
               "priority": 3940,
               "protocol": "*",
               "sourceAddressPrefix": "*",
-              "sourcePortRange": "*"
-            },
-            "comments": "allow fabric application ports within the vnet"
+              "sourcePortRange": "*",
+              "description": "allow fabric application ports within the vnet"
+            }
           },
           {
             "name": "blockAll",
@@ -546,23 +546,23 @@
               "priority": 4095,
               "protocol": "*",
               "sourceAddressPrefix": "*",
-              "sourcePortRange": "*"
-            },
-            "comments": "block all traffic except what we've explicitly allowed"
+              "sourcePortRange": "*",
+              "description": "block all traffic except what we've explicitly allowed"
+            }
           },
           {
             "name": "allowVNetRDP",
             "properties": {
               "access": "Allow",
               "destinationAddressPrefix": "*",
-              "destinationPortRange": "3389-4500",
+              "destinationPortRange": "3389-3395",
               "direction": "Inbound",
               "priority": 3960,
               "protocol": "*",
               "sourceAddressPrefix": "*",
-              "sourcePortRange": "*"
-            },
-            "comments": "allow RDP within the net"
+              "sourcePortRange": "*",
+              "description": "allow RDP within the net"
+            }
           },
           {
             "name": "allowSvcFabReverseProxy",
@@ -574,9 +574,9 @@
               "priority": 3980,
               "protocol": "*",
               "sourceAddressPrefix": "*",
-              "sourcePortRange": "*"
-            },
-            "comments": "allow port used to access the fabric cluster using reverse proxy"
+              "sourcePortRange": "*",
+              "description": "allow port used to access the fabric cluster using reverse proxy"
+            }
           },
           {
             "name": "allowAppPort1",
@@ -588,9 +588,9 @@
               "priority": 2001,
               "protocol": "*",
               "sourceAddressPrefix": "*",
-              "sourcePortRange": "*"
-            },
-            "comments": "allow public application port 1"
+              "sourcePortRange": "*",
+              "description": "allow public application port 1"
+            }
           },
           {
             "name": "allowAppPort2",
@@ -602,9 +602,9 @@
               "priority": 2002,
               "protocol": "*",
               "sourceAddressPrefix": "*",
-              "sourcePortRange": "*"
-            },
-            "comments": "allow public application port 2"
+              "sourcePortRange": "*",
+              "description": "allow public application port 2"
+            }
           }
         ]
       },
