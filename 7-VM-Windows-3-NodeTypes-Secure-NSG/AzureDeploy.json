@@ -633,7 +633,7 @@
             "properties": {
               "access": "Allow",
               "destinationAddressPrefix": "*",
-              "destinationPortRange": "3389-3400",
+              "destinationPortRange": "3389",
               "direction": "Inbound",
               "priority": 3960,
               "protocol": "*",
@@ -1174,7 +1174,7 @@
             "properties": {
               "access": "Allow",
               "destinationAddressPrefix": "*",
-              "destinationPortRange": "3389-4500",
+              "destinationPortRange": "3389",
               "direction": "Inbound",
               "priority": 3960,
               "protocol": "*",
@@ -1715,7 +1715,7 @@
             "properties": {
               "access": "Allow",
               "destinationAddressPrefix": "*",
-              "destinationPortRange": "3389-4500",
+              "destinationPortRange": "3389",
               "direction": "Inbound",
               "priority": 3960,
               "protocol": "*",
