@@ -177,12 +177,12 @@
     "maxPercentUpgradeDomainDeltaUnhealthyNodes": "100",
     "vnetID": "[resourceId('Microsoft.Network/virtualNetworks',variables('virtualNetworkName'))]",
     "overProvision": "false",
-    "vmssApiVersion": "2017-03-30",
-    "sfrpApiVersion": "2017-07-01-preview",
-    "lbApiVersion": "2015-06-15",
-    "vNetApiVersion": "2015-06-15",
-    "storageApiVersion": "2016-01-01",
-    "publicIPApiVersion": "2015-06-15",
+    "vmssApiVersion": "2018-06-01",
+    "sfrpApiVersion": "2018-02-01",
+    "lbApiVersion": "2018-08-01",
+    "vNetApiVersion": "2018-08-01",
+    "storageApiVersion": "2018-07-01",
+    "publicIPApiVersion": "2018-08-01",
     "nt0applicationStartPort": "20000",
     "nt0applicationEndPort": "30000",
     "nt0ephemeralStartPort": "49152",
@@ -428,7 +428,7 @@
               "frontendIPConfiguration": {
                 "id": "[variables('lbIPConfig0')]"
               },
-              "frontendPortRangeEnd": "4500",
+              "frontendPortRangeEnd": "3395",
               "frontendPortRangeStart": "3389",
               "protocol": "tcp"
             }
@@ -535,7 +535,30 @@
                   },
                   "typeHandlerVersion": "1.5"
                 }
-              }
+              },
+              {
+                  "name": "[concat('VMIaaSAntimalware','_vmNodeType0Name')]",
+                  "properties": {
+                      "publisher": "Microsoft.Azure.Security",
+                      "type": "IaaSAntimalware",
+                      "typeHandlerVersion": "1.5",
+                      "settings": {
+                         "AntimalwareEnabled": "true",
+                         "Exclusions": {
+                           "Paths": "D:\\SvcFab;D:\\SvcFab\\Log;C:\\Program Files\\Microsoft Service Fabric",
+                           "Processes": "Fabric.exe;FabricHost.exe;FabricInstallerService.exe;FabricSetup.exe;FabricDeployer.exe;ImageBuilder.exe;FabricGateway.exe;FabricDCA.exe;FabricFAS.exe;FabricUOS.exe;FabricRM.exe;FileStoreService.exe"
+                         },
+                         "RealtimeProtectionEnabled": "true",
+                         "ScheduledScanSettings": {
+                           "isEnabled": "true",
+                           "scanType": "Quick",
+                           "day": "7",
+                           "time": "120"
+                         }
+                      },
+                      "protectedSettings": null
+                   }
+                }
             ]
           },
           "networkProfile": {
