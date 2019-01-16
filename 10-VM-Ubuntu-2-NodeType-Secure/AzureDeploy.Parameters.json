@@ -1,78 +1,78 @@
 {
-  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
-  "contentVersion": "1.0.0.0",
-  "parameters": {
-      "clusterName": {
-          "value": "GEN-UNIQUE"
-      },
-      "clusterLocation": {
-          "value": "GEN-UNIQUE-8"
-      },
-      "computeLocation": {
-          "value": "GEN-UNIQUE-8"
-      },
-      "adminUserName": {
-          "value": "GEN-UNIQUE"
-      },
-      "adminPassword": {
-          "value": "GEN-PASSWORD"
-      },
-      "dnsName": {
-          "value": "GEN-UNIQUE"
-      },
-      "certificateThumbprint": {
-        "value": "GEN-CUSTOM-DOMAIN-SSLCERT-THUMBPRINT"
-      },
-      "sourceVaultValue": {
-        "value": "GEN-KEYVAULT-RESOURCE-ID"
-      },
-      "certificateUrlValue": {
-        "value": "GEN-KEYVAULT-SSL-SECRET-URI"
-      },
-      "vmImageSku": {
-          "value": "16.04-LTS"
-      },
-      "vmImageVersion": {
-          "value": "latest"
-      },
-      "vmImagePublisher": {
-          "value": "Canonical"
-      },
-      "nt0ephemeralStartPort": {
-          "value": 49152
-      },
-      "nt0ephemeralEndPort": {
-          "value": 65534
-      },
-      "nt0applicationStartPort": {
-          "value": 20000
-      },
-      "nt0applicationEndPort": {
-          "value": 30000
-      },
-      "nt0fabricTcpGatewayPort": {
-          "value": 19000
-      },
-      "nt0fabricHttpGatewayPort": {
-          "value": 19080
-      },
-      "nt1ephemeralStartPort": {
-          "value": 49152
-      },
-      "nt1ephemeralEndPort": {
-          "value": 65534
-      },
-      "nt1applicationStartPort": {
-          "value": 20000
-      },
-      "nt1applicationEndPort": {
-          "value": 30000
-      },
-      "nt1fabricTcpGatewayPort": {
-          "value": 19000
-      },
-      "nt1fabricHttpGatewayPort": {
-          "value": 19080
-      }
-  }
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "clusterName": {
+            "value": "GEN-UNIQUE"
+        },
+        "clusterLocation": {
+            "value": "GEN-UNIQUE-8"
+        },
+        "computeLocation": {
+            "value": "GEN-UNIQUE-8"
+        },
+        "adminUserName": {
+            "value": "GEN-UNIQUE"
+        },
+        "adminPassword": {
+            "value": "GEN-PASSWORD"
+        },
+        "dnsName": {
+            "value": "GEN-UNIQUE"
+        },
+        "certificateThumbprint": {
+          "value": "GEN-SF-CERT-THUMBPRINT"
+        },
+        "sourceVaultValue": {
+          "value": "GEN-KEYVAULT-RESOURCE-ID"
+        },
+        "certificateUrlValue": {
+          "value": "GEN-SF-CERT-URL"
+        },
+        "vmImageSku": {
+            "value": "16.04-LTS"
+        },
+        "vmImageVersion": {
+            "value": "latest"
+        },
+        "vmImagePublisher": {
+            "value": "Canonical"
+        },
+        "nt0ephemeralStartPort": {
+            "value": 49152
+        },
+        "nt0ephemeralEndPort": {
+            "value": 65534
+        },
+        "nt0applicationStartPort": {
+            "value": 20000
+        },
+        "nt0applicationEndPort": {
+            "value": 30000
+        },
+        "nt0fabricTcpGatewayPort": {
+            "value": 19000
+        },
+        "nt0fabricHttpGatewayPort": {
+            "value": 19080
+        },
+        "nt1ephemeralStartPort": {
+            "value": 49152
+        },
+        "nt1ephemeralEndPort": {
+            "value": 65534
+        },
+        "nt1applicationStartPort": {
+            "value": 20000
+        },
+        "nt1applicationEndPort": {
+            "value": 30000
+        },
+        "nt1fabricTcpGatewayPort": {
+            "value": 19000
+        },
+        "nt1fabricHttpGatewayPort": {
+            "value": 19080
+        }
+    }
 }
