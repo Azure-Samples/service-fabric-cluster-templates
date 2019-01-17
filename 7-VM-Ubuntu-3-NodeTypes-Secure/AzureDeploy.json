@@ -269,7 +269,7 @@
   },
   "resources": [
     {
-      "apiVersion": "[variables('storageApiVersion')]",
+      "apiVersion": "2018-07-01",
       "type": "Microsoft.Storage/storageAccounts",
       "name": "[variables('supportLogStorageAccountName')]",
       "location": "[variables('computeLocation')]",
@@ -285,7 +285,7 @@
       }
     },
     {
-      "apiVersion": "[variables('storageApiVersion')]",
+      "apiVersion": "2018-07-01",
       "type": "Microsoft.Storage/storageAccounts",
       "name": "[variables('applicationDiagnosticsStorageAccountName')]",
       "location": "[variables('computeLocation')]",
@@ -301,7 +301,7 @@
       }
     },
     {
-      "apiVersion": "[variables('vNetApiVersion')]",
+      "apiVersion": "2018-08-01",
       "type": "Microsoft.Network/virtualNetworks",
       "name": "[variables('virtualNetworkName')]",
       "location": "[variables('computeLocation')]",
@@ -339,7 +339,7 @@
       }
     },
     {
-      "apiVersion": "[variables('publicIPApiVersion')]",
+      "apiVersion": "2018-08-01",
       "type": "Microsoft.Network/publicIPAddresses",
       "name": "[concat(variables('lbIPName'),'-',variables('vmNodeType0Name'))]",
       "location": "[variables('computeLocation')]",
@@ -355,7 +355,7 @@
       }
     },
     {
-      "apiVersion": "[variables('lbApiVersion')]",
+      "apiVersion": "2018-08-01",
       "type": "Microsoft.Network/loadBalancers",
       "name": "[concat('LB','-', parameters('clusterName'),'-',variables('vmNodeType0Name'))]",
       "location": "[variables('computeLocation')]",
@@ -516,7 +516,7 @@
       }
     },
     {
-      "apiVersion": "[variables('vmssApiVersion')]",
+      "apiVersion": "2018-10-01",
       "type": "Microsoft.Compute/virtualMachineScaleSets",
       "name": "[variables('vmNodeType0Name')]",
       "location": "[variables('computeLocation')]",
@@ -653,7 +653,7 @@
       }
     },
     {
-      "apiVersion": "[variables('publicIPApiVersion')]",
+      "apiVersion": "2018-08-01",
       "type": "Microsoft.Network/publicIPAddresses",
       "name": "[concat(variables('lbIPName'),'-',variables('vmNodeType1Name'))]",
       "location": "[variables('computeLocation')]",
@@ -669,7 +669,7 @@
       }
     },
     {
-      "apiVersion": "[variables('lbApiVersion')]",
+      "apiVersion": "2018-08-01",
       "type": "Microsoft.Network/loadBalancers",
       "name": "[concat('LB','-', parameters('clusterName'),'-',variables('vmNodeType1Name'))]",
       "location": "[variables('computeLocation')]",
@@ -830,7 +830,7 @@
       }
     },
     {
-      "apiVersion": "[variables('vmssApiVersion')]",
+      "apiVersion": "2018-10-01",
       "type": "Microsoft.Compute/virtualMachineScaleSets",
       "name": "[variables('vmNodeType1Name')]",
       "location": "[variables('computeLocation')]",
@@ -967,7 +967,7 @@
       }
     },
     {
-      "apiVersion": "[variables('publicIPApiVersion')]",
+      "apiVersion": "2018-08-01",
       "type": "Microsoft.Network/publicIPAddresses",
       "name": "[concat(variables('lbIPName'),'-',variables('vmNodeType2Name'))]",
       "location": "[variables('computeLocation')]",
@@ -983,7 +983,7 @@
       }
     },
     {
-      "apiVersion": "[variables('lbApiVersion')]",
+      "apiVersion": "2018-08-01",
       "type": "Microsoft.Network/loadBalancers",
       "name": "[concat('LB','-', parameters('clusterName'),'-',variables('vmNodeType2Name'))]",
       "location": "[variables('computeLocation')]",
@@ -1144,7 +1144,7 @@
       }
     },
     {
-      "apiVersion": "[variables('vmssApiVersion')]",
+      "apiVersion": "2018-10-01",
       "type": "Microsoft.Compute/virtualMachineScaleSets",
       "name": "[variables('vmNodeType2Name')]",
       "location": "[variables('computeLocation')]",
@@ -1281,7 +1281,7 @@
       }
     },
     {
-      "apiVersion": "[variables('sfrpApiVersion')]",
+      "apiVersion": "2018-02-01",
       "type": "Microsoft.ServiceFabric/clusters",
       "name": "[parameters('clusterName')]",
       "location": "[parameters('clusterLocation')]",
