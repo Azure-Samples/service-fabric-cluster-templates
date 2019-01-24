@@ -59,19 +59,10 @@
     "nt0InstanceCount": {
       "value": 5
     },
+    "nt1InstanceCount" : {
+      "value": 5
+    },
     "vmNodeType0Size": {
-      "value": "Standard_D2_V2"
-    },
-    "nt1InstanceCount": {
-      "value": 1
-    },
-    "vmNodeType1Size": {
-      "value": "Standard_D2_V2"
-    },
-    "nt2InstanceCount": {
-      "value": 1
-    },
-    "vmNodeType2Size": {
       "value": "Standard_D2_V2"
     }
   }

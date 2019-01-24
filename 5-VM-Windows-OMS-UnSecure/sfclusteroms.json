@@ -168,12 +168,12 @@
     },
     "resources": [
         {
-            "apiVersion": "2015-06-15",
+            "apiVersion": "2018-07-01",
             "type": "Microsoft.Storage/storageAccounts",
             "name": "[variables('supportLogStorageAccountName')]",
             "location": "[parameters('computeLocation')]",
-            "properties": {
-                "accountType": "[variables('supportLogStorageAccountType')]"
+            "sku": {
+                "name": "[variables('supportLogStorageAccountType')]"
             },
             "tags": {
                 "resourceType": "Service Fabric",
@@ -181,12 +181,12 @@
             }
         },
         {
-            "apiVersion": "2015-06-15",
+            "apiVersion": "2018-07-01",
             "type": "Microsoft.Storage/storageAccounts",
             "name": "[variables('applicationDiagnosticsStorageAccountName')]",
             "location": "[parameters('computeLocation')]",
-            "properties": {
-                "accountType": "[variables('applicationDiagnosticsStorageAccountType')]"
+            "sku": {
+                "name": "[variables('applicationDiagnosticsStorageAccountType')]"
             },
             "tags": {
                 "resourceType": "Service Fabric",
@@ -194,7 +194,7 @@
             }
         },
         {
-            "apiVersion": "2015-06-15",
+            "apiVersion": "2018-08-01",
             "type": "Microsoft.Network/virtualNetworks",
             "name": "[variables('virtualNetworkName')]",
             "location": "[parameters('computeLocation')]",
@@ -219,7 +219,7 @@
             }
         },
         {
-            "apiVersion": "2015-06-15",
+            "apiVersion": "2018-08-01",
             "type": "Microsoft.Network/publicIPAddresses",
             "name": "[concat(variables('lbIPName'),'-','0')]",
             "location": "[parameters('computeLocation')]",
@@ -235,7 +235,7 @@
             }
         },
         {
-            "apiVersion": "2015-06-15",
+            "apiVersion": "2018-08-01",
             "type": "Microsoft.Network/loadBalancers",
             "name": "[concat('LB','-', parameters('clusterName'),'-',parameters('vmNodeType0Name'))]",
             "location": "[parameters('computeLocation')]",
@@ -387,12 +387,12 @@
             }
         },
         {
-            "apiVersion": "2015-06-15",
+            "apiVersion": "2018-07-01",
             "type": "Microsoft.Storage/storageAccounts",
             "name": "[variables('uniqueStringArray0')[copyIndex()]]",
             "location": "[parameters('computeLocation')]",
-            "properties": {
-                "accountType": "[variables('storageAccountType')]"
+            "sku": {
+                "name": "[variables('storageAccountType')]"
             },
             "copy": {
                 "name": "storageLoop",
@@ -404,7 +404,7 @@
             }
         },
         {
-            "apiVersion": "2016-03-30",
+            "apiVersion": "2018-10-01",
             "type": "Microsoft.Compute/virtualMachineScaleSets",
             "name": "[parameters('vmNodeType0Name')]",
             "location": "[parameters('computeLocation')]",
@@ -583,7 +583,7 @@
             }
         },
         {
-            "apiVersion": "2016-09-01",
+            "apiVersion": "2018-02-01",
             "type": "Microsoft.ServiceFabric/clusters",
             "name": "[parameters('clusterName')]",
             "location": "[parameters('computeLocation')]",
