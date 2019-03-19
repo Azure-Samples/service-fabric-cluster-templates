@@ -724,7 +724,7 @@
                     "clusterEndpoint": "[reference(parameters('clusterName')).clusterEndpoint]",
                     "nodeTypeRef": "[variables('vmNodeType0Name')]",
                     "dataPath": "D:\\SvcFab",
-                    "durabilityLevel": "Bronze",
+                    "durabilityLevel": "Silver",
                     "enableParallelJobs": true,
                     "nicPrefixOverride": "[variables('subnet0Prefix')]",
                     "certificate": {
@@ -1265,7 +1265,7 @@
                     "clusterEndpoint": "[reference(parameters('clusterName')).clusterEndpoint]",
                     "nodeTypeRef": "[variables('vmNodeType1Name')]",
                     "dataPath": "D:\\SvcFab",
-                    "durabilityLevel": "Bronze",
+                    "durabilityLevel": "Silver",
                     "enableParallelJobs": true,
                     "nicPrefixOverride": "[variables('subnet1Prefix')]",
                     "certificate": {
@@ -2014,7 +2014,7 @@
               "startPort": "[variables('nt0applicationStartPort')]"
             },
             "clientConnectionEndpointPort": "[variables('nt0fabricTcpGatewayPort')]",
-            "durabilityLevel": "Bronze",
+            "durabilityLevel": "Silver",
             "ephemeralPorts": {
               "endPort": "[variables('nt0ephemeralEndPort')]",
               "startPort": "[variables('nt0ephemeralStartPort')]"
@@ -2031,7 +2031,7 @@
               "startPort": "[variables('nt1applicationStartPort')]"
             },
             "clientConnectionEndpointPort": "[variables('nt1fabricTcpGatewayPort')]",
-            "durabilityLevel": "Bronze",
+            "durabilityLevel": "Silver",
             "ephemeralPorts": {
               "endPort": "[variables('nt1ephemeralEndPort')]",
               "startPort": "[variables('nt1ephemeralStartPort')]"
