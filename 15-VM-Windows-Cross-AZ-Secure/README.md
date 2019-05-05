@@ -7,7 +7,7 @@
     <img src="http://armviz.io/visualizebutton.png"/>
 </a>
 
-This test template allows you to deploy an unsecure 9 node, Cross AZ Service Fabric Cluster running Windows Server 2016 Datacenter with containers on a Standard_D2_v2 Size Virtual Machine Scale set.
+This test template allows you to deploy a secure 15 node, Cross AZ Service Fabric Cluster running Windows Server 2016 Datacenter with containers on a Standard_D2_v2 Size Virtual Machine Scale set.
 
 The main intent for this template is to show how you can stitch a cluster across three Azure Zones. Since this tempalte deploys only an unsecure cluster, it is not for production use.    
 
