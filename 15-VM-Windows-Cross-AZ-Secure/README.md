@@ -1,4 +1,4 @@
-# 9 Node, Cross AZ unsecure Windows Service Fabric Cluster
+# 15 Node, Cross AZ secure Windows Service Fabric Cluster
 
 <a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAzure-Samples%2Fservice-fabric-cluster-templates%2Fmaster%2F9-VM-Windows-Cross-AZ-UnSecure%2Fazuredeploy.json" target="_blank">
     <img src="http://azuredeploy.net/deploybutton.png"/>
