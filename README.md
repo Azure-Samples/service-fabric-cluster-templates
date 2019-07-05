@@ -1,3 +1,10 @@
+---
+languages: []
+products:
+- azure
+topic: sample
+---
+
 # Project Name
 
 Service Fabric Sample Cluster templates
@@ -17,4 +24,4 @@ Although, we try to keep a wide variety of templates to suite broad customer nee
 
 1) Linux cluster templates with Network Security Group on.
 2) Cross Az Cluster template
-3) Cross regional cluster template 
+3) Cross regional cluster template
