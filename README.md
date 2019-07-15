@@ -1,13 +1,14 @@
 ---
-languages: []
+languages:
+- powershell
+- json
 products:
 - azure
-topic: sample
+page_type: sample
+description: "Sample Service Fabric cluster templates that you can customize for use in setting up your clusters."
 ---
 
-# Project Name
-
-Service Fabric Sample Cluster templates
+# Service Fabric Sample Cluster templates
 
 ## Details
 
