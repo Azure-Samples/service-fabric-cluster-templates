@@ -1,0 +1,60 @@
+{
+  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "clusterName": {
+      "value": "Cluster"
+    },
+    "clusterLocation": {
+      "value": "westus"
+    },
+    "adminUserName": {
+      "value": "testuser"
+    },
+    "vmImagePublisher": {
+      "value": "MicrosoftWindowsServer"
+    },
+    "vmImageOffer": {
+      "value": "WindowsServer"
+    },
+    "vmImageSku": {
+      "value": "2012-R2-Datacenter"
+    },
+    "vmImageVersion": {
+      "value": "latest"
+    },
+    "loadBalancedAppPort1": {
+      "value": 80
+    },
+    "loadBalancedAppPort2": {
+      "value": 8081
+    },
+    "certificateStoreValue": {
+      "value": "My"
+    },
+    "secCertificateThumbprint": {
+      "value": "thumbprint value"
+    },
+    "secCertificateUrlValue": {
+      "value": "Refers to the location URL in your key vault where the certificate was uploaded, it is should be in the format of https://<name of the vault>.vault.azure.net:443/secrets/<exact location>"
+     },
+    "certificateThumbprint": {
+      "value": "thumbprint value"
+    },
+    "sourceVaultValue": {
+      "value": "/subscriptions/subscription value/resourceGroups/key vault resource group name/providers/Microsoft.KeyVault/vaults/key vault name"
+    },
+    "certificateUrlValue": {
+      "value": "Refers to the location URL in your key vault where the certificate was uploaded, it is should be in the format of https://<name of the vault>.vault.azure.net:443/secrets/<exact location>"
+     },
+    "clusterProtectionLevel": {
+      "value": "EncryptAndSign"
+    },
+    "storageAccountType": {
+      "value": "Standard_LRS"
+    },
+    "supportLogStorageAccountType": {
+      "value": "Standard_LRS"
+    }
+  }
+}
