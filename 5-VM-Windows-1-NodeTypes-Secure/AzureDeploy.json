@@ -460,7 +460,7 @@
           "extensionProfile": {
             "extensions": [
               {
-                "name": "[concat('ServiceFabricNodeVmExt','_vmNodeType0Name')]",
+                "name": "[concat('ServiceFabricNodeVmExt_',variables('vmNodeType0Name'))]",
                 "properties": {
                   "type": "ServiceFabricNode",
                   "autoUpgradeMinorVersion": true,
@@ -485,7 +485,7 @@
                 }
               },
               {
-                "name": "[concat('VMDiagnosticsVmExt','_vmNodeType0Name')]",
+                "name": "[concat('VMDiagnosticsVmExt_',variables('vmNodeType0Name'))]",
                 "properties": {
                   "type": "IaaSDiagnostics",
                   "autoUpgradeMinorVersion": true,
@@ -537,7 +537,7 @@
                 }
               },
               {
-                  "name": "[concat('VMIaaSAntimalware','_vmNodeType0Name')]",
+                  "name": "[concat('VMIaaSAntimalware_',variables('vmNodeType0Name'))]",
                   "properties": {
                       "publisher": "Microsoft.Azure.Security",
                       "type": "IaaSAntimalware",
