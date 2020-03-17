@@ -550,7 +550,7 @@
                       "x509StoreName": "[parameters('certificateStoreValue')]"
                     }
                   },
-                  "typeHandlerVersion": "1.0"
+                  "typeHandlerVersion": "1.1"
                 }
               },
               {
@@ -1178,7 +1178,7 @@
                       "x509StoreName": "[parameters('certificateStoreValue')]"
                     }
                   },
-                  "typeHandlerVersion": "1.0"
+                  "typeHandlerVersion": "1.1"
                 }
               },
               {
@@ -1276,7 +1276,7 @@
       }
     },
     {
-      "apiVersion": "2018-02-01",
+      "apiVersion": "2019-03-01",
       "type": "Microsoft.ServiceFabric/clusters",
       "name": "[parameters('clusterName')]",
       "location": "[parameters('clusterLocation')]",
