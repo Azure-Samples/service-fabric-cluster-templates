@@ -462,7 +462,7 @@
                                 }
                             },
                             {
-                                "name": "[concat('VMDiagnosticsVmExt','_vmNodeType0Name')]",
+                                "name": "[concat(variables('vmNodeType0Name'),'_VMDiagnosticsVmExt')]",
                                 "properties": {
                                     "type": "IaaSDiagnostics",
                                     "autoUpgradeMinorVersion": true,

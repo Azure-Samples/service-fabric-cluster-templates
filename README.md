@@ -4,6 +4,7 @@ languages:
 - json
 products:
 - azure
+- azure-service-fabric
 page_type: sample
 description: "Sample Service Fabric cluster templates that you can customize for use in setting up your clusters."
 ---
