@@ -635,7 +635,7 @@
         "provisioningState": "Default",
         "reliabilityLevel": "Silver",
         "upgradeMode": "Automatic",
-        "vmImage": "Linux"
+        "vmImage": "Ubuntu18_04"
       },
       "tags": {
         "resourceType": "Service Fabric",
