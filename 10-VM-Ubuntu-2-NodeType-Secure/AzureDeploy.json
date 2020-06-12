@@ -1425,6 +1425,14 @@
                             {
                                 "name": "ClusterProtectionLevel",
                                 "value": "[parameters('clusterProtectionLevel')]"
+                            },
+                            {
+                                "name": "EnforceLinuxMinTlsVersion",
+                                "value": true
+                            },
+                            {
+                                "name": "TLS1_2_CipherList",
+                                "value": "ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-RSA-AES-128-GCM-SHA256:ECDHE-ECDSA-AES256-CBC-SHA384:ECDHE-ECDSA-AES128-CBC-SHA256:ECDHE-RSA-AES256-CBC-SHA384:ECDHE-RSA-AES128-CBC-SHA256"
                             }
                         ],
                         "name": "Security"
