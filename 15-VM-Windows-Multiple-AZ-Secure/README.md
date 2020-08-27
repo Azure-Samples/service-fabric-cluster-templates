@@ -1,19 +1,8 @@
 # 15 Node, Cross AZ secure Windows Service Fabric Cluster
 
-<a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAzure-Samples%2Fservice-fabric-cluster-templates%2Fmaster%2F9-VM-Windows-Cross-AZ-UnSecure%2Fazuredeploy.json" target="_blank">
-    <img src="http://azuredeploy.net/deploybutton.png"/>
-</a>
-<a href="http://armviz.io/#/?load=https%3A%2F%2Fraw.githubusercontent.com%2FAzure-Samples%2Fservice-fabric-cluster-templates%2Fmaster%2F9-VM-Windows-Cross-AZ-UnSecure%2Fazuredeploy.json" target="_blank">
-    <img src="http://armviz.io/visualizebutton.png"/>
-</a>
-
 This test template allows you to deploy a secure 15 node, Cross AZ Service Fabric Cluster running Windows Server 2016 Datacenter with containers on a Standard_D2_v2 Size Virtual Machine Scale set.
 
-The main intent for this template is to show how you can stitch a cluster across three Azure Zones. 
-
-## Note on cross AZ support
-1. Service fabric does not support the use of a single large VMSS across three zones.
-2. Service fabric allows you to set up cross AZ clusters, by spanning three zonal VMSS.
+The main intent for this template is to show how you can deploy a VMSS with three Azure Zones.
 
 
 ## Use Powershell to deploy your cluster
