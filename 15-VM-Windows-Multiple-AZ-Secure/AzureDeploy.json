@@ -87,6 +87,10 @@
             "type": "string",
             "defaultValue": "10.0.0.0/16"
         },
+        "dnsName": {
+            "type": "string",
+            "defaultValue": "[parameters('clusterName')]"
+        },
         "nicName": {
             "type": "string",
             "defaultValue": "NIC"
@@ -119,7 +123,7 @@
         },
         "vmImageSku": {
             "type": "string",
-            "defaultValue": "2016-Datacenter-with-Containers",
+            "defaultValue": "2016-Datacenter",
             "metadata": {
                 "description": "VM image SKU"
             }
