@@ -799,8 +799,7 @@
                 "provisioningState": "Default",
                 "reliabilityLevel": "Platinum",
                 "upgradeMode": "Manual",
-                "vmImage": "Windows",
-                "hierarchicalUpgradeDomain": true
+                "vmImage": "Windows"
             },
             "tags": {
                 "resourceType": "Service Fabric",
