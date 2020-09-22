@@ -538,7 +538,7 @@
                       "x509StoreName": "[parameters('sfReverseProxyCertificateStoreValue')]"
                     }
                   },
-                  "typeHandlerVersion": "1.0"
+                  "typeHandlerVersion": "1.1"
                 }
               },
               {
