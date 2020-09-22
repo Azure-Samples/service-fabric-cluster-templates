@@ -1,0 +1,45 @@
+{
+    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "clusterName": {
+            "value": "GEN-UNIQUE"
+        },
+        "clusterSku": {
+            "value": "Standard"
+        },
+        "adminUserName": {
+            "value": "GEN-UNIQUE"
+        },
+        "adminPassword": {
+            "value": "GEN-PASSWORD"
+        },
+        "clientCertificateThumbprint": {
+            "value": "GEN-SF-CERT-THUMBPRINT"
+        },
+        "nodeType1Name": {
+            "value": "NT1"
+        },
+        "nodeType1VmSize": {
+            "value": "Standard_D2_v2"
+        },
+        "nodeType1VmInstanceCount": {
+            "value": 5
+        },
+        "nodeType1DataDiskSizeGB": {
+            "value": 120
+        },
+        "vmImagePublisher": {
+            "value": "MicrosoftWindowsServer"
+        },
+        "vmImageOffer": {
+            "value": "WindowsServer"
+        },
+        "vmImageSku": {
+            "value": "2019-Datacenter"
+        },
+        "vmImageVersion": {
+            "value": "latest"
+        }
+    }
+}
