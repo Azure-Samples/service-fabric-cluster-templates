@@ -1,0 +1,11 @@
+{
+  "$schema": "https://aka.ms/azure-quickstart-templates-metadata-schema#",
+  "type": "QuickStart",
+  "itemDisplayName": "Deploy a Standard SKU managed Service Fabric cluster",
+  "description": "This template takes a minimum set of parameters and deploys a Standard SKU managed Service Fabric cluster with 1 node type.",
+  "summary": "This template takes a minimum set of parameters and deploys a Standard SKU managed Service Fabric cluster with 1 node type.",
+  "githubUsername": "peterpogorski",
+  "dateUpdated": "2020-08-19"
+}
+
+
