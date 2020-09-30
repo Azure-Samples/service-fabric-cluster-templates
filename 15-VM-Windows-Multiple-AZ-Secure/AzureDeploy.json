@@ -747,6 +747,8 @@
                 "[concat('Microsoft.Storage/storageAccounts/', parameters('supportLogStorageAccountName'))]"
             ],
             "properties": {
+                "vmssZonalUpgradeMode": "Parallel",
+                "sfZonalUpgradeMode": "Hierarchical",
                 "addonFeatures": [
                     "DnsService"
                 ],
@@ -756,7 +758,6 @@
                 },
                 "clientCertificateCommonNames": [],
                 "clientCertificateThumbprints": [],
-                "clusterCodeVersion": "7.1.417.9590",
                 "clusterState": "Default",
                 "diagnosticsStorageAccountConfig": {
                     "blobEndpoint": "[reference(concat('Microsoft.Storage/storageAccounts/', parameters('supportLogStorageAccountName')), variables('storageApiVersion')).primaryEndpoints.blob]",
@@ -798,7 +799,7 @@
                 ],
                 "provisioningState": "Default",
                 "reliabilityLevel": "Platinum",
-                "upgradeMode": "Manual",
+                "upgradeMode": "Automatic",
                 "vmImage": "Windows"
             },
             "tags": {
