@@ -174,18 +174,11 @@
   "variables": {
     "computeLocation": "[parameters('clusterLocation')]",
     "dnsName": "[parameters('clusterName')]",
-    "vmStorageAccountName": "[toLower(concat( 'sflogs', uniqueString(resourceGroup().id), '1' ))]",
     "vmName": "vm",
-    "publicIPAddressName": "PublicIP-VM",
-    "publicIPAddressType": "Static",
-    "vmStorageAccountContainerName": "vhds",
     "virtualNetworkName": "VNet",
     "addressPrefix": "10.0.0.0/16",
     "nicName": "NIC",
-    "lbName": "LoadBalancer",
     "lbIPName": "PublicIP-LB-FE",
-    "availSetName": "AvailabilitySet",
-    "maxPercentUpgradeDomainDeltaUnhealthyNodes": "100",
     "vnetID": "[resourceId('Microsoft.Network/virtualNetworks',variables('virtualNetworkName'))]",
     "overProvision": "false",
     "storageApiVersion": "2018-07-01",
@@ -205,8 +198,6 @@
     "nt1ephemeralEndPort": "65534",
     "nt1fabricTcpGatewayPort": "19000",
     "nt1fabricHttpGatewayPort": "19080",
-    "nt1fabricTcpGatewayPort": "19000",
-    "nt1fabricHttpGatewayPort": "19080",
     "nt1reverseProxyEndpointPort": "19081",
     "subnet1Name": "Subnet-1",
     "subnet1Prefix": "10.0.1.0/24",
@@ -220,7 +211,6 @@
     "lbHttpProbeID0": "[concat(variables('lbID0'),'/probes/FabricHttpGatewayProbe')]",
     "lbNatPoolID0": "[concat(variables('lbID0'),'/inboundNatPools/LoadBalancerBEAddressNatPool')]",
     "vmNodeType0Name": "[toLower(concat('NT1', variables('vmName')))]",
-    "vmStorageAccountName0": "[toLower(concat(uniqueString(resourceGroup().id), '1', '0' ))]",
     "vmNodeType1Name": "[toLower(concat('NT2', variables('vmName')))]",
     "lbID1": "[resourceId('Microsoft.Network/loadBalancers',concat('LB','-', parameters('clusterName'),'-',variables('vmNodeType1Name')))]",
     "lbIPConfig1": "[concat(variables('lbID1'),'/frontendIPConfigurations/LoadBalancerIPConfig')]",
@@ -228,8 +218,6 @@
     "lbProbeID1": "[concat(variables('lbID1'),'/probes/FabricGatewayProbe')]",
     "lbHttpProbeID1": "[concat(variables('lbID1'),'/probes/FabricHttpGatewayProbe')]",
     "lbNatPoolID1": "[concat(variables('lbID1'),'/inboundNatPools/LoadBalancerBEAddressNatPool')]",
-    "vmNodeType1Name": "[toLower(concat('NT2', variables('vmName')))]",
-    "vmStorageAccountName1": "[toLower(concat(uniqueString(resourceGroup().id), '1', '1' ))]"
   },
   "resources": [
     {
@@ -269,7 +257,10 @@
       "type": "Microsoft.Network/virtualNetworks",
       "name": "[variables('virtualNetworkName')]",
       "location": "[variables('computeLocation')]",
-      "dependsOn": [],
+      "dependsOn": [
+        "[concat('Microsoft.Network/networkSecurityGroups/', concat('nsg', variables('subnet0Name')))]",
+        "[concat('Microsoft.Network/networkSecurityGroups/', concat('nsg', variables('subnet1Name')))]"
+      ],
       "properties": {
         "addressSpace": {
           "addressPrefixes": [
@@ -280,13 +271,243 @@
           {
             "name": "[variables('subnet0Name')]",
             "properties": {
-              "addressPrefix": "[variables('subnet0Prefix')]"
+              "addressPrefix": "[variables('subnet0Prefix')]",
+              "networkSecurityGroup": {
+                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', concat('nsg', variables('subnet0Name')))]"
+              }
             }
           },
           {
             "name": "[variables('subnet1Name')]",
             "properties": {
-                "addressPrefix": "[variables('subnet1Prefix')]"
+                "addressPrefix": "[variables('subnet1Prefix')]",
+              "networkSecurityGroup": {
+                "id": "[resourceId('Microsoft.Network/networkSecurityGroups', concat('nsg', variables('subnet1Name')))]"
+              }
+            }
+          }
+        ]
+      },
+      "tags": {
+        "resourceType": "Service Fabric",
+        "clusterName": "[parameters('clusterName')]"
+      }
+    },
+    {
+      "apiVersion": "2018-08-01",
+      "type": "Microsoft.Network/networkSecurityGroups",
+      "name": "[concat('nsg', variables('subnet0Name'))]",
+      "location": "[resourceGroup().location]",
+      "properties": {
+        "securityRules": [
+          {
+            "name": "allowSvcFabCluser",
+            "properties": {
+              "access": "Allow",
+              "destinationAddressPrefix": "*",
+              "destinationPortRange": "1025-1027",
+              "direction": "Inbound",
+              "priority": 3920,
+              "protocol": "*",
+              "sourceAddressPrefix": "VirtualNetwork",
+              "sourcePortRange": "*",
+              "description": "allow ports within vnet that are used by the fabric to talk between nodes"
+            }
+          },
+          {
+            "name": "allowSvcFabEphemeral",
+            "properties": {
+              "access": "Allow",
+              "destinationAddressPrefix": "*",
+              "destinationPortRange": "[concat(variables('nt0ephemeralStartPort'), '-', variables('nt0ephemeralEndPort'))]",
+              "direction": "Inbound",
+              "priority": 3930,
+              "protocol": "*",
+              "sourceAddressPrefix": "VirtualNetwork",
+              "sourcePortRange": "*",
+              "description": "allow fabric ephemeral ports within the vnet"
+            }
+          },
+          {
+            "name": "allowSvcFabPortal",
+            "properties": {
+              "access": "Allow",
+              "destinationAddressPrefix": "*",
+              "destinationPortRange": "[variables('nt0fabricHttpGatewayPort')]",
+              "direction": "Inbound",
+              "priority": 3900,
+              "protocol": "*",
+              "sourceAddressPrefix": "*",
+              "sourcePortRange": "*",
+              "description": "allow port used to access the fabric cluster web portal"
+            }
+          },
+          {
+            "name": "allowSvcFabClient",
+            "properties": {
+              "access": "Allow",
+              "destinationAddressPrefix": "*",
+              "destinationPortRange": "[variables('nt0fabricTcpGatewayPort')]",
+              "direction": "Inbound",
+              "priority": 3910,
+              "protocol": "*",
+              "sourceAddressPrefix": "*",
+              "sourcePortRange": "*",
+              "description": "allow port used by the fabric client (includes powershell)"
+            }
+          },
+          {
+            "name": "allowSvcFabApplication",
+            "properties": {
+              "access": "Allow",
+              "destinationAddressPrefix": "*",
+              "destinationPortRange": "[concat(variables('nt0applicationStartPort'), '-', variables('nt0applicationEndPort'))]",
+              "direction": "Inbound",
+              "priority": 3940,
+              "protocol": "*",
+              "sourceAddressPrefix": "*",
+              "sourcePortRange": "*",
+              "description": "allow fabric application ports within the vnet"
+            }
+          },
+          {
+            "name": "blockAll",
+            "properties": {
+              "access": "Deny",
+              "destinationAddressPrefix": "*",
+              "destinationPortRange": "*",
+              "direction": "Inbound",
+              "priority": 4095,
+              "protocol": "*",
+              "sourceAddressPrefix": "*",
+              "sourcePortRange": "*",
+              "description": "block all traffic except what we've explicitly allowed"
+            }
+          },
+          {
+            "name": "allowVNetRDP",
+            "properties": {
+              "access": "Allow",
+              "destinationAddressPrefix": "*",
+              "destinationPortRange": "3389",
+              "direction": "Inbound",
+              "priority": 3960,
+              "protocol": "*",
+              "sourceAddressPrefix": "*",
+              "sourcePortRange": "*",
+              "description": "allow RDP within the net"
+            }
+          }
+        ]
+      },
+      "tags": {
+        "resourceType": "Service Fabric",
+        "clusterName": "[parameters('clusterName')]"
+      }
+    },
+    {
+      "apiVersion": "2018-08-01",
+      "type": "Microsoft.Network/networkSecurityGroups",
+      "name": "[concat('nsg', variables('subnet1Name'))]",
+      "location": "[resourceGroup().location]",
+      "properties": {
+        "securityRules": [
+          {
+            "name": "allowSvcFabCluser",
+            "properties": {
+              "access": "Allow",
+              "destinationAddressPrefix": "*",
+              "destinationPortRange": "1025-1027",
+              "direction": "Inbound",
+              "priority": 3920,
+              "protocol": "*",
+              "sourceAddressPrefix": "VirtualNetwork",
+              "sourcePortRange": "*",
+              "description": "allow ports within vnet that are used by the fabric to talk between nodes"
+            }
+          },
+          {
+            "name": "allowSvcFabEphemeral",
+            "properties": {
+              "access": "Allow",
+              "destinationAddressPrefix": "*",
+              "destinationPortRange": "[concat(variables('nt1ephemeralStartPort'), '-', variables('nt1ephemeralEndPort'))]",
+              "direction": "Inbound",
+              "priority": 3930,
+              "protocol": "*",
+              "sourceAddressPrefix": "VirtualNetwork",
+              "sourcePortRange": "*",
+              "description": "allow fabric ephemeral ports within the vnet"
+            }
+          },
+          {
+            "name": "allowSvcFabPortal",
+            "properties": {
+              "access": "Allow",
+              "destinationAddressPrefix": "*",
+              "destinationPortRange": "[variables('nt1fabricHttpGatewayPort')]",
+              "direction": "Inbound",
+              "priority": 3900,
+              "protocol": "*",
+              "sourceAddressPrefix": "*",
+              "sourcePortRange": "*",
+              "description": "allow port used to access the fabric cluster web portal"
+            }
+          },
+          {
+            "name": "allowSvcFabClient",
+            "properties": {
+              "access": "Allow",
+              "destinationAddressPrefix": "*",
+              "destinationPortRange": "[variables('nt1fabricTcpGatewayPort')]",
+              "direction": "Inbound",
+              "priority": 3910,
+              "protocol": "*",
+              "sourceAddressPrefix": "*",
+              "sourcePortRange": "*",
+              "description": "allow port used by the fabric client (includes powershell)"
+            }
+          },
+          {
+            "name": "allowSvcFabApplication",
+            "properties": {
+              "access": "Allow",
+              "destinationAddressPrefix": "*",
+              "destinationPortRange": "[concat(variables('nt1applicationStartPort'), '-', variables('nt1applicationEndPort'))]",
+              "direction": "Inbound",
+              "priority": 3940,
+              "protocol": "*",
+              "sourceAddressPrefix": "*",
+              "sourcePortRange": "*",
+              "description": "allow fabric application ports within the vnet"
+            }
+          },
+          {
+            "name": "blockAll",
+            "properties": {
+              "access": "Deny",
+              "destinationAddressPrefix": "*",
+              "destinationPortRange": "*",
+              "direction": "Inbound",
+              "priority": 4095,
+              "protocol": "*",
+              "sourceAddressPrefix": "*",
+              "sourcePortRange": "*",
+              "description": "block all traffic except what we've explicitly allowed"
+            }
+          },
+          {
+            "name": "allowVNetRDP",
+            "properties": {
+              "access": "Allow",
+              "destinationAddressPrefix": "*",
+              "destinationPortRange": "3389",
+              "direction": "Inbound",
+              "priority": 3960,
+              "protocol": "*",
+              "sourceAddressPrefix": "*",
+              "sourcePortRange": "*",
+              "description": "allow RDP within the net"
             }
           }
         ]
@@ -383,12 +604,12 @@
                 "id": "[variables('lbPoolID0')]"
               },
               "backendPort": "[parameters('loadBalancedAppPort1')]",
-              "enableFloatingIP": "false",
+              "enableFloatingIP": false,
               "frontendIPConfiguration": {
                 "id": "[variables('lbIPConfig0')]"
               },
               "frontendPort": "[parameters('loadBalancedAppPort1')]",
-              "idleTimeoutInMinutes": "5",
+              "idleTimeoutInMinutes": 5,
               "probe": {
                 "id": "[concat(variables('lbID0'),'/probes/AppPortProbe1')]"
               },
@@ -402,12 +623,12 @@
                 "id": "[variables('lbPoolID0')]"
               },
               "backendPort": "[parameters('loadBalancedAppPort2')]",
-              "enableFloatingIP": "false",
+              "enableFloatingIP": false,
               "frontendIPConfiguration": {
                 "id": "[variables('lbIPConfig0')]"
               },
               "frontendPort": "[parameters('loadBalancedAppPort2')]",
-              "idleTimeoutInMinutes": "5",
+              "idleTimeoutInMinutes": 5,
               "probe": {
                 "id": "[concat(variables('lbID0'),'/probes/AppPortProbe2')]"
               },
@@ -866,10 +1087,7 @@
       "properties": {
         "overprovision": "[variables('overProvision')]",
         "upgradePolicy": {
-          "mode": "Rolling",
-          "automaticOSUpgradePolicy": {
-            "enableAutomaticOSUpgrade": true
-          }
+          "mode": "Rolling"
         },
         "singlePlacementGroup": false,
         "virtualMachineProfile": {
@@ -1128,7 +1346,7 @@
               "startPort": "[variables('nt1applicationStartPort')]"
             },
             "clientConnectionEndpointPort": "[variables('nt1fabricTcpGatewayPort')]",
-            "durabilityLevel": "Silver",
+            "durabilityLevel": "Bronze",
             "ephemeralPorts": {
               "endPort": "[variables('nt1ephemeralEndPort')]",
               "startPort": "[variables('nt1ephemeralStartPort')]"
