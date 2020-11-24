@@ -13,7 +13,9 @@ This template allows you to deploy a Service Fabric managed cluster using the *S
 
 For more info, see:
 
-- [Service Fabric managed cluster quickstart](https://docs.microsoft.com/azure/service-fabric/how-to-managed-identity-managed-cluster-vmss) for a walkthrough of the ARM template.
+- [Service Fabric managed cluster quickstart](https://docs.microsoft.com/azure/service-fabric/quickstart-managed-cluster-template) for a walkthrough of the base ARM template without a managed identity added.
+
+- [How to add a managed identity to a managed cluster node type](https://docs.microsoft.com/azure/service-fabric/how-to-managed-identity-managed-cluster-vmss) for discussion of this template and steps to add a managed identity to a node type on a Service Fabric managed cluster.
 
 - [Service Fabric managed cluster overview](https://docs.microsoft.com/azure/service-fabric/overview-managed-cluster) for more details on cluster SKUs.
 
