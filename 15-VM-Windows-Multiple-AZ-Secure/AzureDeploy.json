@@ -195,7 +195,7 @@
                 "Standard_LRS",
                 "Standard_GRS"
             ],
-            "defaultValue": "Standard_LRS",
+            "defaultValue": "Standard_GRS",
             "metadata": {
                 "description": "Replication option for the support log storage account"
             }
@@ -213,7 +213,7 @@
                 "Standard_LRS",
                 "Standard_GRS"
             ],
-            "defaultValue": "Standard_LRS",
+            "defaultValue": "Standard_GRS",
             "metadata": {
                 "description": "Replication option for the application diagnostics storage account"
             }
@@ -799,7 +799,8 @@
                 ],
                 "provisioningState": "Default",
                 "reliabilityLevel": "Platinum",
-                "upgradeMode": "Automatic",
+                "upgradeMode": "Manual",
+                "ClusterCodeVersion": "7.2.445.9590",
                 "vmImage": "Windows"
             },
             "tags": {
