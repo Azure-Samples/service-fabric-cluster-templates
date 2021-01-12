@@ -3,28 +3,16 @@
   "contentVersion": "1.0.0.0",
   "parameters": {
     "clusterLocation": {
-      "value": "westus"
+      "value": "southcentralus"
     },
     "clusterName": {
-      "value": "GEN-UNIQUE"
+      "value": "sftestupgrade"
     },
     "adminUserName": {
-      "value": "GEN-UNIQUE"
+      "value": "testadmin"
     },
     "adminPassword": {
-      "value": "GEN-PASSWORD"
-    },
-    "vmImagePublisher": {
-      "value": "MicrosoftWindowsServer"
-    },
-    "vmImageOffer": {
-      "value": "WindowsServer"
-    },
-    "vmImageSku": {
-      "value": "2016-Datacenter-with-Containers"
-    },
-    "vmImageVersion": {
-      "value": "latest"
+      "value": "Password#1234"
     },
     "loadBalancedAppPort1": {
       "value": 80
@@ -39,13 +27,13 @@
       "value": "My"
     },
     "certificateThumbprint": {
-      "value": "GEN-SF-CERT-THUMBPRINT"
+      "value": ""
     },
     "sourceVaultValue": {
-      "value": "GEN-KEYVAULT-RESOURCE-ID"
+      "value": ""
     },
     "certificateUrlValue": {
-      "value": "GEN-SF-CERT-URL"
+      "value": ""
     },
     "storageAccountType": {
       "value": "Standard_LRS"
