@@ -193,7 +193,7 @@
     "lbPoolID0": "[concat(variables('lbID0'),'/backendAddressPools/LoadBalancerBEAddressPool')]",
     "lbProbeID0": "[concat(variables('lbID0'),'/probes/FabricGatewayProbe')]",
     "lbHttpProbeID0": "[concat(variables('lbID0'),'/probes/FabricHttpGatewayProbe')]",
-    "lbNatPoolID0": "[concat(variables('lbID0'),'/inboundNatPools/LoadBalancerBEAddressNatPool')]",
+    "lbNatPoolID0": "[concat(variables('lbID0'),'/inboundNatPools/LoadBalancerBEAddressNatPool0')]",
     "vmNodeType0Name": "[toLower(concat('NT0', variables('vmName')))]"
   },
   "resources": [
@@ -414,14 +414,14 @@
         ],
         "inboundNatPools": [
           {
-            "name": "LoadBalancerBEAddressNatPool",
+            "name": "LoadBalancerBEAddressNatPool0",
             "properties": {
               "backendPort": "3389",
               "frontendIPConfiguration": {
                 "id": "[variables('lbIPConfig0')]"
               },
-              "frontendPortRangeEnd": "3395",
-              "frontendPortRangeStart": "3389",
+              "frontendPortRangeEnd": "50999",
+              "frontendPortRangeStart": "50000",
               "protocol": "tcp"
             }
           }

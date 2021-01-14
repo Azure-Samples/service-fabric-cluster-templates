@@ -223,11 +223,8 @@
     "nt0fabricHttpGatewayPort": "19080",
     "nt0reverseProxyEndpointPort": "19081",
     "subnet0Name": "Subnet-0",
-    "subnet1Name": "Subnet-1",
     "subnet0Prefix": "10.0.0.0/24",
-    "subnet1Prefix": "10.0.1.0/24",
     "subnet0Ref": "[concat(variables('vnetID'),'/subnets/',variables('subnet0Name'))]",
-    "subnet1Ref": "[concat(variables('vnetID'),'/subnets/',variables('subnet1Name'))]",
     "supportLogStorageAccountName": "[toLower( concat('sflogs', uniqueString(resourceGroup().id),'2'))]",
     "applicationDiagnosticsStorageAccountName": "[toLower(concat('wad',uniqueString(resourceGroup().id), '3' ))]",
     "lbID0": "[resourceId('Microsoft.Network/loadBalancers',concat('LB','-', parameters('clusterName'),'-',variables('vmNodeType0Name')))]",
@@ -235,15 +232,10 @@
     "lbPoolID0": "[concat(variables('lbID0'),'/backendAddressPools/LoadBalancerBEAddressPool')]",
     "lbProbeID0": "[concat(variables('lbID0'),'/probes/FabricGatewayProbe')]",
     "lbHttpProbeID0": "[concat(variables('lbID0'),'/probes/FabricHttpGatewayProbe')]",
-    "lbNatPoolID0": "[concat(variables('lbID0'),'/inboundNatPools/LoadBalancerBEAddressNatPool')]",
+    "lbNatPoolID0": "[concat(variables('lbID0'),'/inboundNatPools/LoadBalancerBEAddressNatPool0')]",
     "vmNodeType0Name": "[toLower(concat('NT0', variables('vmName')))]",
     "vmNodeType1Name": "[toLower(concat('NT1', variables('vmName')))]",
-    "lbID1": "[resourceId('Microsoft.Network/loadBalancers',concat('LB','-', parameters('clusterName'),'-',variables('vmNodeType1Name')))]",
-    "lbIPConfig1": "[concat(variables('lbID1'),'/frontendIPConfigurations/LoadBalancerIPConfig')]",
-    "lbPoolID1": "[concat(variables('lbID1'),'/backendAddressPools/LoadBalancerBEAddressPool')]",
-    "lbProbeID1": "[concat(variables('lbID1'),'/probes/FabricGatewayProbe')]",
-    "lbHttpProbeID1": "[concat(variables('lbID1'),'/probes/FabricHttpGatewayProbe')]",
-    "lbNatPoolID1": "[concat(variables('lbID1'),'/inboundNatPools/LoadBalancerBEAddressNatPool')]"
+    "lbNatPoolID1": "[concat(variables('lbID0'),'/inboundNatPools/LoadBalancerBEAddressNatPool1')]"
   },
   "resources": [
     {
@@ -295,12 +287,6 @@
             "name": "[variables('subnet0Name')]",
             "properties": {
               "addressPrefix": "[variables('subnet0Prefix')]"
-            }
-          },
-          {
-            "name": "[variables('subnet1Name')]",
-            "properties": {
-              "addressPrefix": "[variables('subnet1Prefix')]"
             }
           }
         ]
@@ -469,192 +455,27 @@
         ],
         "inboundNatPools": [
           {
-            "name": "LoadBalancerBEAddressNatPool",
+            "name": "LoadBalancerBEAddressNatPool0",
             "properties": {
               "backendPort": "3389",
               "frontendIPConfiguration": {
                 "id": "[variables('lbIPConfig0')]"
               },
-              "frontendPortRangeEnd": "3395",
-              "frontendPortRangeStart": "3389",
-              "protocol": "tcp"
-            }
-          }
-        ]
-      },
-      "tags": {
-        "resourceType": "Service Fabric",
-        "clusterName": "[parameters('clusterName')]"
-      }
-    },
-    {
-      "apiVersion": "[variables('publicIPApiVersion')]",
-      "type": "Microsoft.Network/publicIPAddresses",
-      "name": "[concat(variables('lbIPName'),'-',variables('vmNodeType1Name'))]",
-      "location": "[variables('computeLocation')]",
-      "properties": {
-        "dnsSettings": {
-          "domainNameLabel": "[concat(variables('dnsName'),'-','nt1')]"
-        },
-        "publicIPAllocationMethod": "Dynamic"
-      },
-      "tags": {
-        "resourceType": "Service Fabric",
-        "clusterName": "[parameters('clusterName')]"
-      }
-    },
-    {
-      "apiVersion": "[variables('lbApiVersion')]",
-      "type": "Microsoft.Network/loadBalancers",
-      "name": "[concat('LB','-', parameters('clusterName'),'-',variables('vmNodeType1Name'))]",
-      "location": "[variables('computeLocation')]",
-      "dependsOn": [
-        "[concat('Microsoft.Network/publicIPAddresses/',concat(variables('lbIPName'),'-',variables('vmNodeType1Name')))]"
-      ],
-      "properties": {
-        "frontendIPConfigurations": [
-          {
-            "name": "LoadBalancerIPConfig",
-            "properties": {
-              "publicIPAddress": {
-                "id": "[resourceId('Microsoft.Network/publicIPAddresses',concat(variables('lbIPName'),'-',variables('vmNodeType1Name')))]"
-              }
-            }
-          }
-        ],
-        "backendAddressPools": [
-          {
-            "name": "LoadBalancerBEAddressPool",
-            "properties": {}
-          }
-        ],
-        "loadBalancingRules": [
-          {
-            "name": "LBRule",
-            "properties": {
-              "backendAddressPool": {
-                "id": "[variables('lbPoolID1')]"
-              },
-              "backendPort": "[variables('nt0fabricTcpGatewayPort')]",
-              "enableFloatingIP": "false",
-              "frontendIPConfiguration": {
-                "id": "[variables('lbIPConfig1')]"
-              },
-              "frontendPort": "[variables('nt0fabricTcpGatewayPort')]",
-              "idleTimeoutInMinutes": "5",
-              "probe": {
-                "id": "[variables('lbProbeID1')]"
-              },
+              "frontendPortRangeEnd": "50999",
+              "frontendPortRangeStart": "50000",
               "protocol": "tcp"
             }
           },
           {
-            "name": "LBHttpRule",
-            "properties": {
-              "backendAddressPool": {
-                "id": "[variables('lbPoolID1')]"
-              },
-              "backendPort": "[variables('nt0fabricHttpGatewayPort')]",
-              "enableFloatingIP": "false",
-              "frontendIPConfiguration": {
-                "id": "[variables('lbIPConfig1')]"
-              },
-              "frontendPort": "[variables('nt0fabricHttpGatewayPort')]",
-              "idleTimeoutInMinutes": "5",
-              "probe": {
-                "id": "[variables('lbHttpProbeID1')]"
-              },
-              "protocol": "tcp"
-            }
-          },
-          {
-            "name": "AppPortLBRule1",
-            "properties": {
-              "backendAddressPool": {
-                "id": "[variables('lbPoolID1')]"
-              },
-              "backendPort": "[parameters('loadBalancedAppPort1')]",
-              "enableFloatingIP": "false",
-              "frontendIPConfiguration": {
-                "id": "[variables('lbIPConfig1')]"
-              },
-              "frontendPort": "[parameters('loadBalancedAppPort1')]",
-              "idleTimeoutInMinutes": "5",
-              "probe": {
-                "id": "[concat(variables('lbID1'),'/probes/AppPortProbe1')]"
-              },
-              "protocol": "tcp"
-            }
-          },
-          {
-            "name": "AppPortLBRule2",
-            "properties": {
-              "backendAddressPool": {
-                "id": "[variables('lbPoolID1')]"
-              },
-              "backendPort": "[parameters('loadBalancedAppPort2')]",
-              "enableFloatingIP": "false",
-              "frontendIPConfiguration": {
-                "id": "[variables('lbIPConfig1')]"
-              },
-              "frontendPort": "[parameters('loadBalancedAppPort2')]",
-              "idleTimeoutInMinutes": "5",
-              "probe": {
-                "id": "[concat(variables('lbID1'),'/probes/AppPortProbe2')]"
-              },
-              "protocol": "tcp"
-            }
-          }
-        ],
-        "probes": [
-          {
-            "name": "FabricGatewayProbe",
-            "properties": {
-              "intervalInSeconds": 5,
-              "numberOfProbes": 2,
-              "port": "[variables('nt0fabricTcpGatewayPort')]",
-              "protocol": "tcp"
-            }
-          },
-          {
-            "name": "FabricHttpGatewayProbe",
-            "properties": {
-              "intervalInSeconds": 5,
-              "numberOfProbes": 2,
-              "port": "[variables('nt0fabricHttpGatewayPort')]",
-              "protocol": "tcp"
-            }
-          },
-          {
-            "name": "AppPortProbe1",
-            "properties": {
-              "intervalInSeconds": 5,
-              "numberOfProbes": 2,
-              "port": "[parameters('loadBalancedAppPort1')]",
-              "protocol": "tcp"
-            }
-          },
-          {
-            "name": "AppPortProbe2",
-            "properties": {
-              "intervalInSeconds": 5,
-              "numberOfProbes": 2,
-              "port": "[parameters('loadBalancedAppPort2')]",
-              "protocol": "tcp"
-            }
-          }
-        ],
-        "inboundNatPools": [
-          {
-            "name": "LoadBalancerBEAddressNatPool",
+            "name": "LoadBalancerBEAddressNatPool1",
             "properties": {
               "backendPort": "3389",
               "frontendIPConfiguration": {
-                "id": "[variables('lbIPConfig1')]"
+                "id": "[variables('lbIPConfig0')]"
               },
-              "frontendPortRangeEnd": "3395",
-              "frontendPortRangeStart": "3389",
-              "protocol": "tcp"
+              "frontendPortRangeEnd": "51999",
+              "frontendPortRangeStart": "51000",
+                "protocol": "tcp"
             }
           }
         ]
@@ -867,7 +688,7 @@
       "location": "[variables('computeLocation')]",
       "dependsOn": [
         "[concat('Microsoft.Network/virtualNetworks/', variables('virtualNetworkName'))]",
-        "[concat('Microsoft.Network/loadBalancers/', concat('LB','-', parameters('clusterName'),'-',variables('vmNodeType1Name')))]",
+        "[concat('Microsoft.Network/loadBalancers/', concat('LB','-', parameters('clusterName'),'-',variables('vmNodeType0Name')))]",
         "[concat('Microsoft.Storage/storageAccounts/', variables('supportLogStorageAccountName'))]",
         "[concat('Microsoft.Storage/storageAccounts/', variables('applicationDiagnosticsStorageAccountName'))]"
       ],
@@ -895,7 +716,7 @@
                     "dataPath": "D:\\SvcFab",
                     "durabilityLevel": "Silver",
                     "enableParallelJobs": true,
-                    "nicPrefixOverride": "[variables('subnet1Prefix')]",
+                    "nicPrefixOverride": "[variables('subnet0Prefix')]",
                     "certificate": {
                       "thumbprint": "[parameters('certificateThumbprint')]",
                       "x509StoreName": "[parameters('certificateStoreValue')]"
@@ -992,7 +813,7 @@
                       "properties": {
                         "loadBalancerBackendAddressPools": [
                           {
-                            "id": "[variables('lbPoolID1')]"
+                            "id": "[variables('lbPoolID0')]"
                           }
                         ],
                         "loadBalancerInboundNatPools": [
@@ -1001,7 +822,7 @@
                           }
                         ],
                         "subnet": {
-                          "id": "[variables('subnet1Ref')]"
+                          "id": "[variables('subnet0Ref')]"
                         }
                       }
                     }
