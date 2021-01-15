@@ -576,7 +576,7 @@
             ],
             "properties": {
                 "singlePlacementGroup": true,
-                "zoneBalance": false,
+                "zoneBalance": true,
                 "overprovision": "[parameters('overProvision')]",
                 "upgradePolicy": {
                     "mode": "Automatic"
