@@ -195,7 +195,7 @@
                 "Standard_LRS",
                 "Standard_GRS"
             ],
-            "defaultValue": "Standard_LRS",
+            "defaultValue": "Standard_GRS",
             "metadata": {
                 "description": "Replication option for the support log storage account"
             }
@@ -213,7 +213,7 @@
                 "Standard_LRS",
                 "Standard_GRS"
             ],
-            "defaultValue": "Standard_LRS",
+            "defaultValue": "Standard_GRS",
             "metadata": {
                 "description": "Replication option for the application diagnostics storage account"
             }
@@ -576,7 +576,7 @@
             ],
             "properties": {
                 "singlePlacementGroup": true,
-                "zoneBalance": false,
+                "zoneBalance": true,
                 "overprovision": "[parameters('overProvision')]",
                 "upgradePolicy": {
                     "mode": "Automatic"
@@ -593,7 +593,7 @@
                                         "StorageAccountKey1": "[listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('supportLogStorageAccountName')),'2015-05-01-preview').key1]",
                                         "StorageAccountKey2": "[listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('supportLogStorageAccountName')),'2015-05-01-preview').key2]"
                                     },
-                                    "publisher": "Microsoft.Azure.ServiceFabric.Test",
+                                    "publisher": "Microsoft.Azure.ServiceFabric",
                                     "settings": {
                                         "clusterEndpoint": "[reference(parameters('clusterName')).clusterEndpoint]",
                                         "nodeTypeRef": "[parameters('vmNodeType0Name')]",
@@ -747,6 +747,8 @@
                 "[concat('Microsoft.Storage/storageAccounts/', parameters('supportLogStorageAccountName'))]"
             ],
             "properties": {
+                "vmssZonalUpgradeMode": "Parallel",
+                "sfZonalUpgradeMode": "Hierarchical",
                 "addonFeatures": [
                     "DnsService"
                 ],
@@ -756,7 +758,6 @@
                 },
                 "clientCertificateCommonNames": [],
                 "clientCertificateThumbprints": [],
-                "clusterCodeVersion": "7.1.417.9590",
                 "clusterState": "Default",
                 "diagnosticsStorageAccountConfig": {
                     "blobEndpoint": "[reference(concat('Microsoft.Storage/storageAccounts/', parameters('supportLogStorageAccountName')), variables('storageApiVersion')).primaryEndpoints.blob]",
@@ -799,6 +800,7 @@
                 "provisioningState": "Default",
                 "reliabilityLevel": "Platinum",
                 "upgradeMode": "Manual",
+                "ClusterCodeVersion": "7.2.445.9590",
                 "vmImage": "Windows"
             },
             "tags": {

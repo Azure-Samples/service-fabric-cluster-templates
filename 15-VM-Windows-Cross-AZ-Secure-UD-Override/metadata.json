@@ -1,7 +1,7 @@
 {
-  "itemDisplayName": "Deploy a 9 Node, cross Azure Zone, unsecure Windows Service Fabric Cluster ",
-  "description": "This template allows you to deploy an unsecure 7Node, cross AZ Service Fabric Cluster running Windows Server 2016 Datacenter with containers on a Standard_D2_V2 Size VMSS, with network security groups enabled.",
-  "summary": "This template takes a minimum amount of parameters and deploys a 9 Node, cross Azure Zone Windows Service Fabric Cluster",
-  "githubUsername": "chackdan",
-  "dateUpdated": "2018-01-03"
+  "itemDisplayName": "Deploy a 15-Node, cross Availability Zone, secure Service Fabric Cluster on Azure",
+  "description": "This template allows you to deploy a 15-Node, cross AZ Service Fabric Cluster running Windows Server 2016 Datacenter with containers on 3 Standard_D2_V2 size VM ScaleSets, with network security groups enabled.",
+  "summary": "This template takes a minimum amount of parameters and deploys a 15-Node, cross Availability Zone Service Fabric Cluster",
+  "githubUsername": "linmeng08",
+  "dateUpdated": "2020-09-29"
 }
