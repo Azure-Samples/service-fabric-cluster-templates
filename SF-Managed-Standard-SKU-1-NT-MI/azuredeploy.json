@@ -71,7 +71,7 @@
         }
     },
     "variables": {
-        "sfApiVersion": "2020-01-01-preview"
+        "sfApiVersion": "2021-01-01-preview"
     },
     "resources": [
         {
@@ -142,7 +142,7 @@
                 "dataDiskSizeGB": "[parameters('dataDiskSizeGB')]",
                 "vmManagedIdentity": {
                     "userAssignedIdentities": [
-                        "[resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', parameters('userAssignedIdentityName'))]"
+                        "[resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', parameters('userAssignedIdentityName'))]"
                     ]
                 }
             }
