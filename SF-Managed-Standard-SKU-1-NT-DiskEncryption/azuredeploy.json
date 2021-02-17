@@ -1,0 +1,156 @@
+{
+    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "clusterName": {
+            "type": "string",
+            "minLength": 4,
+            "maxLength": 23,
+            "metadata": {
+                "description": "Name of your cluster - Between 3 and 23 characters. Letters and numbers only"
+            }
+        },
+        "clusterSku": {
+            "type": "string",
+            "allowedValues": [
+                "Basic",
+                "Standard"
+            ],
+            "defaultValue": "Basic"
+        },
+        "adminUserName": {
+            "type": "string",
+            "defaultValue": "vmadmin"
+        },
+        "adminPassword": {
+            "type": "securestring"
+        },
+        "clientCertificateThumbprint": {
+            "type": "string"
+        },
+         "nodeTypeName": {
+            "type": "string",
+            "maxLength": 9,
+            "defaultValue": "NT1"
+        },
+        "vmImagePublisher": {
+            "type": "string",
+            "defaultValue": "MicrosoftWindowsServer"
+        },
+        "vmImageOffer": {
+            "type": "string",
+            "defaultValue": "WindowsServer"
+        },
+        "vmImageSku": {
+            "type": "string",
+            "defaultValue": "2019-Datacenter"
+        },
+        "vmImageVersion": {
+            "type": "string",
+            "defaultValue": "latest"
+        },
+        "vmSize": {
+            "type": "string",
+            "defaultValue": "Standard_D2_v2"
+        },
+        "vmInstanceCount": {
+            "type": "int",
+            "defaultValue": 3
+        },
+        "dataDiskSizeGB": {
+            "type": "int",
+            "defaultValue": 120
+        },
+        "keyVaultResourceId": {
+            "type": "string",
+            "metadata": {
+                "description": "Full resource id of the Key Vault used for disk encryption."
+            }
+        },
+        "volumeType": {
+            "type": "string",
+            "defaultValue": "All",
+            "metadata": {
+                "description": "Type of the volume OS or Data to perform encryption operation"
+            }
+        }
+    },
+    "variables": {
+        "sfApiVersion": "2021-01-01-preview"
+    },
+    "resources": [
+        {
+            "type": "Microsoft.ServiceFabric/managedclusters",
+            "apiVersion": "[variables('sfApiVersion')]",
+            "name": "[parameters('clusterName')]",
+            "dependsOn": [],
+            "sku": {
+                "name" : "[parameters('clusterSku')]"
+            },
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "dnsName": "[toLower(parameters('clusterName'))]",
+                "adminUserName": "[parameters('adminUserName')]",
+                "adminPassword": "[parameters('adminPassword')]",
+                "clientConnectionPort": 19000,
+                "httpGatewayConnectionPort": 19080,
+                "clients": [
+                    {
+                        "isAdmin": true,
+                        "thumbprint": "[parameters('clientCertificateThumbprint')]"
+                    }
+                ]
+            }
+        },
+        {
+            "type": "Microsoft.ServiceFabric/managedclusters/nodetypes",
+            "apiVersion": "[variables('sfApiVersion')]",
+            "name": "[concat(parameters('clusterName'), '/', parameters('nodeTypeName'))]",
+            "dependsOn": [
+                "[concat('Microsoft.ServiceFabric/managedclusters/', parameters('clusterName'))]"
+            ],
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "isPrimary": true,
+                "vmImagePublisher": "[parameters('vmImagePublisher')]",
+                "vmImageOffer": "[parameters('vmImageOffer')]",
+                "vmImageSku": "[parameters('vmImageSku')]",
+                "vmImageVersion": "[parameters('vmImageVersion')]",
+                "vmSize": "[parameters('vmSize')]",
+                "vmInstanceCount": "[parameters('vmInstanceCount')]",
+                "dataDiskSizeGB": "[parameters('dataDiskSizeGB')]",
+                "vmExtensions": [
+                    {
+                        "name": "AzureDiskEncryption",
+                        "properties": {
+                            "publisher": "Microsoft.Azure.Security",
+                            "type": "AzureDiskEncryption",
+                            "typeHandlerVersion": "2.1",
+                            "autoUpgradeMinorVersion": true,
+                            "settings": {
+                                "EncryptionOperation": "EnableEncryption",
+                                "KeyVaultURL": "[reference(parameters('keyVaultResourceId'),'2016-10-01').vaultUri]",
+                                "KeyVaultResourceId": "[parameters('keyVaultResourceID')]",
+                                "VolumeType": "[parameters('volumeType')]"
+                            }
+                        }
+                    }
+                ]
+            }
+        }
+    ],
+    "outputs": {
+         "serviceFabricExplorer": {
+            "value": "[concat('https://', reference(parameters('clusterName')).fqdn, ':', reference(parameters('clusterName')).httpGatewayConnectionPort)]",
+            "type": "string"
+        },
+        "clientConnectionEndpoint": {
+             "value": "[concat(reference(parameters('clusterName')).fqdn, ':', reference(parameters('clusterName')).clientConnectionPort)]",
+             "type": "string"
+        },
+        "clusterProperties": {
+            "value": "[reference(parameters('clusterName'))]",
+            "type": "object"
+        }
+    }
+}
