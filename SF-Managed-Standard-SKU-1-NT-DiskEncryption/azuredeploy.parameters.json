@@ -1,0 +1,51 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "clusterName": {
+      "value": "GEN-UNIQUE"
+    },
+    "clusterSku": {
+      "value": "Standard"
+    },
+    "adminUserName": {
+      "value": "GEN-UNIQUE"
+    },
+    "adminPassword": {
+      "value": "GEN-PASSWORD"
+    },
+    "clientCertificateThumbprint": {
+      "value": "GEN-SF-CERT-THUMBPRINT"
+    },
+    "nodeTypeName": {
+      "value": "NT1"
+    },
+    "vmImagePublisher": {
+      "value": "MicrosoftWindowsServer"
+    },
+    "vmImageOffer": {
+      "value": "WindowsServer"
+    },
+    "vmImageSku": {
+      "value": "2019-Datacenter"
+    },
+    "vmImageVersion": {
+      "value": "latest"
+    },
+    "vmSize": {
+      "value": "Standard_D2_v2"
+    },
+    "vmInstanceCount": {
+      "value": 5
+    },
+    "dataDiskSizeGB": {
+      "value": 120
+    },
+    "keyVaultResourceId": {
+      "value": "GEN-KEY-VAULT-FULL-RESOURCE-ID" 
+    },
+    "volumeType": {
+      "value": "All"
+    }
+  }
+}
