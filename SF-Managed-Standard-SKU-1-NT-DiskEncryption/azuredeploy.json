@@ -16,7 +16,7 @@
                 "Basic",
                 "Standard"
             ],
-            "defaultValue": "Standard"
+            "defaultValue": "Basic"
         },
         "adminUserName": {
             "type": "string",
@@ -28,7 +28,7 @@
         "clientCertificateThumbprint": {
             "type": "string"
         },
-        "nodeTypeName": {
+         "nodeTypeName": {
             "type": "string",
             "maxLength": 9,
             "defaultValue": "NT1"
@@ -55,19 +55,24 @@
         },
         "vmInstanceCount": {
             "type": "int",
-            "defaultValue": 5
+            "defaultValue": 3
         },
         "dataDiskSizeGB": {
             "type": "int",
             "defaultValue": 120
         },
-        "userAssignedIdentityName": {
-            "defaultValue": "SFMC-id",
-            "type": "String"
+        "keyVaultResourceId": {
+            "type": "string",
+            "metadata": {
+                "description": "Full resource id of the Key Vault used for disk encryption."
+            }
         },
-        "vmIdentityRoleNameGuid": {
-            "defaultValue": "[newGuid()]",
-            "type": "String"
+        "volumeType": {
+            "type": "string",
+            "defaultValue": "All",
+            "metadata": {
+                "description": "Type of the volume OS or Data to perform encryption operation"
+            }
         }
     },
     "variables": {
@@ -75,62 +80,36 @@
     },
     "resources": [
         {
-            "apiVersion": "[variables('sfApiVersion')]",
             "type": "Microsoft.ServiceFabric/managedclusters",
+            "apiVersion": "[variables('sfApiVersion')]",
             "name": "[parameters('clusterName')]",
-            "location": "[resourcegroup().location]",
+            "dependsOn": [],
             "sku": {
                 "name" : "[parameters('clusterSku')]"
             },
+            "location": "[resourceGroup().location]",
             "properties": {
                 "dnsName": "[toLower(parameters('clusterName'))]",
                 "adminUserName": "[parameters('adminUserName')]",
                 "adminPassword": "[parameters('adminPassword')]",
                 "clientConnectionPort": 19000,
                 "httpGatewayConnectionPort": 19080,
-                "clients" : [
+                "clients": [
                     {
-                        "isAdmin" : true,
-                        "thumbprint" : "[parameters('clientCertificateThumbprint')]"
-                    }
-                ],
-                "loadBalancingRules": [
-                    {
-                        "frontendPort": 8080, 
-                        "backendPort": 8080,
-                        "protocol": "tcp",
-                        "probeProtocol": "tcp"
+                        "isAdmin": true,
+                        "thumbprint": "[parameters('clientCertificateThumbprint')]"
                     }
                 ]
             }
         },
-        { 
-            "type": "Microsoft.ManagedIdentity/userAssignedIdentities", 
-            "name": "[parameters('userAssignedIdentityName')]", 
-            "apiVersion": "2018-11-30", 
-            "location": "[resourceGroup().location]"  
-        }, 
         {
-            "type": "Microsoft.Authorization/roleAssignments", 
-            "apiVersion": "2020-04-01-preview",
-            "name": "[parameters('vmIdentityRoleNameGuid')]",
-            "scope": "[concat('Microsoft.ManagedIdentity/userAssignedIdentities', '/', parameters('userAssignedIdentityName'))]",
-            "dependsOn": [ 
-                "[concat('Microsoft.ManagedIdentity/userAssignedIdentities/', parameters('userAssignedIdentityName'))]"
-            ], 
-            "properties": {
-                "roleDefinitionId": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', 'f1a07417-d97a-45cb-824c-7a7467783830')]",
-                "principalId": "fbc587f2-66f5-4459-a027-bcd908b9d278" 
-                  } 
-            }, 
-        {
-            "apiVersion": "[variables('sfApiVersion')]",
             "type": "Microsoft.ServiceFabric/managedclusters/nodetypes",
+            "apiVersion": "[variables('sfApiVersion')]",
             "name": "[concat(parameters('clusterName'), '/', parameters('nodeTypeName'))]",
-            "location": "[resourcegroup().location]",
             "dependsOn": [
-              "[concat('Microsoft.ServiceFabric/managedclusters/', parameters('clusterName'))]"
+                "[concat('Microsoft.ServiceFabric/managedclusters/', parameters('clusterName'))]"
             ],
+            "location": "[resourceGroup().location]",
             "properties": {
                 "isPrimary": true,
                 "vmImagePublisher": "[parameters('vmImagePublisher')]",
@@ -140,11 +119,23 @@
                 "vmSize": "[parameters('vmSize')]",
                 "vmInstanceCount": "[parameters('vmInstanceCount')]",
                 "dataDiskSizeGB": "[parameters('dataDiskSizeGB')]",
-                "vmManagedIdentity": {
-                    "userAssignedIdentities": [
-                        "[resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', parameters('userAssignedIdentityName'))]"
-                    ]
-                }
+                "vmExtensions": [
+                    {
+                        "name": "AzureDiskEncryption",
+                        "properties": {
+                            "publisher": "Microsoft.Azure.Security",
+                            "type": "AzureDiskEncryption",
+                            "typeHandlerVersion": "2.1",
+                            "autoUpgradeMinorVersion": true,
+                            "settings": {
+                                "EncryptionOperation": "EnableEncryption",
+                                "KeyVaultURL": "[reference(parameters('keyVaultResourceId'),'2016-10-01').vaultUri]",
+                                "KeyVaultResourceId": "[parameters('keyVaultResourceID')]",
+                                "VolumeType": "[parameters('volumeType')]"
+                            }
+                        }
+                    }
+                ]
             }
         }
     ],

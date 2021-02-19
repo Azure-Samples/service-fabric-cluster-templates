@@ -80,7 +80,7 @@
         }
     },
     "variables": {
-        "sfApiVersion": "2020-01-01-preview"
+        "sfApiVersion": "2021-01-01-preview"
     },
     "resources": [
         {
