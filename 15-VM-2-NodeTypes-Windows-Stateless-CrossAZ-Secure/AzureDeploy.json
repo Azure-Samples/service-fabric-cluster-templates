@@ -150,14 +150,14 @@
     },
     "nt0InstanceCount": {
       "type": "int",
-      "defaultValue": 5,
+      "defaultValue": "15",
       "metadata": {
         "description": "Instance count for node type"
       }
     },
     "nt1InstanceCount": {
       "type": "int",
-      "defaultValue": "5",
+      "defaultValue": "9",
       "metadata": {
         "description": "Instance count for node type"
       }
@@ -695,7 +695,7 @@
       }
     },
     {
-      "apiVersion": "2018-10-01",
+      "apiVersion": "2019-03-01",
       "type": "Microsoft.Compute/virtualMachineScaleSets",
       "name": "[variables('vmNodeType0Name')]",
       "location": "[variables('computeLocation')]",
@@ -705,11 +705,15 @@
         "[concat('Microsoft.Storage/storageAccounts/', variables('supportLogStorageAccountName'))]",
         "[concat('Microsoft.Storage/storageAccounts/', variables('applicationDiagnosticsStorageAccountName'))]"
       ],
+      "zones": ["1", "2", "3"]
       "properties": {
         "overprovision": "[variables('overProvision')]",
         "upgradePolicy": {
           "mode": "Automatic"
         },
+        "singlePlacementGroup": true,
+        "zoneBalance": true,
+        "platformFaultDomainCount": 5,
         "virtualMachineProfile": {
           "extensionProfile": {
             "extensions": [
@@ -1341,6 +1345,7 @@
             },
             "httpGatewayEndpointPort": "[variables('nt0fabricHttpGatewayPort')]",
             "isPrimary": true,
+            "multipleAvailabilityZones": true,
             "reverseProxyEndpointPort": "[variables('nt0reverseProxyEndpointPort')]",
             "vmInstanceCount": "[parameters('nt0InstanceCount')]"
           },
