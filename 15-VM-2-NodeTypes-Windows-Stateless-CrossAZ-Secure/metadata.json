@@ -1,0 +1,7 @@
+{
+  "itemDisplayName": "Deploy a 15 node, 2 Node Types Windows Service Fabric Cluster ",
+  "description": "This template allows you to deploy 10 Node, 2 Node Types Service Fabric Cluster with one node type exclusively supporting Stateless workloads on  Standard_D2_V2 Size VMSS.",
+  "summary": "This template takes a minimum amount of parameters and deploys a 15 Node, 2 Node types, Stateless Windows Service Fabric Cluster",
+  "githubUsername": "saketharsh",
+  "dateUpdated": "2021-15-03"
+}
