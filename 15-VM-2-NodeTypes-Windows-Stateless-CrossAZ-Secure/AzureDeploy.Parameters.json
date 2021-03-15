@@ -57,7 +57,7 @@
       "value": "Standard_LRS"
     },
     "nt0InstanceCount": {
-      "value": 5
+      "value": 15
     },
     "nt1InstanceCount" : {
       "value": 10
