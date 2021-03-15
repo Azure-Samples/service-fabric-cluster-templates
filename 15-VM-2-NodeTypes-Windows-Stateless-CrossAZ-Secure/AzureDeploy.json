@@ -157,7 +157,7 @@
     },
     "nt1InstanceCount": {
       "type": "int",
-      "defaultValue": "9",
+      "defaultValue": "6",
       "metadata": {
         "description": "Instance count for node type"
       }
