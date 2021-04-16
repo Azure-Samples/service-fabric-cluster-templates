@@ -51,7 +51,7 @@
         },
         "vmSize": {
             "type": "string",
-            "defaultValue": "Standard_D2_v2"
+            "defaultValue": "Standard_D2_v3"
         },
         "vmInstanceCount": {
             "type": "int",
@@ -60,10 +60,19 @@
         "dataDiskSizeGB": {
             "type": "int",
             "defaultValue": 120
+        },
+        "managedDataDiskType": {
+            "type": "string",
+            "allowedValues": [
+                "Standard_LRS",
+                "StandardSSD_LRS",
+                "Premium_LRS"
+            ],
+            "defaultValue": "Standard_LRS"
         }
     },
     "variables": {
-        "sfApiVersion": "2021-01-01-preview"
+        "sfApiVersion": "2021-05-01"
     },
     "resources": [
         {
@@ -112,7 +121,9 @@
                 "vmImageVersion": "[parameters('vmImageVersion')]",
                 "vmSize": "[parameters('vmSize')]",
                 "vmInstanceCount": "[parameters('vmInstanceCount')]",
-                "dataDiskSizeGB": "[parameters('dataDiskSizeGB')]"
+                "dataDiskSizeGB": "[parameters('dataDiskSizeGB')]",
+                "dataDiskType": "[parameters('managedDataDiskType')]"
+
             }
         }
     ],
