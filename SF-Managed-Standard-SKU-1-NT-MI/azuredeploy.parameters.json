@@ -17,8 +17,20 @@
         "clientCertificateThumbprint": {
             "value": "GEN-SF-CERT-THUMBPRINT"
         },
-        "nodeTypeName": {
+        "nodeType1Name": {
             "value": "NT1"
+        },
+        "nodeType1VmSize": {
+            "value": "Standard_D2_v3"
+        },
+        "nodeType1VmInstanceCount": {
+            "value": 5
+        },
+        "nodeType1DataDiskSizeGB": {
+            "value": 120
+        },
+        "managedDataDiskType": {
+            "value": "StandardSSD_LRS"
         },
         "vmImagePublisher": {
             "value": "MicrosoftWindowsServer"
@@ -31,18 +43,6 @@
         },
         "vmImageVersion": {
             "value": "latest"
-        },
-        "vmSize": {
-            "value": "Standard_D2_v3"
-        },
-        "vmInstanceCount": {
-            "value": 5
-        },
-        "dataDiskSizeGB": {
-            "value": 120
-        },
-        "managedDataDiskType": {
-            "value": "StandardSSD_LRS"
         }
     }
 }

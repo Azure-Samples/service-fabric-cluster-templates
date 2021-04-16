@@ -68,7 +68,7 @@
                 "StandardSSD_LRS",
                 "Premium_LRS"
             ],
-            "defaultValue": "Standard_LRS"
+            "defaultValue": "StandardSSD_LRS"
         }
     },
     "variables": {

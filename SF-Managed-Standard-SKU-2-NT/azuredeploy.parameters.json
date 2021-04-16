@@ -1,5 +1,5 @@
 {
-    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json",
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
         "clusterName": {
@@ -21,7 +21,7 @@
             "value": "NT1"
         },
         "nodeType1VmSize": {
-            "value": "Standard_D2_v2"
+            "value": "Standard_D2_v3"
         },
         "nodeType1VmInstanceCount": {
             "value": 5
@@ -29,17 +29,23 @@
         "nodeType1DataDiskSizeGB": {
             "value": 120
         },
+        "nodeType1managedDataDiskType": {
+            "value": "Premium_LRS"
+        },
         "nodeType2Name": {
             "value": "NT2"
         },
         "nodeType2VmSize": {
-            "value": "Standard_D2_v2"
+            "value": "Standard_D2_v3"
         },
         "nodeType2VmInstanceCount": {
             "value": 3
         },
         "nodeType2DataDiskSizeGB": {
             "value": 120
+        },
+        "nodeType2managedDataDiskType": {
+            "value": "Premium_LRS"
         },
         "vmImagePublisher": {
             "value": "MicrosoftWindowsServer"
