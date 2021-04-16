@@ -1,5 +1,5 @@
 {
-    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json",
+    "$schema": "http://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json",
     "contentVersion": "1.0.0.0",
     "parameters": {
         "clusterName": {
@@ -42,7 +42,7 @@
             "value": 120
         },
         "managedDataDiskType": {
-            "value": "Standard_LRS"
+            "value": "StandardSSD_LRS"
         }
     }
 }

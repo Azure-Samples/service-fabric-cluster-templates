@@ -1,5 +1,5 @@
 {
-    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json",
+    "$schema": "http://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json",
     "contentVersion": "1.0.0.0",
     "parameters": {
         "clusterName": {
@@ -60,10 +60,19 @@
         "vmImageVersion": {
             "type": "string",
             "defaultValue": "latest"
+        },
+        "managedDataDiskType": {
+            "type": "string",
+            "allowedValues": [
+                "Standard_LRS",
+                "StandardSSD_LRS",
+                "Premium_LRS"
+            ],
+            "defaultValue": "Standard_LRS"
         }
     },
     "variables": {
-        "sfApiVersion": "2021-01-01-preview"
+        "sfApiVersion": "2021-05-01"
     },
     "resources": [
         {
@@ -112,7 +121,8 @@
                 "vmImageVersion": "[parameters('vmImageVersion')]",
                 "vmSize": "[parameters('nodeType1VmSize')]",
                 "vmInstanceCount": "[parameters('nodeType1VmInstanceCount')]",
-                "dataDiskSizeGB": "[parameters('nodeType1DataDiskSizeGB')]"
+                "dataDiskSizeGB": "[parameters('nodeType1DataDiskSizeGB')]",
+                "dataDiskType": "[parameters('managedDataDiskType')]"
             }
         }
     ],
