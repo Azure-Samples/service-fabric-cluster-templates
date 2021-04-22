@@ -9,6 +9,10 @@
 
 This template allows you to deploy a Service Fabric managed cluster using the *Standard* SKU. This cluster contains a single node type running *Windows Server 2019 Datacenter* on a *Standard_D2s_v3* size virtual machine scale set with disk encryption enabled.
 
+## Use Powershell to deploy your cluster
+
+Go through the process of creating the cluster as described in [Creating Service Fabric Cluster via arm](https://docs.microsoft.com/azure/service-fabric/service-fabric-cluster-creation-via-arm)
+
 ## Resources
 
 For more info, see:
