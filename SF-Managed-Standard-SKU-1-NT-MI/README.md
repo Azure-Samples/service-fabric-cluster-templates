@@ -9,6 +9,8 @@
 
 This template allows you to deploy a Service Fabric managed cluster using the *Standard* SKU. This cluster contains a single node type running *Windows Server 2019 Datacenter* on a *Standard_D2_v2* size virtual machine scale set with a user-assigned managed identity.
 
+Generate a new GUID for the parameter **vmIdentityRoleNameGuid** and if you deploy again the same template including the role assignment, make sure the GUID is the same as the one originally used or remove this resource as it just needs to be created once.
+
 ## Resources
 
 For more info, see:

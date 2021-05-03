@@ -66,8 +66,11 @@
             "type": "String"
         },
         "vmIdentityRoleNameGuid": {
-            "defaultValue": "[newGuid()]",
-            "type": "String"
+            "defaultValue": "0000000-0000-0000-0000-000000000000",
+            "type": "String",
+            "metadata": {
+                "description": "Unique GUID to create the role assigment. Make sure it is the same value on redeployments."
+            }
         }
     },
     "variables": {
