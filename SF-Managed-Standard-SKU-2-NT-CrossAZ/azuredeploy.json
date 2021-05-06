@@ -43,7 +43,7 @@
         },
         "nodeType1DataDiskSizeGB": {
             "type": "int",
-            "defaultValue": 120
+            "defaultValue": 256
         },
         "nodeType1managedDataDiskType": {
             "type": "string",
@@ -69,7 +69,7 @@
         },
         "nodeType2DataDiskSizeGB": {
             "type": "int",
-            "defaultValue": 120
+            "defaultValue": 128
         },
         "nodeType2managedDataDiskType": {
             "type": "string",

@@ -5,7 +5,7 @@
   "description": "This template takes a minimum set of parameters and deploys a Basic SKU Service Fabric managed cluster",
   "summary": "This template takes a minimum set of parameters and deploys a Basic SKU Service Fabric managed cluster",
   "githubUsername": "peterpogorski",
-  "dateUpdated": "2021-04-16"
+  "dateUpdated": "2021-05-06"
 }
 
 

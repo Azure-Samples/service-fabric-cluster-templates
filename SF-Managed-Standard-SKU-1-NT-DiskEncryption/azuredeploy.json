@@ -59,7 +59,7 @@
         },
         "dataDiskSizeGB": {
             "type": "int",
-            "defaultValue": 120
+            "defaultValue": 256
         },
         "managedDataDiskType": {
             "type": "string",

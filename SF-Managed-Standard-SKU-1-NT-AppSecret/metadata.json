@@ -4,7 +4,7 @@
   "itemDisplayName": "Deploy a Standard SKU Service Fabric managed cluster with an application secret from Key Vault",
   "description": "This template takes a minimum set of parameters and deploys a Standard SKU Service Fabric managed cluster with 1 node type and an application secret from Key Vault.",
   "summary": "This template takes a minimum set of parameters and deploys a Standard SKU Service Fabric managed cluster with 1 node type and an application secret from Key Vault.",
-    "dateUpdated": "2021-04-21"
+  "dateUpdated": "2021-05-06"
 }
 
 

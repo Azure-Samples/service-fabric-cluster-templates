@@ -43,7 +43,7 @@
         },
         "nodeType1DataDiskSizeGB": {
             "type": "int",
-            "defaultValue": 120
+            "defaultValue": 256
         },
         "vmImagePublisher": {
             "type": "string",

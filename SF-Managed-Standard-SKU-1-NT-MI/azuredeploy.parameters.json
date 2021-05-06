@@ -27,7 +27,7 @@
             "value": 5
         },
         "nodeType1DataDiskSizeGB": {
-            "value": 120
+            "value": 256
         },
         "managedDataDiskType": {
             "value": "StandardSSD_LRS"

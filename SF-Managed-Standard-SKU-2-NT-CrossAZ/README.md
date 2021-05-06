@@ -14,7 +14,7 @@ This template allows you to deploy a Service Fabric managed cluster using the *S
 
 ## Use Powershell to deploy your cluster
 
-Go through the process of creating the cluster as described in [Creating Service Fabric Cluster via arm](https://docs.microsoft.com/azure/service-fabric/service-fabric-cluster-creation-via-arm)
+Go through the process of creating the cluster as described in [Creating Service Fabric Cluster via ARM template](https://docs.microsoft.com/azure/service-fabric/service-fabric-cluster-creation-via-arm)
 
 ## Resources
 

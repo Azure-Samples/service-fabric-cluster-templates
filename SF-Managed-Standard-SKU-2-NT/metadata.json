@@ -5,7 +5,7 @@
   "description": "This template takes a minimum set of parameters and deploys a Standard SKU Service Fabric managed cluster with 2 node types.",
   "summary": "This template takes a minimum set of parameters and deploys a Standard SKU Service Fabric managed cluster with 2 node types.",
   "githubUsername": "peterpogorski",
-  "dateUpdated": "2021-04-16"
+  "dateUpdated": "2021-05-06"
 }
 
 
