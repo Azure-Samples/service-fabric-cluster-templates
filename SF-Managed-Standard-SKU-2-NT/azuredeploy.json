@@ -1,5 +1,5 @@
 {
-    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json",
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
         "clusterName": {
@@ -35,7 +35,7 @@
         },
         "nodeType1VmSize": {
             "type": "string",
-            "defaultValue": "Standard_D2_v2"
+            "defaultValue": "Standard_D2s_v3"
         },
         "nodeType1VmInstanceCount": {
             "type": "int",
@@ -43,7 +43,16 @@
         },
         "nodeType1DataDiskSizeGB": {
             "type": "int",
-            "defaultValue": 120
+            "defaultValue": 256
+        },
+        "nodeType1managedDataDiskType": {
+            "type": "string",
+            "allowedValues": [
+                "Standard_LRS",
+                "StandardSSD_LRS",
+                "Premium_LRS"
+            ],
+            "defaultValue": "StandardSSD_LRS"
         },
         "nodeType2Name": {
             "type": "string",
@@ -52,7 +61,7 @@
         },
         "nodeType2VmSize": {
             "type": "string",
-            "defaultValue": "Standard_D2_v2"
+            "defaultValue": "Standard_D2s_v3"
         },
         "nodeType2VmInstanceCount": {
             "type": "int",
@@ -60,7 +69,16 @@
         },
         "nodeType2DataDiskSizeGB": {
             "type": "int",
-            "defaultValue": 120
+            "defaultValue": 128
+        },
+        "nodeType2managedDataDiskType": {
+            "type": "string",
+            "allowedValues": [
+                "Standard_LRS",
+                "StandardSSD_LRS",
+                "Premium_LRS"
+            ],
+            "defaultValue": "StandardSSD_LRS"
         },
         "vmImagePublisher": {
             "type": "string",
@@ -80,7 +98,7 @@
         }
     },
     "variables": {
-        "sfApiVersion": "2021-01-01-preview"
+        "sfApiVersion": "2021-05-01"
     },
     "resources": [
         {
@@ -129,7 +147,9 @@
                 "vmImageVersion": "[parameters('vmImageVersion')]",
                 "vmSize": "[parameters('nodeType1VmSize')]",
                 "vmInstanceCount": "[parameters('nodeType1VmInstanceCount')]",
-                "dataDiskSizeGB": "[parameters('nodeType1DataDiskSizeGB')]"
+                "dataDiskSizeGB": "[parameters('nodeType1DataDiskSizeGB')]",
+                "dataDiskType": "[parameters('nodeType1managedDataDiskType')]"
+
             }
         },
         {
@@ -148,7 +168,9 @@
                 "vmImageVersion": "[parameters('vmImageVersion')]",
                 "vmSize": "[parameters('nodeType2VmSize')]",
                 "vmInstanceCount": "[parameters('nodeType2VmInstanceCount')]",
-                "dataDiskSizeGB": "[parameters('nodeType2DataDiskSizeGB')]"
+                "dataDiskSizeGB": "[parameters('nodeType2DataDiskSizeGB')]",
+                "dataDiskType": "[parameters('nodeType2managedDataDiskType')]"
+
             }
         }
     ],
