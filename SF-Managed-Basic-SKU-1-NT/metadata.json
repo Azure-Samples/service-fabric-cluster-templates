@@ -1,11 +1,11 @@
 {
   "$schema": "https://aka.ms/azure-quickstart-templates-metadata-schema#",
   "type": "QuickStart",
-  "itemDisplayName": "Deploy a Basic SKU managed Service Fabric cluster",
-  "description": "This template takes a minimum set of parameters and deploys a Basic SKU managed Service Fabric cluster",
-  "summary": "This template takes a minimum set of parameters and deploys a Basic SKU managed Service Fabric cluster",
+  "itemDisplayName": "Deploy a Basic SKU Service Fabric managed cluster",
+  "description": "This template takes a minimum set of parameters and deploys a Basic SKU Service Fabric managed cluster",
+  "summary": "This template takes a minimum set of parameters and deploys a Basic SKU Service Fabric managed cluster",
   "githubUsername": "peterpogorski",
-  "dateUpdated": "2020-09-22"
+  "dateUpdated": "2021-05-06"
 }
 
 

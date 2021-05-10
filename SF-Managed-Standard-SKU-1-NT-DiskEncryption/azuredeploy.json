@@ -1,5 +1,5 @@
 {
-    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json",
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
         "clusterName": {
@@ -16,7 +16,7 @@
                 "Basic",
                 "Standard"
             ],
-            "defaultValue": "Basic"
+            "defaultValue": "Standard"
         },
         "adminUserName": {
             "type": "string",
@@ -51,15 +51,24 @@
         },
         "vmSize": {
             "type": "string",
-            "defaultValue": "Standard_D2_v2"
+            "defaultValue": "Standard_D2s_v3"
         },
         "vmInstanceCount": {
             "type": "int",
-            "defaultValue": 3
+            "defaultValue": 5
         },
         "dataDiskSizeGB": {
             "type": "int",
-            "defaultValue": 120
+            "defaultValue": 256
+        },
+        "managedDataDiskType": {
+            "type": "string",
+            "allowedValues": [
+                "Standard_LRS",
+                "StandardSSD_LRS",
+                "Premium_LRS"
+            ],
+            "defaultValue": "StandardSSD_LRS"
         },
         "keyVaultResourceId": {
             "type": "string",
@@ -76,7 +85,7 @@
         }
     },
     "variables": {
-        "sfApiVersion": "2021-01-01-preview"
+        "sfApiVersion": "2021-05-01"
     },
     "resources": [
         {
@@ -119,6 +128,7 @@
                 "vmSize": "[parameters('vmSize')]",
                 "vmInstanceCount": "[parameters('vmInstanceCount')]",
                 "dataDiskSizeGB": "[parameters('dataDiskSizeGB')]",
+                "dataDiskType": "[parameters('managedDataDiskType')]",
                 "vmExtensions": [
                     {
                         "name": "AzureDiskEncryption",
