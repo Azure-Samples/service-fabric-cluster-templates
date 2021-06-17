@@ -7,11 +7,25 @@
     <img src="http://armviz.io/visualizebutton.png"/>
 </a>
 
-This template allows you to deploy a Service Fabric managed cluster using the *Standard* SKU. This cluster contains a single node type running *Windows Server 2019 Datacenter* on a *Standard_D2s_v3* size virtual machine scale set with a user-assigned managed identity.
+This example has 2 templates:
+
+1.  **Managed identity and role assignment**: Template to create the managed identity and the role assignment to allow Service Fabric RP to assign the identity to the managed cluster's virtual machine scale set. This should be deployed only once before using the managed identity on the node type resource.
+
+2. **Managed cluster and node type**: Template for the service fabric managed cluster using the *Standard* SKU and containing a single node type type running *Windows Server 2019 Datacenter* on a *Standard_D2s_v3* size virtual machine scale set resources, using the user-assigned managed identity created before.
 
 ## Use Powershell to deploy your cluster
 
-Go through the process of creating the cluster as described in [Creating Service Fabric Cluster via arm](https://docs.microsoft.com/azure/service-fabric/service-fabric-cluster-creation-via-arm)
+1. Deploy managed identity and role assignment.
+
+```powershell
+New-AzResourceGroupDeployment -ResourceGroupName <managedIdentityRGName> -TemplateFile ".\mangedIdentityAndSfrpRoleAssignment.json" -TemplateParameterFile ".\mangedIdentityAndSfrpRoleAssignment.Parameters.json" -Verbose
+```
+
+2. Deploy the node type resource assigning the identity
+
+```powershell
+New-AzResourceGroupDeployment -ResourceGroupName <sfmcRGName> -TemplateFile ".\sfmcVmMangedIdentity.json" -TemplateParameterFile ".\sfmcVmMangedIdentity.Parameters.json" -Verbose
+```
 
 ## Resources
 

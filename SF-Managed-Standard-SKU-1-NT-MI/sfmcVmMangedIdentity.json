@@ -61,22 +61,11 @@
             "type": "int",
             "defaultValue": 256
         },
-        "managedDataDiskType": {
-            "type": "string",
-            "allowedValues": [
-                "Standard_LRS",
-                "StandardSSD_LRS",
-                "Premium_LRS"
-            ],
-            "defaultValue": "StandardSSD_LRS"
-        },
-        "userAssignedIdentityName": {
-            "defaultValue": "SFMC-id",
-            "type": "String"
-        },
-        "vmIdentityRoleNameGuid": {
-            "defaultValue": "[newGuid()]",
-            "type": "String"
+        "userAssignedIdentityResourceId": {
+            "type": "String",
+            "metadata": {
+                "description": "Full resourceId of the managed identity."
+            }
         }
     },
     "variables": {
@@ -113,25 +102,6 @@
                 ]
             }
         },
-        { 
-            "type": "Microsoft.ManagedIdentity/userAssignedIdentities", 
-            "name": "[parameters('userAssignedIdentityName')]", 
-            "apiVersion": "2018-11-30", 
-            "location": "[resourceGroup().location]"  
-        }, 
-        {
-            "type": "Microsoft.Authorization/roleAssignments", 
-            "apiVersion": "2020-04-01-preview",
-            "name": "[parameters('vmIdentityRoleNameGuid')]",
-            "scope": "[concat('Microsoft.ManagedIdentity/userAssignedIdentities', '/', parameters('userAssignedIdentityName'))]",
-            "dependsOn": [ 
-                "[concat('Microsoft.ManagedIdentity/userAssignedIdentities/', parameters('userAssignedIdentityName'))]"
-            ], 
-            "properties": {
-                "roleDefinitionId": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', 'f1a07417-d97a-45cb-824c-7a7467783830')]",
-                "principalId": "fbc587f2-66f5-4459-a027-bcd908b9d278" 
-                  } 
-            }, 
         {
             "apiVersion": "[variables('sfApiVersion')]",
             "type": "Microsoft.ServiceFabric/managedclusters/nodetypes",
@@ -149,10 +119,9 @@
                 "vmSize": "[parameters('vmSize')]",
                 "vmInstanceCount": "[parameters('vmInstanceCount')]",
                 "dataDiskSizeGB": "[parameters('dataDiskSizeGB')]",
-                "dataDiskType": "[parameters('managedDataDiskType')]",
                 "vmManagedIdentity": {
                     "userAssignedIdentities": [
-                        "[resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', parameters('userAssignedIdentityName'))]"
+                        "[parameters('userAssignedIdentityResourceId')]"
                     ]
                 }
             }
