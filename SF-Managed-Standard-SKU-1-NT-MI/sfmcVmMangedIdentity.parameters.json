@@ -3,34 +3,31 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "clusterName": {
-            "value": "GEN-UNIQUE"
+            "value": "CLUSTER-NAME"
         },
         "clusterSku": {
             "value": "Standard"
         },
         "adminUserName": {
-            "value": "GEN-UNIQUE"
+            "value": "ADMIN-USER"
         },
         "adminPassword": {
-            "value": "GEN-PASSWORD"
+            "value": "SECURE-STRING"
         },
         "clientCertificateThumbprint": {
-            "value": "GEN-SF-CERT-THUMBPRINT"
+            "value": "CLIENT-SF-CERT-THUMBPRINT"
         },
-        "nodeType1Name": {
+        "nodeTypeName": {
             "value": "NT1"
         },
-        "nodeType1VmSize": {
+        "vmSize": {
             "value": "Standard_D2s_v3"
         },
-        "nodeType1VmInstanceCount": {
+        "vmInstanceCount": {
             "value": 5
         },
-        "nodeType1DataDiskSizeGB": {
+        "dataDiskSizeGB": {
             "value": 256
-        },
-        "managedDataDiskType": {
-            "value": "StandardSSD_LRS"
         },
         "vmImagePublisher": {
             "value": "MicrosoftWindowsServer"
@@ -43,6 +40,9 @@
         },
         "vmImageVersion": {
             "value": "latest"
+        },
+        "userAssignedIdentityResourceId": {
+            "value": "IDENTITY-FULL-RESOURCE-ID"
         }
     }
 }

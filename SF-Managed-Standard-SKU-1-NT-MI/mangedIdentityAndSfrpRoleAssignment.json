@@ -1,0 +1,60 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "userAssignedIdentityName": {
+            "type": "String"
+        },
+        "vmIdentityRoleNameGuid": {
+            "type": "String",
+            "metadata": {
+                "description": "Unique guid for the role assigment"
+            }
+        },
+        "serviceFabricRpPrincipalId": {
+            "type": "String",
+            "metadata": {
+                "description": "Principal Id for the Service Fabric Resource Provider AAD application to give access to assign the identity. It varies per tenant, to find the value use: Get-AzADServicePrincipal -DisplayName \"Azure Service Fabric Resource Provider\""
+            }
+        }
+    },
+    "resources": [
+        {
+            "type": "Microsoft.ManagedIdentity/userAssignedIdentities",
+            "name": "[parameters('userAssignedIdentityName')]",
+            "apiVersion": "2018-11-30",
+            "location": "[resourceGroup().location]"
+        },
+        {
+            "type": "Microsoft.Authorization/roleAssignments",
+            "apiVersion": "2020-04-01-preview",
+            "name": "[parameters('vmIdentityRoleNameGuid')]",
+            "scope": "[concat('Microsoft.ManagedIdentity/userAssignedIdentities', '/', parameters('userAssignedIdentityName'))]",
+            "dependsOn": [
+                "[concat('Microsoft.ManagedIdentity/userAssignedIdentities/', parameters('userAssignedIdentityName'))]"
+            ],
+            "properties": {
+                "roleDefinitionId": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/f1a07417-d97a-45cb-824c-7a7467783830')]",
+                "principalId": "[parameters('serviceFabricRpPrincipalId')]"
+            }
+        }
+    ],
+    "outputs": {
+        "userAssignedIdentityResourceId": {
+            "value": "[resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', parameters('userAssignedIdentityName'))]",
+            "type": "string"
+        },
+        "userAssignedIdentityProperties": {
+            "value": "[reference(parameters('userAssignedIdentityName'))]",
+            "type": "object"
+        },        
+        "roleAssignmentsProperties": {
+            "value": "[reference(parameters('vmIdentityRoleNameGuid'))]",
+            "type": "object"
+        },
+        "vmIdentityRoleNameGuid": {
+            "value": "[parameters('vmIdentityRoleNameGuid')]",
+            "type": "string"
+        }
+    }
+}
