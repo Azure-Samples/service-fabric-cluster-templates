@@ -95,10 +95,22 @@
         "vmImageVersion": {
             "type": "string",
             "defaultValue": "latest"
+        },
+        "publicLoadBalancerBackendPoolId": {
+            "type": "string",
+            "metadata": {
+              "description": "Resource ID of the Load Balancer backend pool that the VMSS of the node type is deployed to. Should be in the format of '/subscriptions/<SubscriptionId>/resourceGroups/<ResourceGroupName>/providers/Microsoft.Network/loadBalancers/<LoadBalancerName>/backendAddressPools/<BackendPoolName>'."
+            }
+        },
+        "publicLoadBalancerNatPoolId": {
+            "type": "string",
+            "metadata": {
+              "description": "Resource ID of the Load Balancer inbound NAT pool that the VMSS of the node type is deployed to. Should be in the format of '/subscriptions/<SubscriptionId>/resourceGroups/<ResourceGroupName>/providers/Microsoft.Network/loadBalancers/<LoadBalancerName>/inboundNatPools/<NATPoolName>'."
+            }
         }
     },
     "variables": {
-        "sfApiVersion": "2021-05-01"
+        "sfApiVersion": "2021-07-01-preview"
     },
     "resources": [
         {
@@ -119,14 +131,6 @@
                     {
                         "isAdmin" : true,
                         "thumbprint" : "[parameters('clientCertificateThumbprint')]"
-                    }
-                ],
-                "loadBalancingRules": [
-                    {
-                        "frontendPort": 8080, 
-                        "backendPort": 8080,
-                        "protocol": "tcp",
-                        "probeProtocol": "tcp"
                     }
                 ]
             }
@@ -169,8 +173,27 @@
                 "vmSize": "[parameters('nodeType2VmSize')]",
                 "vmInstanceCount": "[parameters('nodeType2VmInstanceCount')]",
                 "dataDiskSizeGB": "[parameters('nodeType2DataDiskSizeGB')]",
-                "dataDiskType": "[parameters('nodeType2managedDataDiskType')]"
-
+                "dataDiskType": "[parameters('nodeType2managedDataDiskType')]",
+                "frontendConfigurations": [
+                    {
+                      "loadBalancerBackendAddressPoolId": "[parameters('publicLoadBalancerBackendPoolId')]",
+                      "loadBalancerInboundNatPoolId": "[parameters('publicLoadBalancerNatPoolId')]"
+                    }
+                  ],
+                  "networkSecurityRules": [
+                    {
+                      "name": "AllowAppPort8000",
+                      "protocol": "*",
+                      "sourcePortRange": "*",
+                      "sourceAddressPrefix": "*",
+                      "destinationAddressPrefix": "VirtualNetwork",
+                      "destinationPortRange": "8080",
+                      "access": "Allow",
+                      "priority": 2005,
+                      "direction": "Inbound",
+                      "description": "Allow inbound communication to application port 8080."
+                    }
+                  ]
             }
         }
     ],

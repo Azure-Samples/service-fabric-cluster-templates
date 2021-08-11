@@ -99,13 +99,13 @@
               "backendAddressPool": {
                 "id": "[concat(variables('lbID'), '/backendAddressPools/LoadBalancerBEAddressPool')]"
               },
-              "backendPort": 8000,
+              "backendPort": 8080,
               "enableFloatingIP": "false",
               "disableOutboundSNAT" : "true",
               "frontendIPConfiguration": {
                 "id": "[concat(variables('lbID'), '/frontendIPConfigurations/LoadBalancerIPConfig')]"
               },
-              "frontendPort": 8000,
+              "frontendPort": 8080,
               "idleTimeoutInMinutes": "5",
               "probe": {
                 "id": "[concat(variables('lbID'), '/probes/AppProbe8000')]"
@@ -120,7 +120,7 @@
             "properties": {
               "intervalInSeconds": 5,
               "numberOfProbes": 2,
-              "port": 8000,
+              "port": 8080,
               "protocol": "tcp"
             }
           }
@@ -137,7 +137,7 @@
       ],
       "properties": {
         "roleDefinitionId": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/4d97b98b-1d4f-4787-a291-c67834d212e7')]",
-        "principalId": "fbc587f2-66f5-4459-a027-bcd908b9d278"
+        "principalId": "00000000-0000-0000-0000-000000000000"
       }
     }
   ],
