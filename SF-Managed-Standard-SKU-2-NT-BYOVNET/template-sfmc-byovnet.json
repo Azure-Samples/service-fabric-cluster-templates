@@ -1,0 +1,111 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "clusterName": {
+            "type": "string"
+        },
+        "clusterSku": {
+            "type": "string",
+            "allowedValues": [
+                "Basic",
+                "Standard",
+                "Basic-ManagedSystem",
+                "Standard-ManagedSystem"
+            ]
+        },
+        "clusterLocation": {
+            "type": "string",
+            "defaultValue": "[resourcegroup().location]"
+        },
+        "adminUserName": {
+            "type": "string",
+            "defaultValue": "vmadmin"
+        },
+        "adminPassword": {
+            "type": "securestring"
+        },
+        "nodeTypeName": {
+            "type": "string"
+        },
+        "vmImagePublisher": {
+            "type": "string",
+            "defaultValue": "MicrosoftWindowsServer"
+        },
+        "vmImageOffer": {
+            "type": "string",
+            "defaultValue": "WindowsServer"
+        },
+        "vmImageSku": {
+            "type": "string",
+            "defaultValue": "2019-Datacenter"
+        },
+        "vmImageVersion": {
+            "type": "string",
+            "defaultValue": "latest"
+        },
+        "vmSize": {
+            "type": "string",
+            "defaultValue": "Standard_D2_v2"
+        },
+        "vmInstanceCount": {
+            "type": "int",
+            "defaultValue": 5
+        },
+        "dataDiskSizeGB": {
+            "type": "int",
+            "defaultValue": 120
+        },
+        "subnetId": {
+            "type": "string"
+        }
+    },
+    "variables": {
+        "sfApiVersion": "2021-07-01-preview"
+    },
+    "resources": [
+        {
+            "apiVersion": "[variables('sfApiVersion')]",
+            "type": "Microsoft.ServiceFabric/managedclusters",
+            "name": "[parameters('clusterName')]",
+            "location": "[parameters('clusterLocation')]",
+            "sku": {
+                "name" : "[parameters('clusterSku')]"
+            },
+            "properties": {
+                "subnetId": "[parameters('subnetId')]",
+                "dnsName": "[toLower(parameters('clusterName'))]",
+                "adminUserName": "[parameters('adminUserName')]",
+                "adminPassword": "[parameters('adminPassword')]",
+                "clientConnectionPort": 19000,
+                "httpGatewayConnectionPort": 19080,
+                "allowRdpAccess": false
+            }
+        },
+        {
+            "apiVersion": "[variables('sfApiVersion')]",
+            "type": "Microsoft.ServiceFabric/managedclusters/nodetypes",
+            "name": "[concat(parameters('clusterName'), '/', parameters('nodeTypeName'))]",
+            "location": "[parameters('clusterLocation')]",
+            "dependsOn": [
+              "[concat('Microsoft.ServiceFabric/managedclusters/', parameters('clusterName'))]"
+            ],
+            "properties": {
+                "isPrimary": true,
+                "dataDiskSizeGB": "[parameters('dataDiskSizeGB')]",
+                "vmImagePublisher": "[parameters('vmImagePublisher')]",
+                "vmImageOffer": "[parameters('vmImageOffer')]",
+                "vmImageSku": "[parameters('vmImageSku')]",
+                "vmImageVersion": "[parameters('vmImageVersion')]",
+                "vmSize": "[parameters('vmSize')]",
+                "vmInstanceCount": "[parameters('vmInstanceCount')]"
+            }
+        }
+    ],
+    "outputs": {
+        "clusterProperties": {
+            "value": "[reference(parameters('clusterName'))]",
+            "type": "object"
+        }
+    }
+}
