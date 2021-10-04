@@ -18,13 +18,13 @@ This example has 2 templates:
 1. Deploy managed identity and role assignment.
 
 ```powershell
-New-AzResourceGroupDeployment -ResourceGroupName <managedIdentityRGName> -TemplateFile ".\mangedIdentityAndSfrpRoleAssignment.json" -TemplateParameterFile ".\mangedIdentityAndSfrpRoleAssignment.Parameters.json" -Verbose
+New-AzResourceGroupDeployment -ResourceGroupName <managedIdentityRGName> -TemplateFile ".\managedIdentityAndSfrpRoleAssignment.json" -TemplateParameterFile ".\managedIdentityAndSfrpRoleAssignment.Parameters.json" -Verbose
 ```
 
 2. Deploy the node type resource assigning the identity
 
 ```powershell
-New-AzResourceGroupDeployment -ResourceGroupName <sfmcRGName> -TemplateFile ".\sfmcVmMangedIdentity.json" -TemplateParameterFile ".\sfmcVmMangedIdentity.Parameters.json" -Verbose
+New-AzResourceGroupDeployment -ResourceGroupName <sfmcRGName> -TemplateFile ".\sfmcVmManagedIdentity.json" -TemplateParameterFile ".\sfmcVmManagedIdentity.Parameters.json" -Verbose
 ```
 
 ## Resources
