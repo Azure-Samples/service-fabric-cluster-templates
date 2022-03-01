@@ -2,29 +2,21 @@
   "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
-    "adminUserName": {
-      "defaultValue": "",
-      "type": "String"
-    },
     "adminPassword": {
       "defaultValue": "",
       "type": "securestring"
     },
-    "storageAccountName": {
-      "defaultValue": "[concat('sfmcmetrics', uniqueString(resourceGroup().id))]",
+    "adminUserName": {
+      "defaultValue": "",
       "type": "String"
     },
     "clusterName": {
       "defaultValue": "sfmanagedcluster",
       "type": "String"
     },
-    "userAssignedIdentity": {
-      "defaultValue": "sfmetrics",
-      "type": "String"
-    },
-    "thumbprint": {
-      "defaultValue": "",
-      "type": "String"
+    "dataDiskSizeGB": {
+      "type": "int",
+      "defaultValue": 256
     },
     "laWorkspaceId": {
       "defaultValue": "",
@@ -34,23 +26,43 @@
       "defaultValue": "",
       "type": "String"
     },
+    "roleAssignmentId": {
+      "defaultValue": "",
+      "type": "string",
+      "metadata": {
+        "description": "generate guid one time and reuse for same assignment:[guid]::NewGuid() "
+      }
+    },
+    "roleDefinitionId": {
+      "defaultValue": "f1a07417-d97a-45cb-824c-7a7467783830",
+      "type": "string",
+      "metadata": {
+        "description": "https://docs.microsoft.com/azure/role-based-access-control/role-definitions-list"
+      }
+    },
     "sfrpRegionalId": {
       "defaultValue": "",
       "type": "string"
     },
-    "roleAssignmentId":{
-      "defaultValue": "",
-      "type": "string",
-      "metadata":{
-        "description": "generate guid one time and reuse for same assignment:[guid]::NewGuid() "
-      }
+    "storageAccountName": {
+      "defaultValue": "[concat('sfmcmetrics', uniqueString(resourceGroup().id))]",
+      "type": "String"
     },
-    "roleDefinitionId":{
-      "defaultValue": "f1a07417-d97a-45cb-824c-7a7467783830",
-      "type": "string",
-      "metadata":{
-        "description": "https://docs.microsoft.com/azure/role-based-access-control/role-definitions-list"
-      }
+    "thumbprint": {
+      "defaultValue": "",
+      "type": "String"
+    },
+    "userAssignedIdentity": {
+      "defaultValue": "sfmetrics",
+      "type": "String"
+    },
+    "vmInstanceCount": {
+      "type": "int",
+      "defaultValue": 5
+    },
+    "vmSize": {
+      "defaultValue": "",
+      "type": "string"
     }
   },
   "variables": {},
@@ -83,7 +95,6 @@
         "name": "Standard"
       },
       "properties": {
-        "clusterCodeVersion": "8.2.1486.9590",
         "clusterUpgradeMode": "Automatic",
         "clusterUpgradeCadence": "Wave0",
         "adminUserName": "[parameters('adminUserName')]",
@@ -131,25 +142,20 @@
         "[resourceId('Microsoft.ServiceFabric/managedClusters', parameters('clusterName'))]",
         "[resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', parameters('userAssignedIdentity'))]"
       ],
-      "sku": {
-        "name": "Standard_P2",
-        "tier": "Standard",
-        "capacity": 6
-      },
       "properties": {
         "isPrimary": true,
         "vmImagePublisher": "MicrosoftWindowsServer",
         "vmImageOffer": "WindowsServer",
         "vmImageSku": "2019-Datacenter",
         "vmImageVersion": "latest",
-        "vmSize": "Standard_D2s_v3",
-        "vmInstanceCount": 6,
+        "vmSize": "[parameters('vmSize')]",
+        "vmInstanceCount": "[parameters('vmInstanceCount')]",
         "vmManagedIdentity": {
           "userAssignedIdentities": [
             "[resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', parameters('userAssignedIdentity'))]"
           ]
         },
-        "dataDiskSizeGB": 256,
+        "dataDiskSizeGB": "[parameters('dataDiskSizeGB')]",
         "dataDiskType": "StandardSSD_LRS",
         "dataDiskLetter": "S",
         "placementProperties": {},
