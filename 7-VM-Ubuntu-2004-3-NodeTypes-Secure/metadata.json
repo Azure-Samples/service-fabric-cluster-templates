@@ -1,0 +1,7 @@
+{
+  "itemDisplayName": "Deploy a 7 Node, 3 nodetype Ubuntu 20.04 Service Fabric Cluster",
+  "description": "This template allows you to deploy a secure 7 Node, 3 nodetype Service Fabric Cluster running Ubuntu 20.04 on a Standard_D2_V2 Size VMSS.",
+  "summary": "This template takes a minimum amount of parameters and deploys 7 Node, 3 nodetype Service Fabric Cluster running Ubuntu 20.04 ",
+  "githubUsername": "nickomang",
+  "dateUpdated": "2022-02-15"
+}
