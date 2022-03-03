@@ -516,10 +516,10 @@
       "properties": {
         "securityRules": [
           {
-            "name": "Service Fabric Explorer",
+            "name": "Azure Portal",
             "properties": {
               "access": "Allow",
-              "sourceAddressPrefix": "Internet",
+              "sourceAddressPrefix": "ServiceFabric",
               "sourcePortRange": "*",
               "sourcePortRanges": [],
               "destinationAddressPrefix": "*",
@@ -532,14 +532,14 @@
             }
           },
           {
-            "name": "Azure Portal",
+            "name": "Client API",
             "properties": {
-              "access": "Allow",
-              "sourceAddressPrefix": "ServiceFabric",
+              "access": "Deny",
+              "sourceAddressPrefix": "Internet",
               "sourcePortRange": "*",
               "sourcePortRanges": [],
               "destinationAddressPrefix": "*",
-              "destinationPortRange": "19080",
+              "destinationPortRange": "19000",
               "destinationPortRanges": [],
               "direction": "Inbound",
               "priority": 3910,
@@ -548,14 +548,14 @@
             }
           },
           {
-            "name": "Client APIs",
+            "name": "SFX + Client API",
             "properties": {
-              "access": "Allow",
+              "access": "Deny",
               "sourceAddressPrefix": "Internet",
               "sourcePortRange": "*",
               "sourcePortRanges": [],
               "destinationAddressPrefix": "*",
-              "destinationPortRange": "19000",
+              "destinationPortRange": "19080",
               "destinationPortRanges": [],
               "direction": "Inbound",
               "priority": 3920,
@@ -612,22 +612,6 @@
             }
           },
           {
-            "name": "SMB",
-            "properties": {
-              "access": "Allow",
-              "sourceAddressPrefix": "VirtualNetwork",
-              "sourcePortRange": "*",
-              "sourcePortRanges": [],
-              "destinationAddressPrefix": "*",
-              "destinationPortRange": "445",
-              "destinationPortRanges": [],
-              "direction": "Inbound",
-              "priority": 3960,
-              "protocol": "Tcp",
-              "description": ""
-            }
-          },
-          {
             "name": "RDP",
             "properties": {
               "access": "Deny",
@@ -638,7 +622,7 @@
               "destinationPortRange": "3389-3488",
               "destinationPortRanges": [],
               "direction": "Inbound",
-              "priority": 3970,
+              "priority": 3960,
               "protocol": "Tcp",
               "description": ""
             }
@@ -654,7 +638,7 @@
               "destinationPortRange": "22",
               "destinationPortRanges": [],
               "direction": "Inbound",
-              "priority": 3980,
+              "priority": 3970,
               "protocol": "Tcp",
               "description": ""
             }
@@ -662,15 +646,15 @@
           {
             "name": "Custom Endpoint",
             "properties": {
-              "access": "Allow",
+              "access": "Deny",
               "sourceAddressPrefix": "Internet",
               "sourcePortRange": "*",
               "sourcePortRanges": [],
               "destinationAddressPrefix": "*",
-              "destinationPortRange": "443",
+              "destinationPortRange": "80",
               "destinationPortRanges": [],
               "direction": "Inbound",
-              "priority": 3990,
+              "priority": 3980,
               "protocol": "Tcp",
               "description": ""
             }
@@ -699,8 +683,8 @@
               "sourcePortRange": "*",
               "sourcePortRanges": [],
               "destinationAddressPrefix": "AzureFrontDoor.FirstParty",
-              "destinationPortRange": "443",
-              "destinationPortRanges": [],
+              "destinationPortRange": "",
+              "destinationPortRanges": ["443"], 
               "direction": "Outbound",
               "priority": 4010,
               "protocol": "Tcp",
