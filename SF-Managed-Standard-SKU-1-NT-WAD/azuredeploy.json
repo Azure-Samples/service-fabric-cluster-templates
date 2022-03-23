@@ -11,7 +11,7 @@
       "type": "String"
     },
     "clusterName": {
-      "defaultValue": "sfmanagedcluster",
+      "defaultValue": "",
       "type": "String"
     },
     "dataDiskSizeGB": {
@@ -22,7 +22,7 @@
       "defaultValue": "",
       "type": "string",
       "metadata": {
-        "description": "generate guid one time and reuse for same assignment:[guid]::NewGuid() "
+        "description": "generate guid one time and reuse for same assignment: [guid]::NewGuid() "
       }
     },
     "roleDefinitionId": {
@@ -37,7 +37,7 @@
       "type": "string"
     },
     "storageAccountName": {
-      "defaultValue": "[concat('sfmcmetrics', uniqueString(resourceGroup().id))]",
+      "defaultValue": "[concat('sfmcevts', uniqueString(resourceGroup().id))]",
       "type": "String"
     },
     "thumbprint": {
@@ -45,7 +45,7 @@
       "type": "String"
     },
     "userAssignedIdentity": {
-      "defaultValue": "sfmetrics",
+      "defaultValue": "sfmcevts",
       "type": "String"
     },
     "vmInstanceCount": {
@@ -246,7 +246,7 @@
                       ]
                     },
                     "EtwProviders": {
-                      // "sinks": "AzMonSink",
+                      //"sinks": "ApplicationInsights",
                       "EtwEventSourceProviderConfiguration": [
                         {
                           "provider": "Microsoft-ServiceFabric-Actors",
@@ -273,12 +273,21 @@
                           "DefaultEvents": {
                             "eventDestination": "ServiceFabricSystemEventTable"
                           }
+                        },
+                        {
+                          "provider": "02d06793-efeb-48c8-8f7f-09713309a810",
+                          "scheduledTransferLogLevelFilter": "Information",
+                          "scheduledTransferKeywordFilter": "4611686018427387904",
+                          "scheduledTransferPeriod": "PT5M",
+                          "DefaultEvents": {
+                            "eventDestination": "ServiceFabricSystemEventTable"
+                          }
                         }
                       ]
                     },
                     "WindowsEventLog": {
                       "scheduledTransferPeriod": "PT5M",
-                      "sinks": "AzMonSink",
+                      //"sinks": "ApplicationInsights",
                       "DataSource": [
                         {
                           "name": "System!*[System[Provider[@Name='Microsoft Antimalware']]]"
@@ -313,8 +322,16 @@
                         }
                       },
                       {
-                        "name": "applicationInsights",
+                        "name": "ApplicationInsights",
                         "ApplicationInsights": "***ADD INSTRUMENTATION KEY HERE***"
+                      },
+                      {
+                        "name": "EventHub",
+                        "EventHub": {
+                          "Url": "https://myeventhub-ns.servicebus.windows.net/diageventhub",
+                          "SharedAccessKeyName": "SendRule",
+                          "usePublisherId": false
+                        }
                       }
                     ]
                   }
