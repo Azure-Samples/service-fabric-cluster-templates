@@ -29,7 +29,7 @@
       "defaultValue": "f1a07417-d97a-45cb-824c-7a7467783830",
       "type": "string",
       "metadata": {
-        "description": "https://docs.microsoft.com/azure/role-based-access-control/role-definitions-list"
+        "description": "https://docs.microsoft.com/azure/role-based-access-control/role-definitions-list 'Managed Identity Operatory' read and assign"
       }
     },
     "sfrpRegionalId": {

@@ -18,7 +18,7 @@
             "value": ""
         },
         "vmInstanceCount": {
-            "value": 5
+            "value": 6
         },
         "vmSize": {
             "value": "Standard_D2s_v3"

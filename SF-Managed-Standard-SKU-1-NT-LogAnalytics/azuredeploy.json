@@ -18,6 +18,14 @@
       "type": "int",
       "defaultValue": 256
     },
+    "laWorkspaceId": {
+      "defaultValue": "",
+      "type": "String"
+    },
+    "laWorkspaceKey": {
+      "defaultValue": "",
+      "type": "String"
+    },
     "storageAccountName": {
       "defaultValue": "[concat('sfmcevts', uniqueString(resourceGroup().id))]",
       "type": "String"
@@ -118,13 +126,18 @@
         "vmSecrets": [],
         "vmExtensions": [
           {
-            "name": "[concat('AzureMonitorWindowsAgent', '/', variables('nodeTypeName'))]",
+            "name": "[concat('OMSExtension', '/', variables('nodeTypeName'))]",
             "properties": {
-              "publisher": "Microsoft.Azure.Monitor",
-              "type": "AzureMonitorWindowsAgent",
-              "typeHandlerVersion": "1.2",
+              "publisher": "Microsoft.EnterpriseCloud.Monitoring",
+              "type": "MicrosoftMonitoringAgent",
+              "typeHandlerVersion": "1.0",
               "autoUpgradeMinorVersion": true,
-              "enableAutomaticUpgrade": true
+              "settings": {
+                "workspaceId": "[parameters('laWorkspaceId')]"
+              },
+              "protectedSettings": {
+                "workspaceKey": "[parameters('laWorkspaceKey')]"
+              }
             }
           }
         ],
