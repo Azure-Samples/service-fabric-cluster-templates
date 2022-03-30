@@ -40,6 +40,8 @@ For more info, see:
 
 - [Performance monitoring with the Windows Azure Diagnostics extension](https://docs.microsoft.com/azure/service-fabric/service-fabric-diagnostics-perf-wad) for service fabric specific ETW and metric configuration information.
 
+- [Event aggregation and collection using Windows Azure Diagnostics](https://docs.microsoft.com/azure/service-fabric/service-fabric-diagnostics-event-aggregation-wad)
+
 - [Windows Diagnostics Extension Schema](https://docs.microsoft.com/azure/azure-monitor/agents/diagnostics-extension-schema-windows) for WadCfg schema definition information.
 
 - [List Azure Role Definitions](https://docs.microsoft.com/azure/role-based-access-control/role-definitions-list) for additional information about Role Definitions and Assignments.
