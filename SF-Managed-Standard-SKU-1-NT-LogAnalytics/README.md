@@ -11,13 +11,13 @@ This template allows you to deploy a Service Fabric managed cluster using the *S
 
 ## Log Analytics ETW Configuration flow
 
-Log Analytics can query Windows Event Logs and Performance counters directly using a centralized configuration in Azure configured in Azure portal. ETW can be queried indirectly by using WAD to configure and upload ETW events to configured storage account, Application Insights, or Event Hub as examples. See [SF-Managed-Standard-SKU-1-NT-WAD Readme](../SF-Managed-Standard-SKU-1-NT-WAD/README.md)
+Log Analytics can query Windows Event Logs and Performance counters directly using a centralized configuration in Azure configured in Azure portal. ETW can be queried indirectly by using WAD to configure and upload ETW events to configured table storage account, Application Insights, or Event Hub as examples. See [Collecting Event Tracing for Windows (ETW) Events for analysis Azure Monitor Logs](https://docs.microsoft.com/azure/azure-monitor/agents/data-sources-event-tracing-windows) and [SF-Managed-Standard-SKU-1-NT-WAD Readme](../SF-Managed-Standard-SKU-1-NT-WAD/README.md)
 
 ```mermaid
   graph TD;
-      Service Fabric Components-->Node Monitoring Agent (WAD);
-      Node Monitoring Agent (WAD)-->Azure storage tables;
-      Azure storage tables-->Log Analytics Workspace;
+      A["Service Fabric Components"] --> B["Azure Diagnostics Agent (WAD)"];
+      B["Azure Diagnostics Agent (WAD)"] --> C["Azure storage tables"];
+      C["Azure storage tables"] --> D["Log Analytics Workspace"];
 ```
 
 ## Performance Counter configuration
