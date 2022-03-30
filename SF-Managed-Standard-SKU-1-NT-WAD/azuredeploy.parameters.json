@@ -8,6 +8,9 @@
         "adminUserName": {
             "value": ""
         },
+        "clientCertificateThumbprint": {
+            "value": ""
+        },
         "clusterName": {
             "value": ""
         },
@@ -18,9 +21,6 @@
             "value": ""
         },
         "sfrpRegionalId": {
-            "value": ""
-        },
-        "thumbprint": {
             "value": ""
         },
         "userAssignedIdentity": {

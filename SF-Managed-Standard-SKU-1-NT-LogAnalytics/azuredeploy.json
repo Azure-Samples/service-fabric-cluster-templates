@@ -10,6 +10,10 @@
       "defaultValue": "",
       "type": "String"
     },
+    "clientCertificateThumbprint": {
+      "defaultValue": "",
+      "type": "String"
+    },
     "clusterName": {
       "defaultValue": "",
       "type": "String"
@@ -23,14 +27,6 @@
       "type": "String"
     },
     "laWorkspaceKey": {
-      "defaultValue": "",
-      "type": "String"
-    },
-    "storageAccountName": {
-      "defaultValue": "[concat('sfmcevts', uniqueString(resourceGroup().id))]",
-      "type": "String"
-    },
-    "thumbprint": {
       "defaultValue": "",
       "type": "String"
     },
@@ -67,7 +63,7 @@
         "clients": [
           {
             "isAdmin": true,
-            "thumbprint": "[parameters('thumbprint')]"
+            "thumbprint": "[parameters('clientCertificateThumbprint')]"
           }
         ],
         "addonFeatures": [
@@ -75,23 +71,6 @@
         ],
         "enableAutoOSUpgrade": false,
         "zonalResiliency": true
-      }
-    },
-    {
-      "apiVersion": "2021-08-01",
-      "type": "Microsoft.Storage/storageAccounts",
-      "name": "[parameters('storageAccountName')]",
-      "location": "[resourceGroup().location]",
-      "dependsOn": [],
-      "properties": {},
-      "kind": "StorageV2",
-      "sku": {
-        "name": "Standard_RAGRS",
-        "tier": "Standard"
-      },
-      "tags": {
-        "resourceType": "Service Fabric",
-        "clusterName": "[parameters('clusterName')]"
       }
     },
     {

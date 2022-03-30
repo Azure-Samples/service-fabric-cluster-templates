@@ -14,7 +14,7 @@
         "dataDiskSizeGB": {
             "value": 256
         },
-        "thumbprint": {
+        "clientCertificateThumbprint": {
             "value": ""
         },
         "vmInstanceCount": {

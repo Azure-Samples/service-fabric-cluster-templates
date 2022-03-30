@@ -8,14 +8,14 @@
         "adminUserName": {
             "value": ""
         },
+        "clientCertificateThumbprint": {
+            "value": ""
+        },
         "clusterName": {
             "value": ""
         },
         "dataDiskSizeGB": {
             "value": 256
-        },
-        "thumbprint": {
-            "value": ""
         },
         "vmInstanceCount": {
             "value": 6
