@@ -205,7 +205,7 @@
         "vmSecrets": [],
         "vmExtensions": [
           {
-            "name": "[concat('VMDiagnosticsVmExt','_vmNodeType0Name')]",
+            "name": "[concat('VMDiagnosticsVmExt', '-', parameters('nodeType1Name'))]",
             "properties": {
               "type": "IaaSDiagnostics",
               "autoUpgradeMinorVersion": true,
@@ -391,7 +391,7 @@
     {
       "type": "Microsoft.ServiceFabric/managedClusters/nodetypes",
       "apiVersion": "2022-01-01",
-      "name": "[concat(parameters('clusterName'), '/', parameters('nodeType2Name'))]",
+      "name": "[concat('VMDiagnosticsVmExt', '-', parameters('nodeType2Name'))]",
       "location": "[resourceGroup().location]",
       "dependsOn": [
         "[resourceId('Microsoft.ServiceFabric/managedClusters', parameters('clusterName'))]",
@@ -426,7 +426,7 @@
         "vmSecrets": [],
         "vmExtensions": [
           {
-            "name": "[concat('VMDiagnosticsVmExt','_vmNodeType0Name')]",
+            "name": "[concat('VMDiagnosticsVmExt',parameters('nodeType2Name'))]",
             "properties": {
               "type": "IaaSDiagnostics",
               "autoUpgradeMinorVersion": true,

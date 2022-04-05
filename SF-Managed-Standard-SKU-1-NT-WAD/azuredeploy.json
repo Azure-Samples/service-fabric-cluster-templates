@@ -166,7 +166,7 @@
         "vmSecrets": [],
         "vmExtensions": [
           {
-            "name": "[concat('VMDiagnosticsVmExt', '/', variables('nodeTypeName'))]",
+            "name": "[concat('VMDiagnosticsVmExt', '-', variables('nodeTypeName'))]",
             "properties": {
               "type": "IaaSDiagnostics",
               "autoUpgradeMinorVersion": true,

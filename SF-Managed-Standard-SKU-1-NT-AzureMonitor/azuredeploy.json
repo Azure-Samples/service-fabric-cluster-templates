@@ -97,7 +97,7 @@
         "vmSecrets": [],
         "vmExtensions": [
           {
-            "name": "[concat('AzureMonitorWindowsAgent', '/', variables('nodeTypeName'))]",
+            "name": "[concat('AzureMonitorWindowsAgent', '-', variables('nodeTypeName'))]",
             "properties": {
               "publisher": "Microsoft.Azure.Monitor",
               "type": "AzureMonitorWindowsAgent",

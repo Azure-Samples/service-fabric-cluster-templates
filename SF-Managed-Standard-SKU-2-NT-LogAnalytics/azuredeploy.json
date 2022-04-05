@@ -144,7 +144,7 @@
         "vmSecrets": [],
         "vmExtensions": [
           {
-            "name": "[concat('OMSExtension', '/', parameters('nodeType1Name'))]",
+            "name": "[concat('OMSExtension', '-', parameters('nodeType1Name'))]",
             "properties": {
               "publisher": "Microsoft.EnterpriseCloud.Monitoring",
               "type": "MicrosoftMonitoringAgent",
@@ -198,7 +198,7 @@
         "vmSecrets": [],
         "vmExtensions": [
           {
-            "name": "[concat('OMSExtension', '/', parameters('nodeType2Name'))]",
+            "name": "[concat('OMSExtension', '-', parameters('nodeType2Name'))]",
             "properties": {
               "publisher": "Microsoft.EnterpriseCloud.Monitoring",
               "type": "MicrosoftMonitoringAgent",

@@ -105,7 +105,7 @@
         "vmSecrets": [],
         "vmExtensions": [
           {
-            "name": "[concat('OMSExtension', '/', variables('nodeTypeName'))]",
+            "name": "[concat('OMSExtension', '-', variables('nodeTypeName'))]",
             "properties": {
               "publisher": "Microsoft.EnterpriseCloud.Monitoring",
               "type": "MicrosoftMonitoringAgent",

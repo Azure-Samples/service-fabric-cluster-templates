@@ -136,7 +136,7 @@
         "vmSecrets": [],
         "vmExtensions": [
           {
-            "name": "[concat('AzureMonitorWindowsAgent', '/', parameters('nodeType1Name'))]",
+            "name": "[concat('AzureMonitorWindowsAgent', '-', parameters('nodeType1Name'))]",
             "properties": {
               "publisher": "Microsoft.Azure.Monitor",
               "type": "AzureMonitorWindowsAgent",
@@ -185,7 +185,7 @@
         "vmSecrets": [],
         "vmExtensions": [
           {
-            "name": "[concat('AzureMonitorWindowsAgent', '/', parameters('nodeType2Name'))]",
+            "name": "[concat('AzureMonitorWindowsAgent', '-', parameters('nodeType2Name'))]",
             "properties": {
               "publisher": "Microsoft.Azure.Monitor",
               "type": "AzureMonitorWindowsAgent",
