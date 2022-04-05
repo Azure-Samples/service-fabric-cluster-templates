@@ -76,7 +76,7 @@
   "resources": [
     {
       "type": "Microsoft.ServiceFabric/managedClusters",
-      "apiVersion": "2021-11-01-preview",
+      "apiVersion": "2022-01-01",
       "name": "[parameters('clusterName')]",
       "location": "[resourceGroup().location]",
       "sku": {
@@ -106,7 +106,7 @@
     },
     {
       "type": "Microsoft.ServiceFabric/managedClusters/nodetypes",
-      "apiVersion": "2021-11-01-preview",
+      "apiVersion": "2022-01-01",
       "name": "[concat(parameters('clusterName'), '/', parameters('nodeType1Name'))]",
       "location": "[resourceGroup().location]",
       "dependsOn": [
@@ -155,7 +155,7 @@
     },
     {
       "type": "Microsoft.ServiceFabric/managedClusters/nodetypes",
-      "apiVersion": "2021-11-01-preview",
+      "apiVersion": "2022-01-01",
       "name": "[concat(parameters('clusterName'), '/', parameters('nodeType2Name'))]",
       "location": "[resourceGroup().location]",
       "dependsOn": [
