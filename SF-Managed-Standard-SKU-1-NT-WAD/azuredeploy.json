@@ -36,9 +36,12 @@
         "description": "https://docs.microsoft.com/azure/role-based-access-control/role-definitions-list 'Managed Identity Operator' read and assign"
       }
     },
-    "sfrpRegionalId": {
+    "subscriptionSFRPId": {
       "defaultValue": "",
-      "type": "string"
+      "type": "string",
+      "metadata": {
+        "description":"to enumerate tenant specific SFRP guid: Select-AzSubscription -SubscriptionId {{subscription id}}; Get-AzADServicePrincipal -DisplayName 'Azure Service Fabric Resource Provider'"
+      }
     },
     "storageAccountName": {
       "defaultValue": "[concat('sfmcevts', uniqueString(resourceGroup().id))]",
@@ -72,7 +75,7 @@
       ],
       "properties": {
         "roleDefinitionId": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', parameters('roleDefinitionId'))]",
-        "principalId": "[parameters('sfrpRegionalId')]"
+        "principalId": "[parameters('subscriptionSFRPId')]"
       }
     },
     {
