@@ -17,6 +17,12 @@
         "dataDiskSizeGB": {
             "value": 256
         },
+        "laWorkspaceId": {
+            "value": ""
+        },
+        "laWorkspaceKey": {
+            "value": ""
+        },
         "vmInstanceCount": {
             "value": 6
         },
