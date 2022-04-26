@@ -394,7 +394,7 @@
     {
       "type": "Microsoft.ServiceFabric/managedClusters/nodetypes",
       "apiVersion": "2022-01-01",
-      "name": "[concat('VMDiagnosticsVmExt', '-', parameters('nodeType2Name'))]",
+      "name": "[concat(parameters('clusterName'), '/', parameters('nodeType2Name'))]",
       "location": "[resourceGroup().location]",
       "dependsOn": [
         "[resourceId('Microsoft.ServiceFabric/managedClusters', parameters('clusterName'))]",
