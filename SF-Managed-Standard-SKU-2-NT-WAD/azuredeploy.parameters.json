@@ -39,16 +39,13 @@
             "value": "NT2"
         },
         "nodeType2VmInstanceCount": {
-            "value": 3
+            "value": 6
         },
         "nodeType2VmSize": {
             "value": "Standard_D2s_v3"
         },
         "roleAssignmentId": {
             "value": ""
-        },
-        "roleDefinitionId": {
-            "value": "f1a07417-d97a-45cb-824c-7a7467783830"
         },
         "subscriptionSFRPId": {
             "value": ""
