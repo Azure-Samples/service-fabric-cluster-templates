@@ -36,7 +36,7 @@
             "value": "NT2"
         },
         "nodeType2VmInstanceCount": {
-            "value": 3
+            "value": 6
         },
         "nodeType2VmSize": {
             "value": "Standard_D2s_v3"
