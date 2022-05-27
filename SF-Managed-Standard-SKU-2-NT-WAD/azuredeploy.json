@@ -1,0 +1,616 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "adminPassword": {
+      "defaultValue": "",
+      "type": "securestring"
+    },
+    "adminUserName": {
+      "defaultValue": "",
+      "type": "String"
+    },
+    "clientCertificateThumbprint": {
+      "defaultValue": "",
+      "type": "String"
+    },
+    "clusterName": {
+      "defaultValue": "",
+      "type": "String"
+    },
+    "nodeType1DataDiskSizeGB": {
+      "type": "int",
+      "defaultValue": 256
+    },
+    "nodeType1managedDataDiskType": {
+      "type": "string",
+      "allowedValues": [
+        "Standard_LRS",
+        "StandardSSD_LRS",
+        "Premium_LRS"
+      ],
+      "defaultValue": "StandardSSD_LRS"
+    },
+    "nodeType1Name": {
+      "type": "string",
+      "maxLength": 9,
+      "defaultValue": "NT1"
+    },
+    "nodeType1VmInstanceCount": {
+      "type": "int",
+      "defaultValue": 5
+    },
+    "nodeType1VmSize": {
+      "type": "string",
+      "defaultValue": "Standard_D2s_v3"
+    },
+    "nodeType2DataDiskSizeGB": {
+      "type": "int",
+      "defaultValue": 128
+    },
+    "nodeType2managedDataDiskType": {
+      "type": "string",
+      "allowedValues": [
+        "Standard_LRS",
+        "StandardSSD_LRS",
+        "Premium_LRS"
+      ],
+      "defaultValue": "StandardSSD_LRS"
+    },
+    "nodeType2Name": {
+      "type": "string",
+      "maxLength": 9,
+      "defaultValue": "NT2"
+    },
+    "nodeType2VmInstanceCount": {
+      "type": "int",
+      "defaultValue": 3
+    },
+    "nodeType2VmSize": {
+      "type": "string",
+      "defaultValue": "Standard_D2s_v3"
+    },
+    "roleAssignmentId": {
+      "defaultValue": "",
+      "type": "string",
+      "metadata": {
+        "description": "generate guid one time and reuse for same assignment: [guid]::NewGuid() "
+      }
+    },
+    "roleDefinitionId": {
+      "defaultValue": "f1a07417-d97a-45cb-824c-7a7467783830",
+      "type": "string",
+      "metadata": {
+        "description": "https://docs.microsoft.com/azure/role-based-access-control/role-definitions-list 'Managed Identity Operator' read and assign"
+      }
+    },
+    "storageAccountName": {
+      "defaultValue": "[concat('sfmcevts', uniqueString(resourceGroup().id))]",
+      "type": "String"
+    },
+    "subscriptionSFRPId": {
+      "defaultValue": "",
+      "type": "string",
+      "metadata": {
+        "description":"to enumerate tenant specific SFRP guid: Select-AzSubscription -SubscriptionId {{subscription id}}; Get-AzADServicePrincipal -DisplayName 'Azure Service Fabric Resource Provider'"
+      }
+    },
+    "userAssignedIdentity": {
+      "defaultValue": "sfmcevts",
+      "type": "String"
+    }
+  },
+  "variables": {
+    "dataDiskLetter": "S"
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Authorization/roleAssignments",
+      "apiVersion": "2020-04-01-preview",
+      "name": "[parameters('roleAssignmentID')]",
+      "scope": "[concat('Microsoft.ManagedIdentity/userAssignedIdentities/', parameters('userAssignedIdentity'))]",
+      "dependsOn": [
+        "[resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', parameters('userAssignedIdentity'))]"
+      ],
+      "properties": {
+        "roleDefinitionId": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', parameters('roleDefinitionId'))]",
+        "principalId": "[parameters('subscriptionSFRPId')]"
+      }
+    },
+    {
+      "type": "Microsoft.ManagedIdentity/userAssignedIdentities",
+      "apiVersion": "2018-11-30",
+      "name": "[parameters('userAssignedIdentity')]",
+      "location": "[resourceGroup().location]"
+    },
+    {
+      "type": "Microsoft.ServiceFabric/managedClusters",
+      "apiVersion": "2022-01-01",
+      "name": "[parameters('clusterName')]",
+      "location": "[resourceGroup().location]",
+      "sku": {
+        "name": "Standard"
+      },
+      "properties": {
+        "clusterUpgradeMode": "Automatic",
+        "clusterUpgradeCadence": "Wave0",
+        "adminUserName": "[parameters('adminUserName')]",
+        "adminPassword": "[parameters('adminPassword')]",
+        "dnsName": "[parameters('clusterName')]",
+        "clientConnectionPort": 19000,
+        "httpGatewayConnectionPort": 19080,
+        "allowRdpAccess": false,
+        "clients": [
+          {
+            "isAdmin": true,
+            "thumbprint": "[parameters('clientCertificateThumbprint')]"
+          }
+        ],
+        "addonFeatures": [
+          "DnsService"
+        ],
+        "enableAutoOSUpgrade": false,
+        "zonalResiliency": true
+      }
+    },
+    {
+      "apiVersion": "2021-08-01",
+      "type": "Microsoft.Storage/storageAccounts",
+      "name": "[parameters('storageAccountName')]",
+      "location": "[resourceGroup().location]",
+      "dependsOn": [],
+      "properties": {},
+      "kind": "StorageV2",
+      "sku": {
+        "name": "Standard_RAGRS",
+        "tier": "Standard"
+      },
+      "tags": {
+        "resourceType": "Service Fabric",
+        "clusterName": "[parameters('clusterName')]"
+      }
+    },
+    {
+      "type": "Microsoft.ServiceFabric/managedClusters/nodetypes",
+      "apiVersion": "2022-01-01",
+      "name": "[concat(parameters('clusterName'), '/', parameters('nodeType1Name'))]",
+      "location": "[resourceGroup().location]",
+      "dependsOn": [
+        "[resourceId('Microsoft.ServiceFabric/managedClusters', parameters('clusterName'))]",
+        "[resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', parameters('userAssignedIdentity'))]"
+      ],
+      "properties": {
+        "isPrimary": true,
+        "vmImagePublisher": "MicrosoftWindowsServer",
+        "vmImageOffer": "WindowsServer",
+        "vmImageSku": "2019-Datacenter",
+        "vmImageVersion": "latest",
+        "vmSize": "[parameters('nodeType1VmSize')]",
+        "vmInstanceCount": "[parameters('nodeType1VmInstanceCount')]",
+        "dataDiskSizeGB": "[parameters('nodeType1DataDiskSizeGB')]",
+        "dataDiskType": "[parameters('nodeType1managedDataDiskType')]",
+        "vmManagedIdentity": {
+          "userAssignedIdentities": [
+            "[resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', parameters('userAssignedIdentity'))]"
+          ]
+        },
+        "dataDiskLetter": "[variables('dataDiskLetter')]",
+        "placementProperties": {},
+        "capacities": {},
+        "applicationPorts": {
+          "startPort": 20000,
+          "endPort": 30000
+        },
+        "ephemeralPorts": {
+          "startPort": 49152,
+          "endPort": 65534
+        },
+        "vmSecrets": [],
+        "vmExtensions": [
+          {
+            "name": "[concat('VMDiagnosticsVmExt', '-', parameters('nodeType1Name'))]",
+            "properties": {
+              "type": "IaaSDiagnostics",
+              "autoUpgradeMinorVersion": true,
+              "protectedSettings": {
+                "storageAccountName": "[parameters('storageAccountName')]",
+                "storageAccountKey": "[listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName')),'2015-05-01-preview').key1]",
+                "storageAccountEndPoint": "https://core.windows.net/"
+              },
+              "publisher": "Microsoft.Azure.Diagnostics",
+              "settings": {
+                "WadCfg": {
+                  "DiagnosticMonitorConfiguration": {
+                    "overallQuotaInMB": "50000",
+                    "PerformanceCounters": {
+                      "scheduledTransferPeriod": "PT1M",
+                      "sinks": "AzMonSink",
+                      "PerformanceCounterConfiguration": [
+                        {
+                          "counterSpecifier": "\\LogicalDisk(C:)\\% Free Space",
+                          "sampleRate": "PT10S"
+                        },
+                        {
+                          "counterSpecifier": "[concat('\\LogicalDisk(',variables('dataDiskLetter'),':)\\% Free Space')]",
+                          "sampleRate": "PT10S"
+                        },
+                        {
+                          "counterSpecifier": "\\Memory\\Available MBytes",
+                          "sampleRate": "PT10S"
+                        },
+                        {
+                          "counterSpecifier": "\\Memory\\Pages/sec",
+                          "sampleRate": "PT10S"
+                        },
+                        {
+                          "counterSpecifier": "\\Paging File(_Total)\\% Usage",
+                          "sampleRate": "PT10S"
+                        },
+                        {
+                          "counterSpecifier": "\\PhysicalDisk(C:)\\Current Disk Queue Length",
+                          "sampleRate": "PT10S"
+                        },
+                        {
+                          "counterSpecifier": "[concat('\\PhysicalDisk(',variables('dataDiskLetter'),':)\\Current Disk Queue Length')]",
+                          "sampleRate": "PT10S"
+                        },
+                        {
+                          "counterSpecifier": "\\Process(_Total)\\Handle Count",
+                          "sampleRate": "PT10S"
+                        },
+                        {
+                          "counterSpecifier": "\\Process(_Total)\\Private Bytes",
+                          "sampleRate": "PT10S"
+                        },
+                        {
+                          "counterSpecifier": "\\Process(_Total)\\Thread Count",
+                          "sampleRate": "PT10S"
+                        },
+                        {
+                          "counterSpecifier": "\\Processor(_Total)\\% Processor Time",
+                          "sampleRate": "PT10S"
+                        },
+                        {
+                          "counterSpecifier": "\\TCPv4\\Connections Established",
+                          "sampleRate": "PT10S"
+                        },
+                        {
+                          "counterSpecifier": "\\TCPv4\\Segments Received/sec",
+                          "sampleRate": "PT10S"
+                        },
+                        {
+                          "counterSpecifier": "\\TCPv4\\Segments Retransmitted/sec",
+                          "sampleRate": "PT10S"
+                        },
+                        {
+                          "counterSpecifier": "\\TCPv4\\Segments Sent/sec",
+                          "sampleRate": "PT10S"
+                        }
+                      ]
+                    },
+                    "EtwProviders": {
+                      //"sinks": "ApplicationInsights",
+                      "EtwEventSourceProviderConfiguration": [
+                        {
+                          "provider": "Microsoft-ServiceFabric-Actors",
+                          "scheduledTransferKeywordFilter": "1",
+                          "scheduledTransferPeriod": "PT5M",
+                          "DefaultEvents": {
+                            "eventDestination": "ServiceFabricReliableActorEventTable"
+                          }
+                        },
+                        {
+                          "provider": "Microsoft-ServiceFabric-Services",
+                          "scheduledTransferPeriod": "PT5M",
+                          "DefaultEvents": {
+                            "eventDestination": "ServiceFabricReliableServiceEventTable"
+                          }
+                        }
+                      ],
+                      "EtwManifestProviderConfiguration": [
+                        {
+                          "provider": "cbd93bc2-71e5-4566-b3a7-595d8eeca6e8",
+                          "scheduledTransferLogLevelFilter": "Information",
+                          "scheduledTransferKeywordFilter": "4611686018427387904",
+                          "scheduledTransferPeriod": "PT5M",
+                          "DefaultEvents": {
+                            "eventDestination": "ServiceFabricSystemEventTable"
+                          }
+                        },
+                        {
+                          "provider": "02d06793-efeb-48c8-8f7f-09713309a810",
+                          "scheduledTransferLogLevelFilter": "Information",
+                          "scheduledTransferKeywordFilter": "4611686018427387904",
+                          "scheduledTransferPeriod": "PT5M",
+                          "DefaultEvents": {
+                            "eventDestination": "ServiceFabricSystemEventTable"
+                          }
+                        }
+                      ]
+                    },
+                    "WindowsEventLog": {
+                      "scheduledTransferPeriod": "PT5M",
+                      //"sinks": "ApplicationInsights",
+                      "DataSource": [
+                        {
+                          "name": "System!*[System[Provider[@Name='Microsoft Antimalware']]]"
+                        },
+                        {
+                          "name": "System!*[System[Provider[@Name='NTFS'] and (EventID=55)]]"
+                        },
+                        {
+                          "name": "System!*[System[Provider[@Name='disk'] and (EventID=7 or EventID=52 or EventID=55)]]"
+                        },
+                        {
+                          "name": "Application!*[System[(Level=1 or Level=2 or Level=3)]]"
+                        },
+                        {
+                          "name": "Microsoft-ServiceFabric/Admin!*[System[(Level=1 or Level=2 or Level=3)]]"
+                        },
+                        {
+                          "name": "Microsoft-ServiceFabric/Audit!*[System[(Level=1 or Level=2 or Level=3)]]"
+                        },
+                        {
+                          "name": "Microsoft-ServiceFabric/Operational!*[System[(Level=1 or Level=2 or Level=3)]]"
+                        }
+                      ]
+                    }
+                  },
+                  "SinksConfig": {
+                    "Sink": [
+                      {
+                        "name": "AzMonSink",
+                        "AzureMonitor": {
+                          "resourceId": ""
+                        }
+                      },
+                      {
+                        "name": "ApplicationInsights",
+                        "ApplicationInsights": "***ADD INSTRUMENTATION KEY HERE***"
+                      },
+                      {
+                        "name": "EventHub",
+                        "EventHub": {
+                          "Url": "https://myeventhub-ns.servicebus.windows.net/diageventhub",
+                          "SharedAccessKeyName": "SendRule",
+                          "usePublisherId": false
+                        }
+                      }
+                    ]
+                  }
+                }
+              },
+              "typeHandlerVersion": "1.5"
+            }
+          }
+        ],
+        "isStateless": false,
+        "multiplePlacementGroups": false,
+        "enableEncryptionAtHost": false,
+        "enableAcceleratedNetworking": false,
+        "useTempDataDisk": false
+      }
+    },
+    {
+      "type": "Microsoft.ServiceFabric/managedClusters/nodetypes",
+      "apiVersion": "2022-01-01",
+      "name": "[concat(parameters('clusterName'), '/', parameters('nodeType2Name'))]",
+      "location": "[resourceGroup().location]",
+      "dependsOn": [
+        "[resourceId('Microsoft.ServiceFabric/managedClusters', parameters('clusterName'))]",
+        "[resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', parameters('userAssignedIdentity'))]"
+      ],
+      "properties": {
+        "isPrimary": true,
+        "vmImagePublisher": "MicrosoftWindowsServer",
+        "vmImageOffer": "WindowsServer",
+        "vmImageSku": "2019-Datacenter",
+        "vmImageVersion": "latest",
+        "vmSize": "[parameters('nodeType2VmSize')]",
+        "vmInstanceCount": "[parameters('nodeType2VmInstanceCount')]",
+        "dataDiskSizeGB": "[parameters('nodeType2DataDiskSizeGB')]",
+        "dataDiskType": "[parameters('nodeType2managedDataDiskType')]",
+        "vmManagedIdentity": {
+          "userAssignedIdentities": [
+            "[resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', parameters('userAssignedIdentity'))]"
+          ]
+        },
+        "dataDiskLetter": "[variables('dataDiskLetter')]",
+        "placementProperties": {},
+        "capacities": {},
+        "applicationPorts": {
+          "startPort": 20000,
+          "endPort": 30000
+        },
+        "ephemeralPorts": {
+          "startPort": 49152,
+          "endPort": 65534
+        },
+        "vmSecrets": [],
+        "vmExtensions": [
+          {
+            "name": "[concat('VMDiagnosticsVmExt',parameters('nodeType2Name'))]",
+            "properties": {
+              "type": "IaaSDiagnostics",
+              "autoUpgradeMinorVersion": true,
+              "protectedSettings": {
+                "storageAccountName": "[parameters('storageAccountName')]",
+                "storageAccountKey": "[listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName')),'2015-05-01-preview').key1]",
+                "storageAccountEndPoint": "https://core.windows.net/"
+              },
+              "publisher": "Microsoft.Azure.Diagnostics",
+              "settings": {
+                "WadCfg": {
+                  "DiagnosticMonitorConfiguration": {
+                    "overallQuotaInMB": "50000",
+                    "PerformanceCounters": {
+                      "scheduledTransferPeriod": "PT1M",
+                      "sinks": "AzMonSink",
+                      "PerformanceCounterConfiguration": [
+                        {
+                          "counterSpecifier": "\\LogicalDisk(C:)\\% Free Space",
+                          "sampleRate": "PT10S"
+                        },
+                        {
+                          "counterSpecifier": "[concat('\\LogicalDisk(',variables('dataDiskLetter'),':)\\% Free Space')]",
+                          "sampleRate": "PT10S"
+                        },
+                        {
+                          "counterSpecifier": "\\Memory\\Available MBytes",
+                          "sampleRate": "PT10S"
+                        },
+                        {
+                          "counterSpecifier": "\\Memory\\Pages/sec",
+                          "sampleRate": "PT10S"
+                        },
+                        {
+                          "counterSpecifier": "\\Paging File(_Total)\\% Usage",
+                          "sampleRate": "PT10S"
+                        },
+                        {
+                          "counterSpecifier": "\\PhysicalDisk(C:)\\Current Disk Queue Length",
+                          "sampleRate": "PT10S"
+                        },
+                        {
+                          "counterSpecifier": "[concat('\\PhysicalDisk(',variables('dataDiskLetter'),':)\\Current Disk Queue Length')]",
+                          "sampleRate": "PT10S"
+                        },
+                        {
+                          "counterSpecifier": "\\Process(_Total)\\Handle Count",
+                          "sampleRate": "PT10S"
+                        },
+                        {
+                          "counterSpecifier": "\\Process(_Total)\\Private Bytes",
+                          "sampleRate": "PT10S"
+                        },
+                        {
+                          "counterSpecifier": "\\Process(_Total)\\Thread Count",
+                          "sampleRate": "PT10S"
+                        },
+                        {
+                          "counterSpecifier": "\\Processor(_Total)\\% Processor Time",
+                          "sampleRate": "PT10S"
+                        },
+                        {
+                          "counterSpecifier": "\\TCPv4\\Connections Established",
+                          "sampleRate": "PT10S"
+                        },
+                        {
+                          "counterSpecifier": "\\TCPv4\\Segments Received/sec",
+                          "sampleRate": "PT10S"
+                        },
+                        {
+                          "counterSpecifier": "\\TCPv4\\Segments Retransmitted/sec",
+                          "sampleRate": "PT10S"
+                        },
+                        {
+                          "counterSpecifier": "\\TCPv4\\Segments Sent/sec",
+                          "sampleRate": "PT10S"
+                        }
+                      ]
+                    },
+                    "EtwProviders": {
+                      //"sinks": "ApplicationInsights",
+                      "EtwEventSourceProviderConfiguration": [
+                        {
+                          "provider": "Microsoft-ServiceFabric-Actors",
+                          "scheduledTransferKeywordFilter": "1",
+                          "scheduledTransferPeriod": "PT5M",
+                          "DefaultEvents": {
+                            "eventDestination": "ServiceFabricReliableActorEventTable"
+                          }
+                        },
+                        {
+                          "provider": "Microsoft-ServiceFabric-Services",
+                          "scheduledTransferPeriod": "PT5M",
+                          "DefaultEvents": {
+                            "eventDestination": "ServiceFabricReliableServiceEventTable"
+                          }
+                        }
+                      ],
+                      "EtwManifestProviderConfiguration": [
+                        {
+                          "provider": "cbd93bc2-71e5-4566-b3a7-595d8eeca6e8",
+                          "scheduledTransferLogLevelFilter": "Information",
+                          "scheduledTransferKeywordFilter": "4611686018427387904",
+                          "scheduledTransferPeriod": "PT5M",
+                          "DefaultEvents": {
+                            "eventDestination": "ServiceFabricSystemEventTable"
+                          }
+                        },
+                        {
+                          "provider": "02d06793-efeb-48c8-8f7f-09713309a810",
+                          "scheduledTransferLogLevelFilter": "Information",
+                          "scheduledTransferKeywordFilter": "4611686018427387904",
+                          "scheduledTransferPeriod": "PT5M",
+                          "DefaultEvents": {
+                            "eventDestination": "ServiceFabricSystemEventTable"
+                          }
+                        }
+                      ]
+                    },
+                    "WindowsEventLog": {
+                      "scheduledTransferPeriod": "PT5M",
+                      //"sinks": "ApplicationInsights",
+                      "DataSource": [
+                        {
+                          "name": "System!*[System[Provider[@Name='Microsoft Antimalware']]]"
+                        },
+                        {
+                          "name": "System!*[System[Provider[@Name='NTFS'] and (EventID=55)]]"
+                        },
+                        {
+                          "name": "System!*[System[Provider[@Name='disk'] and (EventID=7 or EventID=52 or EventID=55)]]"
+                        },
+                        {
+                          "name": "Application!*[System[(Level=1 or Level=2 or Level=3)]]"
+                        },
+                        {
+                          "name": "Microsoft-ServiceFabric/Admin!*[System[(Level=1 or Level=2 or Level=3)]]"
+                        },
+                        {
+                          "name": "Microsoft-ServiceFabric/Audit!*[System[(Level=1 or Level=2 or Level=3)]]"
+                        },
+                        {
+                          "name": "Microsoft-ServiceFabric/Operational!*[System[(Level=1 or Level=2 or Level=3)]]"
+                        }
+                      ]
+                    }
+                  },
+                  "SinksConfig": {
+                    "Sink": [
+                      {
+                        "name": "AzMonSink",
+                        "AzureMonitor": {
+                          "resourceId": ""
+                        }
+                      },
+                      {
+                        "name": "ApplicationInsights",
+                        "ApplicationInsights": "***ADD INSTRUMENTATION KEY HERE***"
+                      },
+                      {
+                        "name": "EventHub",
+                        "EventHub": {
+                          "Url": "https://myeventhub-ns.servicebus.windows.net/diageventhub",
+                          "SharedAccessKeyName": "SendRule",
+                          "usePublisherId": false
+                        }
+                      }
+                    ]
+                  }
+                }
+              },
+              "typeHandlerVersion": "1.5"
+            }
+          }
+        ],
+        "isStateless": false,
+        "multiplePlacementGroups": false,
+        "enableEncryptionAtHost": false,
+        "enableAcceleratedNetworking": false,
+        "useTempDataDisk": false
+      }
+    }
+  ]
+}

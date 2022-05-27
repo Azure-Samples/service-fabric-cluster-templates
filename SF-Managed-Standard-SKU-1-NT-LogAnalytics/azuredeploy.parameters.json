@@ -1,0 +1,33 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "adminPassword": {
+            "value": ""
+        },
+        "adminUserName": {
+            "value": ""
+        },
+        "clientCertificateThumbprint": {
+            "value": ""
+        },
+        "clusterName": {
+            "value": ""
+        },
+        "dataDiskSizeGB": {
+            "value": 256
+        },
+        "laWorkspaceId": {
+            "value": ""
+        },
+        "laWorkspaceKey": {
+            "value": ""
+        },
+        "vmInstanceCount": {
+            "value": 6
+        },
+        "vmSize": {
+            "value": "Standard_D2s_v3"
+        }
+    }
+}

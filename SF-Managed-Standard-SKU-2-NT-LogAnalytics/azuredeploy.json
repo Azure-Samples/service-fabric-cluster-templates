@@ -1,0 +1,224 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "adminPassword": {
+      "defaultValue": "",
+      "type": "securestring"
+    },
+    "adminUserName": {
+      "defaultValue": "",
+      "type": "String"
+    },
+    "clientCertificateThumbprint": {
+      "defaultValue": "",
+      "type": "String"
+    },
+    "clusterName": {
+      "defaultValue": "",
+      "type": "String"
+    },
+    "laWorkspaceId": {
+      "defaultValue": "",
+      "type": "String"
+    },
+    "laWorkspaceKey": {
+      "defaultValue": "",
+      "type": "String"
+    },
+    "nodeType1DataDiskSizeGB": {
+      "type": "int",
+      "defaultValue": 256
+    },
+    "nodeType1managedDataDiskType": {
+      "type": "string",
+      "allowedValues": [
+        "Standard_LRS",
+        "StandardSSD_LRS",
+        "Premium_LRS"
+      ],
+      "defaultValue": "StandardSSD_LRS"
+    },
+    "nodeType1Name": {
+      "type": "string",
+      "maxLength": 9,
+      "defaultValue": "NT1"
+    },
+    "nodeType1VmInstanceCount": {
+      "type": "int",
+      "defaultValue": 5
+    },
+    "nodeType1VmSize": {
+      "type": "string",
+      "defaultValue": "Standard_D2s_v3"
+    },
+    "nodeType2DataDiskSizeGB": {
+      "type": "int",
+      "defaultValue": 128
+    },
+    "nodeType2managedDataDiskType": {
+      "type": "string",
+      "allowedValues": [
+        "Standard_LRS",
+        "StandardSSD_LRS",
+        "Premium_LRS"
+      ],
+      "defaultValue": "StandardSSD_LRS"
+    },
+    "nodeType2Name": {
+      "type": "string",
+      "maxLength": 9,
+      "defaultValue": "NT2"
+    },
+    "nodeType2VmInstanceCount": {
+      "type": "int",
+      "defaultValue": 3
+    },
+    "nodeType2VmSize": {
+      "type": "string",
+      "defaultValue": "Standard_D2s_v3"
+    }
+  },
+  "variables": {
+  },
+  "resources": [
+    {
+      "type": "Microsoft.ServiceFabric/managedClusters",
+      "apiVersion": "2022-01-01",
+      "name": "[parameters('clusterName')]",
+      "location": "[resourceGroup().location]",
+      "sku": {
+        "name": "Standard"
+      },
+      "properties": {
+        "clusterUpgradeMode": "Automatic",
+        "clusterUpgradeCadence": "Wave0",
+        "adminUserName": "[parameters('adminUserName')]",
+        "adminPassword": "[parameters('adminPassword')]",
+        "dnsName": "[parameters('clusterName')]",
+        "clientConnectionPort": 19000,
+        "httpGatewayConnectionPort": 19080,
+        "allowRdpAccess": false,
+        "clients": [
+          {
+            "isAdmin": true,
+            "thumbprint": "[parameters('clientCertificateThumbprint')]"
+          }
+        ],
+        "addonFeatures": [
+          "DnsService"
+        ],
+        "enableAutoOSUpgrade": false,
+        "zonalResiliency": true
+      }
+    },
+    {
+      "type": "Microsoft.ServiceFabric/managedClusters/nodetypes",
+      "apiVersion": "2022-01-01",
+      "name": "[concat(parameters('clusterName'), '/', parameters('nodeType1Name'))]",
+      "location": "[resourceGroup().location]",
+      "dependsOn": [
+        "[resourceId('Microsoft.ServiceFabric/managedClusters', parameters('clusterName'))]"
+      ],
+      "properties": {
+        "isPrimary": true,
+        "vmImagePublisher": "MicrosoftWindowsServer",
+        "vmImageOffer": "WindowsServer",
+        "vmImageSku": "2019-Datacenter",
+        "vmImageVersion": "latest",
+        "vmSize": "[parameters('nodeType1VmSize')]",
+        "vmInstanceCount": "[parameters('nodeType1VmInstanceCount')]",
+        "dataDiskSizeGB": "[parameters('nodeType1DataDiskSizeGB')]",
+        "dataDiskType": "[parameters('nodeType1managedDataDiskType')]",
+        "dataDiskLetter": "S",
+        "placementProperties": {},
+        "capacities": {},
+        "applicationPorts": {
+          "startPort": 20000,
+          "endPort": 30000
+        },
+        "ephemeralPorts": {
+          "startPort": 49152,
+          "endPort": 65534
+        },
+        "vmSecrets": [],
+        "vmExtensions": [
+          {
+            "name": "[concat('OMSExtension', '-', parameters('nodeType1Name'))]",
+            "properties": {
+              "publisher": "Microsoft.EnterpriseCloud.Monitoring",
+              "type": "MicrosoftMonitoringAgent",
+              "typeHandlerVersion": "1.0",
+              "autoUpgradeMinorVersion": true,
+              "settings": {
+                "workspaceId": "[parameters('laWorkspaceId')]"
+              },
+              "protectedSettings": {
+                "workspaceKey": "[parameters('laWorkspaceKey')]"
+              }
+            }
+          }
+        ],
+        "isStateless": false,
+        "multiplePlacementGroups": false,
+        "enableEncryptionAtHost": false,
+        "enableAcceleratedNetworking": false,
+        "useTempDataDisk": false
+      }
+    },
+    {
+      "type": "Microsoft.ServiceFabric/managedClusters/nodetypes",
+      "apiVersion": "2022-01-01",
+      "name": "[concat(parameters('clusterName'), '/', parameters('nodeType2Name'))]",
+      "location": "[resourceGroup().location]",
+      "dependsOn": [
+        "[resourceId('Microsoft.ServiceFabric/managedClusters', parameters('clusterName'))]"
+      ],
+      "properties": {
+        "isPrimary": true,
+        "vmImagePublisher": "MicrosoftWindowsServer",
+        "vmImageOffer": "WindowsServer",
+        "vmImageSku": "2019-Datacenter",
+        "vmImageVersion": "latest",
+        "vmSize": "[parameters('nodeType2VmSize')]",
+        "vmInstanceCount": "[parameters('nodeType2VmInstanceCount')]",
+        "dataDiskSizeGB": "[parameters('nodeType2DataDiskSizeGB')]",
+        "dataDiskType": "[parameters('nodeType2managedDataDiskType')]",
+        "dataDiskLetter": "S",
+        "placementProperties": {},
+        "capacities": {},
+        "applicationPorts": {
+          "startPort": 20000,
+          "endPort": 30000
+        },
+        "ephemeralPorts": {
+          "startPort": 49152,
+          "endPort": 65534
+        },
+        "vmSecrets": [],
+        "vmExtensions": [
+          {
+            "name": "[concat('OMSExtension', '-', parameters('nodeType2Name'))]",
+            "properties": {
+              "publisher": "Microsoft.EnterpriseCloud.Monitoring",
+              "type": "MicrosoftMonitoringAgent",
+              "typeHandlerVersion": "1.0",
+              "autoUpgradeMinorVersion": true,
+              "settings": {
+                "workspaceId": "[parameters('laWorkspaceId')]"
+              },
+              "protectedSettings": {
+                "workspaceKey": "[parameters('laWorkspaceKey')]"
+              }
+            }
+          }
+        ],
+        "isStateless": false,
+        "multiplePlacementGroups": false,
+        "enableEncryptionAtHost": false,
+        "enableAcceleratedNetworking": false,
+        "useTempDataDisk": false
+      }
+    }
+  ]
+}
