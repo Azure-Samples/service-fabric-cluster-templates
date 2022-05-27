@@ -27,6 +27,8 @@ New-AzResourceGroupDeployment -ResourceGroupName <managedIdentityRGName> -Templa
 New-AzResourceGroupDeployment -ResourceGroupName <sfmcRGName> -TemplateFile ".\sfmcVmManagedIdentity.json" -TemplateParameterFile ".\sfmcVmManagedIdentity.Parameters.json" -Verbose
 ```
 
+Generate a new GUID for the parameter **vmIdentityRoleNameGuid** (it can be generated in powershell using [Guid]::NewGuid()) and if you deploy again the same template including the role assignment, make sure the GUID is the same as the one originally used or remove this resource as it just needs to be created once.
+
 ## Resources
 
 For more info, see:
