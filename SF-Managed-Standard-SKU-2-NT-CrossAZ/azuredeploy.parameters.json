@@ -1,0 +1,63 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "clusterName": {
+            "value": "GEN-UNIQUE"
+        },
+        "clusterSku": {
+            "value": "Standard"
+        },
+        "adminUserName": {
+            "value": "GEN-UNIQUE"
+        },
+        "adminPassword": {
+            "value": "GEN-PASSWORD"
+        },
+        "clientCertificateThumbprint": {
+            "value": "GEN-SF-CERT-THUMBPRINT"
+        },
+        "nodeType1Name": {
+            "value": "NT1"
+        },
+        "nodeType1VmSize": {
+            "value": "Standard_D2s_v3"
+        },
+        "nodeType1VmInstanceCount": {
+            "value": 9
+        },
+        "nodeType1DataDiskSizeGB": {
+            "value": 256
+        },
+        "nodeType1managedDataDiskType": {
+            "value": "StandardSSD_LRS"
+        },
+        "nodeType2Name": {
+            "value": "NT2"
+        },
+        "nodeType2VmSize": {
+            "value": "Standard_D2s_v3"
+        },
+        "nodeType2VmInstanceCount": {
+            "value": 6
+        },
+        "nodeType2DataDiskSizeGB": {
+            "value": 128
+        },
+        "nodeType2managedDataDiskType": {
+            "value": "StandardSSD_LRS"
+        },
+        "vmImagePublisher": {
+            "value": "MicrosoftWindowsServer"
+        },
+        "vmImageOffer": {
+            "value": "WindowsServer"
+        },
+        "vmImageSku": {
+            "value": "2019-Datacenter"
+        },
+        "vmImageVersion": {
+            "value": "latest"
+        }
+    }
+}

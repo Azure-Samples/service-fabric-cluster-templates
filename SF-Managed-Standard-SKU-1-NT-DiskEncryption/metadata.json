@@ -1,11 +1,11 @@
 {
   "$schema": "https://aka.ms/azure-quickstart-templates-metadata-schema#",
   "type": "QuickStart",
-  "itemDisplayName": "Deploy a Standard SKU managed Service Fabric cluster with disk encryption",
-  "description": "This template takes a minimum set of parameters and deploys a Standard SKU managed Service Fabric cluster with 1 node type with disk encryption enabled.",
-  "summary": "This template takes a minimum set of parameters and deploys a Standard SKU managed Service Fabric cluster with 1 node type with disk encryption enabled.",
+  "itemDisplayName": "Deploy a Standard SKU Service Fabric managed cluster with disk encryption",
+  "description": "This template takes a minimum set of parameters and deploys a Standard SKU Service Fabric managed cluster with 1 node type with disk encryption enabled.",
+  "summary": "This template takes a minimum set of parameters and deploys a Standard SKU Service Fabric managed cluster with 1 node type with disk encryption enabled.",
   "githubUsername": "peterpogorski",
-  "dateUpdated": "2021-02-16"
+  "dateUpdated": "2021-05-06"
 }
 
 

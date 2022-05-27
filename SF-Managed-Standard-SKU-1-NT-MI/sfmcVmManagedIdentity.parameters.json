@@ -1,0 +1,48 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "clusterName": {
+            "value": "CLUSTER-NAME"
+        },
+        "clusterSku": {
+            "value": "Standard"
+        },
+        "adminUserName": {
+            "value": "ADMIN-USER"
+        },
+        "adminPassword": {
+            "value": "SECURE-STRING"
+        },
+        "clientCertificateThumbprint": {
+            "value": "CLIENT-SF-CERT-THUMBPRINT"
+        },
+        "nodeTypeName": {
+            "value": "NT1"
+        },
+        "vmSize": {
+            "value": "Standard_D2s_v3"
+        },
+        "vmInstanceCount": {
+            "value": 5
+        },
+        "dataDiskSizeGB": {
+            "value": 256
+        },
+        "vmImagePublisher": {
+            "value": "MicrosoftWindowsServer"
+        },
+        "vmImageOffer": {
+            "value": "WindowsServer"
+        },
+        "vmImageSku": {
+            "value": "2019-Datacenter"
+        },
+        "vmImageVersion": {
+            "value": "latest"
+        },
+        "userAssignedIdentityResourceId": {
+            "value": "IDENTITY-FULL-RESOURCE-ID"
+        }
+    }
+}

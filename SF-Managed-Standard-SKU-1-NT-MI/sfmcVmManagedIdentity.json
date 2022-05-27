@@ -1,0 +1,148 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "clusterName": {
+            "type": "string",
+            "minLength": 4,
+            "maxLength": 23,
+            "metadata": {
+                "description": "Name of your cluster - Between 3 and 23 characters. Letters and numbers only"
+            }
+        },
+        "clusterSku": {
+            "type": "string",
+            "allowedValues": [
+                "Basic",
+                "Standard"
+            ],
+            "defaultValue": "Standard"
+        },
+        "adminUserName": {
+            "type": "string",
+            "defaultValue": "vmadmin"
+        },
+        "adminPassword": {
+            "type": "securestring"
+        },
+        "clientCertificateThumbprint": {
+            "type": "string"
+        },
+        "nodeTypeName": {
+            "type": "string",
+            "maxLength": 9,
+            "defaultValue": "NT1"
+        },
+        "vmImagePublisher": {
+            "type": "string",
+            "defaultValue": "MicrosoftWindowsServer"
+        },
+        "vmImageOffer": {
+            "type": "string",
+            "defaultValue": "WindowsServer"
+        },
+        "vmImageSku": {
+            "type": "string",
+            "defaultValue": "2019-Datacenter"
+        },
+        "vmImageVersion": {
+            "type": "string",
+            "defaultValue": "latest"
+        },
+        "vmSize": {
+            "type": "string",
+            "defaultValue": "Standard_D2s_v3"
+        },
+        "vmInstanceCount": {
+            "type": "int",
+            "defaultValue": 5
+        },
+        "dataDiskSizeGB": {
+            "type": "int",
+            "defaultValue": 256
+        },
+        "userAssignedIdentityName": {
+            "defaultValue": "SFMC-id",
+            "type": "String"
+        },
+        "vmIdentityRoleNameGuid": {
+            "type": "String",
+            "metadata": {
+                "description": "Unique GUID to create the role assigment. Make sure it is the same value on redeployments."
+            }
+        }
+    },
+    "variables": {
+        "sfApiVersion": "2021-05-01"
+    },
+    "resources": [
+        {
+            "apiVersion": "[variables('sfApiVersion')]",
+            "type": "Microsoft.ServiceFabric/managedclusters",
+            "name": "[parameters('clusterName')]",
+            "location": "[resourcegroup().location]",
+            "sku": {
+                "name" : "[parameters('clusterSku')]"
+            },
+            "properties": {
+                "dnsName": "[toLower(parameters('clusterName'))]",
+                "adminUserName": "[parameters('adminUserName')]",
+                "adminPassword": "[parameters('adminPassword')]",
+                "clientConnectionPort": 19000,
+                "httpGatewayConnectionPort": 19080,
+                "clients" : [
+                    {
+                        "isAdmin" : true,
+                        "thumbprint" : "[parameters('clientCertificateThumbprint')]"
+                    }
+                ],
+                "loadBalancingRules": [
+                    {
+                        "frontendPort": 8080, 
+                        "backendPort": 8080,
+                        "protocol": "tcp",
+                        "probeProtocol": "tcp"
+                    }
+                ]
+            }
+        },
+        {
+            "apiVersion": "[variables('sfApiVersion')]",
+            "type": "Microsoft.ServiceFabric/managedclusters/nodetypes",
+            "name": "[concat(parameters('clusterName'), '/', parameters('nodeTypeName'))]",
+            "location": "[resourcegroup().location]",
+            "dependsOn": [
+              "[concat('Microsoft.ServiceFabric/managedclusters/', parameters('clusterName'))]"
+            ],
+            "properties": {
+                "isPrimary": true,
+                "vmImagePublisher": "[parameters('vmImagePublisher')]",
+                "vmImageOffer": "[parameters('vmImageOffer')]",
+                "vmImageSku": "[parameters('vmImageSku')]",
+                "vmImageVersion": "[parameters('vmImageVersion')]",
+                "vmSize": "[parameters('vmSize')]",
+                "vmInstanceCount": "[parameters('vmInstanceCount')]",
+                "dataDiskSizeGB": "[parameters('dataDiskSizeGB')]",
+                "vmManagedIdentity": {
+                    "userAssignedIdentities": [
+                        "[parameters('userAssignedIdentityResourceId')]"
+                    ]
+                }
+            }
+        }
+    ],
+    "outputs": {
+         "serviceFabricExplorer": {
+            "value": "[concat('https://', reference(parameters('clusterName')).fqdn, ':', reference(parameters('clusterName')).httpGatewayConnectionPort)]",
+            "type": "string"
+        },
+        "clientConnectionEndpoint": {
+             "value": "[concat(reference(parameters('clusterName')).fqdn, ':', reference(parameters('clusterName')).clientConnectionPort)]",
+             "type": "string"
+        },
+        "clusterProperties": {
+            "value": "[reference(parameters('clusterName'))]",
+            "type": "object"
+        }
+    }
+}

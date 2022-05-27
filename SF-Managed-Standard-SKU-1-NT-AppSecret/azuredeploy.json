@@ -1,5 +1,5 @@
 {
-    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json",
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
         "clusterName": {
@@ -28,10 +28,22 @@
         "clientCertificateThumbprint": {
             "type": "string"
         },
-        "nodeTypeName": {
+        "nodeType1Name": {
             "type": "string",
             "maxLength": 9,
             "defaultValue": "NT1"
+        },
+        "nodeType1VmSize": {
+            "type": "string",
+            "defaultValue": "Standard_D2s_v3"
+        },
+        "nodeType1VmInstanceCount": {
+            "type": "int",
+            "defaultValue": 5
+        },
+        "nodeType1DataDiskSizeGB": {
+            "type": "int",
+            "defaultValue": 256
         },
         "vmImagePublisher": {
             "type": "string",
@@ -49,31 +61,24 @@
             "type": "string",
             "defaultValue": "latest"
         },
-        "vmSize": {
+        "managedDataDiskType": {
             "type": "string",
-            "defaultValue": "Standard_D2_v2"
+            "allowedValues": [
+                "Standard_LRS",
+                "StandardSSD_LRS",
+                "Premium_LRS"
+            ],
+            "defaultValue": "StandardSSD_LRS"
         },
-        "vmInstanceCount": {
-            "type": "int",
-            "defaultValue": 5
+        "sourceVaultValue": {
+          "type": "string"
         },
-        "dataDiskSizeGB": {
-            "type": "int",
-            "defaultValue": 120
-        },
-        "userAssignedIdentityName": {
-            "defaultValue": "SFMC-id",
-            "type": "String"
-        },
-        "vmIdentityRoleNameGuid": {
-            "type": "String",
-            "metadata": {
-                "description": "Unique GUID to create the role assigment. Make sure it is the same value on redeployments."
-            }
-        }
+        "certificate1UrlValue": {
+          "type": "string"
+        }    
     },
     "variables": {
-        "sfApiVersion": "2021-01-01-preview"
+        "sfApiVersion": "2021-05-01"
     },
     "resources": [
         {
@@ -106,29 +111,10 @@
                 ]
             }
         },
-        { 
-            "type": "Microsoft.ManagedIdentity/userAssignedIdentities", 
-            "name": "[parameters('userAssignedIdentityName')]", 
-            "apiVersion": "2018-11-30", 
-            "location": "[resourceGroup().location]"  
-        }, 
-        {
-            "type": "Microsoft.Authorization/roleAssignments", 
-            "apiVersion": "2020-04-01-preview",
-            "name": "[parameters('vmIdentityRoleNameGuid')]",
-            "scope": "[concat('Microsoft.ManagedIdentity/userAssignedIdentities', '/', parameters('userAssignedIdentityName'))]",
-            "dependsOn": [ 
-                "[concat('Microsoft.ManagedIdentity/userAssignedIdentities/', parameters('userAssignedIdentityName'))]"
-            ], 
-            "properties": {
-                "roleDefinitionId": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', 'f1a07417-d97a-45cb-824c-7a7467783830')]",
-                "principalId": "fbc587f2-66f5-4459-a027-bcd908b9d278" 
-                  } 
-            }, 
         {
             "apiVersion": "[variables('sfApiVersion')]",
             "type": "Microsoft.ServiceFabric/managedclusters/nodetypes",
-            "name": "[concat(parameters('clusterName'), '/', parameters('nodeTypeName'))]",
+            "name": "[concat(parameters('clusterName'), '/', parameters('nodeType1Name'))]",
             "location": "[resourcegroup().location]",
             "dependsOn": [
               "[concat('Microsoft.ServiceFabric/managedclusters/', parameters('clusterName'))]"
@@ -139,19 +125,29 @@
                 "vmImageOffer": "[parameters('vmImageOffer')]",
                 "vmImageSku": "[parameters('vmImageSku')]",
                 "vmImageVersion": "[parameters('vmImageVersion')]",
-                "vmSize": "[parameters('vmSize')]",
-                "vmInstanceCount": "[parameters('vmInstanceCount')]",
-                "dataDiskSizeGB": "[parameters('dataDiskSizeGB')]",
-                "vmManagedIdentity": {
-                    "userAssignedIdentities": [
-                        "[resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', parameters('userAssignedIdentityName'))]"
-                    ]
-                }
+                "vmSize": "[parameters('nodeType1VmSize')]",
+                "vmInstanceCount": "[parameters('nodeType1VmInstanceCount')]",
+                "dataDiskSizeGB": "[parameters('nodeType1DataDiskSizeGB')]",
+                "dataDiskType": "[parameters('managedDataDiskType')]",
+                "vmSecrets": [
+                  {
+                    "sourceVault": {
+                      "id": "[parameters('sourceVaultValue')]"
+                    },
+                    "vaultCertificates": [
+                      {
+                        "certificateStore": "My",
+                        "certificateUrl": "[parameters('certificate1UrlValue')]"
+              }
+            ]
+          }
+        ]
+        
             }
         }
     ],
     "outputs": {
-         "serviceFabricExplorer": {
+        "serviceFabricExplorer": {
             "value": "[concat('https://', reference(parameters('clusterName')).fqdn, ':', reference(parameters('clusterName')).httpGatewayConnectionPort)]",
             "type": "string"
         },

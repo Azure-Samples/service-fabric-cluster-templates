@@ -1,0 +1,150 @@
+﻿{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "dnsName": {
+      "type": "string"
+    },
+    "loadBalancerRoleAssignmentID": {
+      "type": "string"
+    }
+  },
+  "variables": {
+    "networkApiVersion": "2020-08-01",
+    "pipName": "[concat('PIP-', parameters('dnsName'))]",
+    "lbName": "[concat('LB-', parameters('dnsName'))]",
+    "lbID": "[resourceId('Microsoft.Network/loadBalancers', variables('lbName'))]"
+  },
+  "resources": [
+    {
+      "apiVersion": "[variables('networkApiVersion')]",
+      "type": "Microsoft.Network/publicIPAddresses",
+      "name": "[variables('pipName')]",
+      "location": "[resourcegroup().location]",
+      "sku": {
+        "name": "Standard"
+      },
+      "properties": {
+        "dnsSettings": {
+          "domainNameLabel": "[parameters('dnsName')]"
+        },
+        "publicIPAllocationMethod": "Static"
+      }
+    },
+    {
+      "apiVersion": "[variables('networkApiVersion')]",
+      "type": "Microsoft.Network/loadBalancers",
+      "name": "[variables('lbName')]",
+      "location": "[resourcegroup().location]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Network/publicIPAddresses', variables('pipName'))]"
+      ],
+      "sku": {
+        "name": "Standard"
+      },
+      "properties": {
+        "frontendIPConfigurations": [
+          {
+            "name": "LoadBalancerIPConfig",
+            "properties": {
+              "publicIPAddress": {
+                "id": "[resourceId('Microsoft.Network/publicIPAddresses', variables('pipName'))]"
+              }
+            }
+          }
+        ],
+        "backendAddressPools": [
+          {
+            "name": "LoadBalancerBEAddressPool",
+            "properties": {}
+          }
+        ],
+        "outboundRules": [
+          {
+            "name": "Default",
+            "properties": {
+              "allocatedOutboundPorts": 0,
+              "protocol": "All",
+              "enableTcpReset": true,
+              "idleTimeoutInMinutes": 4,
+              "backendAddressPool": {
+                "id": "[concat(variables('lbID'), '/backendAddressPools/LoadBalancerBEAddressPool')]"
+              },
+              "frontendIPConfigurations": [
+                {
+                  "id": "[concat(variables('lbID'), '/frontendIPConfigurations/LoadBalancerIPConfig')]"
+                }
+              ]
+            }
+          }
+        ],
+        "inboundNatPools": [
+          {
+            "name": "LoadBalancerNATPool",
+            "properties": {
+              "frontendIPConfiguration": {
+                "id": "[concat(variables('lbID'), '/frontendIPConfigurations/LoadBalancerIPConfig')]"
+              },
+              "protocol": "tcp",
+              "frontendPortRangeStart": "50000",
+              "frontendPortRangeEnd": "64000",
+              "backendPort": "3389"
+            }
+          }
+        ],
+        "loadBalancingRules": [
+          {
+            "name": "AppRule8000",
+            "properties": {
+              "backendAddressPool": {
+                "id": "[concat(variables('lbID'), '/backendAddressPools/LoadBalancerBEAddressPool')]"
+              },
+              "backendPort": 8080,
+              "enableFloatingIP": "false",
+              "disableOutboundSNAT" : "true",
+              "frontendIPConfiguration": {
+                "id": "[concat(variables('lbID'), '/frontendIPConfigurations/LoadBalancerIPConfig')]"
+              },
+              "frontendPort": 8080,
+              "idleTimeoutInMinutes": "5",
+              "probe": {
+                "id": "[concat(variables('lbID'), '/probes/AppProbe8000')]"
+              },
+              "protocol": "tcp"
+            }
+          }
+        ],
+        "probes": [
+          {
+            "name": "AppProbe8000",
+            "properties": {
+              "intervalInSeconds": 5,
+              "numberOfProbes": 2,
+              "port": 8080,
+              "protocol": "tcp"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "Microsoft.Authorization/roleAssignments",
+      "apiVersion": "2020-04-01-preview",
+      "name": "[parameters('loadBalancerRoleAssignmentID')]",
+      "scope": "[concat('Microsoft.Network/loadBalancers/', variables('lbName'))]",
+      "dependsOn": [
+        "[concat('Microsoft.Network/loadBalancers/', variables('lbName'))]"
+      ],
+      "properties": {
+        "roleDefinitionId": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/4d97b98b-1d4f-4787-a291-c67834d212e7')]",
+        "principalId": "00000000-0000-0000-0000-000000000000"
+      }
+    }
+  ],
+  "outputs": {
+    "VMScaleSet": {
+      "value": "[reference(variables('lbName'))]",
+      "type": "object"
+    }
+  }
+}
