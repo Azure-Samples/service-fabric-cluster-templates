@@ -18,6 +18,14 @@
       "defaultValue": "",
       "type": "String"
     },
+    "laWorkspaceId": {
+      "defaultValue": "",
+      "type": "String"
+    },
+    "laWorkspaceKey": {
+      "defaultValue": "",
+      "type": "String"
+    },
     "nodeType1DataDiskSizeGB": {
       "type": "int",
       "defaultValue": 256
@@ -136,13 +144,18 @@
         "vmSecrets": [],
         "vmExtensions": [
           {
-            "name": "[concat('AzureMonitorWindowsAgent', '-', parameters('nodeType1Name'))]",
+            "name": "[concat('OMSExtension', '-', parameters('nodeType1Name'))]",
             "properties": {
-              "publisher": "Microsoft.Azure.Monitor",
-              "type": "AzureMonitorWindowsAgent",
-              "typeHandlerVersion": "1.2",
+              "publisher": "Microsoft.EnterpriseCloud.Monitoring",
+              "type": "MicrosoftMonitoringAgent",
+              "typeHandlerVersion": "1.0",
               "autoUpgradeMinorVersion": true,
-              "enableAutomaticUpgrade": true
+              "settings": {
+                "workspaceId": "[parameters('laWorkspaceId')]"
+              },
+              "protectedSettings": {
+                "workspaceKey": "[parameters('laWorkspaceKey')]"
+              }
             }
           }
         ],
@@ -185,13 +198,18 @@
         "vmSecrets": [],
         "vmExtensions": [
           {
-            "name": "[concat('AzureMonitorWindowsAgent', '-', parameters('nodeType2Name'))]",
+            "name": "[concat('OMSExtension', '-', parameters('nodeType2Name'))]",
             "properties": {
-              "publisher": "Microsoft.Azure.Monitor",
-              "type": "AzureMonitorWindowsAgent",
-              "typeHandlerVersion": "1.2",
+              "publisher": "Microsoft.EnterpriseCloud.Monitoring",
+              "type": "MicrosoftMonitoringAgent",
+              "typeHandlerVersion": "1.0",
               "autoUpgradeMinorVersion": true,
-              "enableAutomaticUpgrade": true
+              "settings": {
+                "workspaceId": "[parameters('laWorkspaceId')]"
+              },
+              "protectedSettings": {
+                "workspaceKey": "[parameters('laWorkspaceKey')]"
+              }
             }
           }
         ],

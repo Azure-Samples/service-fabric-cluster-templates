@@ -17,6 +17,9 @@
         "nodeType1DataDiskSizeGB": {
             "value": 256
         },
+        "nodeType1managedDataDiskType": {
+            "value": "StandardSSD_LRS"
+        },
         "nodeType1Name": {
             "value": "NT1"
         },
@@ -26,11 +29,11 @@
         "nodeType1VmSize": {
             "value": "Standard_D2s_v3"
         },
-        "nodeType1managedDataDiskType": {
-            "value": "StandardSSD_LRS"
-        },
         "nodeType2DataDiskSizeGB": {
             "value": 128
+        },
+        "nodeType2managedDataDiskType": {
+            "value": "StandardSSD_LRS"
         },
         "nodeType2Name": {
             "value": "NT2"
@@ -41,8 +44,14 @@
         "nodeType2VmSize": {
             "value": "Standard_D2s_v3"
         },
-        "nodeType2managedDataDiskType": {
-            "value": "StandardSSD_LRS"
+        "roleAssignmentId": {
+            "value": ""
+        },
+        "subscriptionSFRPId": {
+            "value": ""
+        },
+        "userAssignedIdentity": {
+            "value": "sfmcevts"
         }
     }
 }

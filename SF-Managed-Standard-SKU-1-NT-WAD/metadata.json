@@ -1,0 +1,11 @@
+{
+  "$schema": "https://aka.ms/azure-quickstart-templates-metadata-schema#",
+  "type": "QuickStart",
+  "itemDisplayName": "Deploy a Standard SKU Service Fabric managed cluster with Windows Azure Diagnostics (WAD)",
+  "description": "This template takes a minimum set of parameters and deploys a Standard SKU Service Fabric managed cluster with 1 node type with WAD enabled.",
+  "summary": "This template takes a minimum set of parameters and deploys a Standard SKU Service Fabric managed cluster with 1 node type with WAD enabled.",
+  "githubUsername": "jagilber",
+  "dateUpdated": "2022-03-01"
+}
+
+

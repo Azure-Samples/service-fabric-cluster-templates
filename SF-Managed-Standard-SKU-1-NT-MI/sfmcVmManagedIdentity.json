@@ -61,10 +61,14 @@
             "type": "int",
             "defaultValue": 256
         },
-        "userAssignedIdentityResourceId": {
+        "userAssignedIdentityName": {
+            "defaultValue": "SFMC-id",
+            "type": "String"
+        },
+        "vmIdentityRoleNameGuid": {
             "type": "String",
             "metadata": {
-                "description": "Full resourceId of the managed identity."
+                "description": "Unique GUID to create the role assigment. Make sure it is the same value on redeployments."
             }
         }
     },
