@@ -163,7 +163,9 @@
             "properties": {
                 "isPrimary": false,
                 "isSpotVM": true,
-                "evictionPolicy": "delete",
+                "isStateless": true,
+                "evictionPolicy": "deallocate",
+                "spotRestoreTimeout": "PT30M",
                 "vmImagePublisher": "[parameters('vmImagePublisher')]",
                 "vmImageOffer": "[parameters('vmImageOffer')]",
                 "vmImageSku": "[parameters('vmImageSku')]",
