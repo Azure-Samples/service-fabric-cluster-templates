@@ -2,8 +2,8 @@
   "$schema": "https://aka.ms/azure-quickstart-templates-metadata-schema#",
   "type": "QuickStart",
   "itemDisplayName": "Deploy a Standard SKU Service Fabric managed cluster on Azure Dedicated Hosts",
-  "description": "This template takes a minimum set of parameters and deploys a Standard SKU Service Fabric managed cluster on Azure Dedicated Hosts with 1 node type",
-  "summary": "This template takes a minimum set of parameters and deploys a Standard SKU Service Fabric managed cluster on Azure Dedicated Hosts with 1 node type",
+  "description": "This template takes a minimum set of parameters and deploys a Standard SKU Service Fabric managed cluster on Azure Dedicated Hosts with 2 node types",
+  "summary": "This template takes a minimum set of parameters and deploys a Standard SKU Service Fabric managed cluster on Azure Dedicated Hosts with 2 node types",
   "githubUsername": "ankurjain007",
   "dateUpdated": "2022-06-06"
 }
