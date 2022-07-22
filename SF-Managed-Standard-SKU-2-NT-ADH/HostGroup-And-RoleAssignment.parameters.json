@@ -1,0 +1,27 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "zoneId": {
+            "value": 1
+        },
+        "numberOfHosts": {
+            "value": 5
+        },
+        "hostGroupName": {
+            "value": "<HOST-GROUP-NAME-PLACE-HOLDER>"
+        },
+        "dedicatedHostNamePrefix": {
+            "value": "<DEDICATED-HOST-PREFIX-PLACE-HOLDER>"
+        },
+        "dedicatedHostSKU": {
+            "value": "DSv3-Type1"
+        },
+        "SFRPAadServicePrincipalId": {
+            "value": "<SFRP-AAD-PRINCIPAL-ID-PLACE-HOLDER>"
+        },
+        "hostGroupRoleAssignmentId": {
+            "value": "<UNIQUE-GUID-PLACE-HOLDER>"
+        }
+    }
+}

@@ -3,55 +3,58 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "clusterName": {
-            "type": "String"
+            "type": "string"
         },
         "clusterLocation": {
             "defaultValue": "[resourcegroup().location]",
-            "type": "String"
+            "type": "string"
         },
         "adminUserName": {
             "defaultValue": "vmadmin",
-            "type": "String"
+            "type": "string"
         },
         "adminPassword": {
-            "type": "SecureString"
+            "type": "securestring"
         },
         "vmImagePublisher": {
             "defaultValue": "MicrosoftWindowsServer",
-            "type": "String"
+            "type": "string"
         },
         "vmImageOffer": {
             "defaultValue": "WindowsServer",
-            "type": "String"
+            "type": "string"
         },
         "vmImageSku": {
             "defaultValue": "2019-Datacenter",
-            "type": "String"
+            "type": "string"
         },
         "vmImageVersion": {
             "defaultValue": "latest",
-            "type": "String"
+            "type": "string"
         },
         "nodeTypeName": {
-            "type": "String"
+            "type": "string"
+        },
+        "nodeTypeName2": {
+            "type": "string"
         },
         "vmSize": {
             "defaultValue": "Standard_D2s_v3",
-            "type": "String"
+            "type": "string"
         },
         "vmInstanceCount": {
             "defaultValue": 6,
-            "type": "Int"
+            "type": "int"
         },
         "dataDiskSizeGB": {
             "defaultValue": 120,
-            "type": "Int"
+            "type": "int"
         },
         "clientThumbprint": {
-            "type": "String"
+            "type": "string"
         },
         "hostGroupId": {
-            "type": "String"
+            "type": "string"
         },
         "zone": {
             "type": "string",
@@ -94,6 +97,28 @@
             ],
             "properties": {
                 "isPrimary": true,
+                "vmImagePublisher": "[parameters('vmImagePublisher')]",
+                "vmImageOffer": "[parameters('vmImageOffer')]",
+                "vmImageSku": "[parameters('vmImageSku')]",
+                "vmImageVersion": "[parameters('vmImageVersion')]",
+                "vmSize": "[parameters('vmSize')]",
+                "vmInstanceCount": "[parameters('vmInstanceCount')]",
+                "dataDiskSizeGB": "[parameters('dataDiskSizeGB')]",
+                "HostGroupId": "[parameters('hostGroupId')]",
+                "zones": [ "[parameters('zone')]" ],
+                "enableEncryptionAtHost": true
+            }
+        },
+        {
+            "type": "Microsoft.ServiceFabric/managedclusters/nodetypes",
+            "apiVersion": "[variables('sfApiVersion')]",
+            "name": "[concat(parameters('clusterName'), '/', parameters('nodeTypeName2'))]",
+            "location": "[parameters('clusterLocation')]",
+            "dependsOn": [
+                "[concat('Microsoft.ServiceFabric/managedclusters/', parameters('clusterName'))]"
+            ],
+            "properties": {
+                "isPrimary": false,
                 "vmImagePublisher": "[parameters('vmImagePublisher')]",
                 "vmImageOffer": "[parameters('vmImageOffer')]",
                 "vmImageSku": "[parameters('vmImageSku')]",
