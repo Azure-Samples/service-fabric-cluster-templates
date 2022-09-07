@@ -13,7 +13,7 @@ This repo also contains an example autoscale configuration for scale up and scal
 
 ## Use Powershell to deploy your cluster
 
-Go through the process of creating the cluster as described in [Creating Service Fabric Cluster via arm](https://docs.microsoft.com/azure/service-fabric/service-fabric-cluster-creation-via-arm)
+Go through the process of creating the cluster as described in [Deploy a Service Fabric managed cluster](https://docs.microsoft.com/azure/service-fabric/tutorial-managed-cluster-deploy)
 
 ## Resources
 
