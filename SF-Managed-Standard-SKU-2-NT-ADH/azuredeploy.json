@@ -1,0 +1,141 @@
+{
+    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "clusterName": {
+            "type": "string"
+        },
+        "clusterLocation": {
+            "defaultValue": "[resourcegroup().location]",
+            "type": "string"
+        },
+        "adminUserName": {
+            "defaultValue": "vmadmin",
+            "type": "string"
+        },
+        "adminPassword": {
+            "type": "securestring"
+        },
+        "vmImagePublisher": {
+            "defaultValue": "MicrosoftWindowsServer",
+            "type": "string"
+        },
+        "vmImageOffer": {
+            "defaultValue": "WindowsServer",
+            "type": "string"
+        },
+        "vmImageSku": {
+            "defaultValue": "2019-Datacenter",
+            "type": "string"
+        },
+        "vmImageVersion": {
+            "defaultValue": "latest",
+            "type": "string"
+        },
+        "nodeTypeName": {
+            "type": "string"
+        },
+        "nodeTypeName2": {
+            "type": "string"
+        },
+        "vmSize": {
+            "defaultValue": "Standard_D2s_v3",
+            "type": "string"
+        },
+        "vmInstanceCount": {
+            "defaultValue": 6,
+            "type": "int"
+        },
+        "dataDiskSizeGB": {
+            "defaultValue": 120,
+            "type": "int"
+        },
+        "clientThumbprint": {
+            "type": "string"
+        },
+        "hostGroupId": {
+            "type": "string"
+        },
+        "zone": {
+            "type": "string",
+            "defaultValue": "1"
+        }
+    },
+    "variables": {
+        "sfApiVersion": "2022-06-01-preview"
+    },
+    "resources": [
+        {
+            "type": "Microsoft.ServiceFabric/managedclusters",
+            "apiVersion": "[variables('sfApiVersion')]",
+            "name": "[parameters('clusterName')]",
+            "location": "[parameters('clusterLocation')]",
+            "sku": {
+                "name": "Standard"
+            },
+            "properties": {
+                "dnsName": "[toLower(parameters('clusterName'))]",
+                "adminUserName": "[parameters('adminUserName')]",
+                "adminPassword": "[parameters('adminPassword')]",
+                "clientConnectionPort": 19000,
+                "httpGatewayConnectionPort": 19080,
+                "clients" : [
+                    {
+                        "isAdmin" : true,
+                        "thumbprint" : "[parameters('clientThumbprint')]"
+                    }
+                ]
+            }
+        },
+        {
+            "type": "Microsoft.ServiceFabric/managedclusters/nodetypes",
+            "apiVersion": "[variables('sfApiVersion')]",
+            "name": "[concat(parameters('clusterName'), '/', parameters('nodeTypeName'))]",
+            "location": "[parameters('clusterLocation')]",
+            "dependsOn": [
+                "[concat('Microsoft.ServiceFabric/managedclusters/', parameters('clusterName'))]"
+            ],
+            "properties": {
+                "isPrimary": true,
+                "vmImagePublisher": "[parameters('vmImagePublisher')]",
+                "vmImageOffer": "[parameters('vmImageOffer')]",
+                "vmImageSku": "[parameters('vmImageSku')]",
+                "vmImageVersion": "[parameters('vmImageVersion')]",
+                "vmSize": "[parameters('vmSize')]",
+                "vmInstanceCount": "[parameters('vmInstanceCount')]",
+                "dataDiskSizeGB": "[parameters('dataDiskSizeGB')]",
+                "HostGroupId": "[parameters('hostGroupId')]",
+                "zones": [ "[parameters('zone')]" ],
+                "enableEncryptionAtHost": true
+            }
+        },
+        {
+            "type": "Microsoft.ServiceFabric/managedclusters/nodetypes",
+            "apiVersion": "[variables('sfApiVersion')]",
+            "name": "[concat(parameters('clusterName'), '/', parameters('nodeTypeName2'))]",
+            "location": "[parameters('clusterLocation')]",
+            "dependsOn": [
+                "[concat('Microsoft.ServiceFabric/managedclusters/', parameters('clusterName'))]"
+            ],
+            "properties": {
+                "isPrimary": false,
+                "vmImagePublisher": "[parameters('vmImagePublisher')]",
+                "vmImageOffer": "[parameters('vmImageOffer')]",
+                "vmImageSku": "[parameters('vmImageSku')]",
+                "vmImageVersion": "[parameters('vmImageVersion')]",
+                "vmSize": "[parameters('vmSize')]",
+                "vmInstanceCount": "[parameters('vmInstanceCount')]",
+                "dataDiskSizeGB": "[parameters('dataDiskSizeGB')]",
+                "HostGroupId": "[parameters('hostGroupId')]",
+                "zones": [ "[parameters('zone')]" ],
+                "enableEncryptionAtHost": true
+            }
+        }
+    ],
+    "outputs": {
+        "clusterProperties": {
+            "type": "Object",
+            "value": "[reference(parameters('clusterName'))]"
+        }
+    }
+}

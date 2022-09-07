@@ -178,7 +178,7 @@
     "vmssApiVersion": "2019-03-01",
     "lbApiVersion": "2018-11-01",
     "vNetApiVersion": "2018-11-01",
-    "publicIPApiVersion": "2018-11-01",
+    "publicIPApiVersion": "2020-08-01",
     "storageApiVersion": "2016-01-01",
     "vnetID": "[resourceId('Microsoft.Network/virtualNetworks', variables('virtualNetworkName'))]",
     "subnet0Ref": "[concat(variables('vnetID'),'/subnets/',parameters('subnet0Name'))]",
@@ -358,6 +358,7 @@
       "type": "Microsoft.Network/publicIPAddresses",
       "name": "[concat(variables('lbIPName'),'-','0')]",
       "location": "[parameters('computeLocation')]",
+      "zones": ["1","2","3"],
       "sku": {
         "name": "Standard"
       },

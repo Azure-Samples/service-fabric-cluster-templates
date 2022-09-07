@@ -1,0 +1,51 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "clusterName": {
+            "value": "CLUSTER-NAME"
+        },
+        "adminUserName": {
+            "value": "vmadmin"
+        },
+        "adminPassword": {
+            "value": "SecureString"
+        },
+        "vmImagePublisher": {
+            "value": "MicrosoftWindowsServer"
+        },
+        "vmImageOffer": {
+            "value": "WindowsServer"
+        },
+        "vmImageSku": {
+            "value": "2019-Datacenter"
+        },
+        "vmImageVersion": {
+            "value": "latest"
+        },
+        "nodeTypeName": {
+            "value": "pnt"
+        },
+        "nodeTypeName2": {
+            "value": "snt"
+        },
+        "vmSize": {
+            "value": "Standard_D2s_v3"
+        },
+        "vmInstanceCount": {
+            "value": 6
+        },
+        "dataDiskSizeGB": {
+            "value": 120
+        },
+        "clientThumbprint": {
+            "value": "CERT-THUMBPRINT"
+        },
+        "hostGroupId": {
+            "value": "HOST-GROUP-FULL-RESOURCE-ID"
+        },
+        "zone": {
+            "value": "1"
+        }
+    }
+}

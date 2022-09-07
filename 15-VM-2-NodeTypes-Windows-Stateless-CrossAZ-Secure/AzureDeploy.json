@@ -895,13 +895,14 @@
       }
     },
     {
-      "apiVersion": "2019-12-01",
+      "apiVersion": "2020-08-01",
       "type": "Microsoft.Network/publicIPAddresses",
       "name": "[concat(variables('lbIPName'),'-',variables('vmNodeType1Name'))]",
       "sku": {
         "name": "Standard"
       },
       "location": "[variables('computeLocation')]",
+      "zones": ["1","2","3"],
       "properties": {
         "dnsSettings": {
           "domainNameLabel": "[concat(variables('dnsName'),'-','nt1')]"

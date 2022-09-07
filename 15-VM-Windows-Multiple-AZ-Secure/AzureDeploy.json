@@ -248,7 +248,7 @@
         "lbApiVersion": "2018-11-01",
         "vNetApiVersion": "2015-06-15",
         "storageApiVersion": "2016-01-01",
-        "publicIPApiVersion": "2018-11-01",
+        "publicIPApiVersion": "2020-08-01",
         "vnetID": "[resourceId('Microsoft.Network/virtualNetworks',parameters('virtualNetworkName'))]",
         "subnet0Ref": "[concat(variables('vnetID'),'/subnets/',parameters('subnet0Name'))]",
         "lbID0": "[resourceId('Microsoft.Network/loadBalancers', concat('LB','-', parameters('clusterName'),'-',parameters('vmNodeType0Name')))]",
@@ -440,6 +440,7 @@
             "type": "Microsoft.Network/publicIPAddresses",
             "name": "[concat(parameters('lbIPName'),'-',parameters('vmNodeType0Name'))]",
             "location": "[parameters('computeLocation')]",
+            "zones": ["1","2","3"],
             "sku": {
                 "name": "Standard"
             },

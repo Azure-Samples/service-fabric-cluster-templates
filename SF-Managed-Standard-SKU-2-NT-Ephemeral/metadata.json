@@ -1,0 +1,11 @@
+{
+  "$schema": "https://aka.ms/azure-quickstart-templates-metadata-schema#",
+  "type": "QuickStart",
+  "itemDisplayName": "Deploy a Standard SKU Service Fabric managed cluster with a secondary node type having Ephemeral OS disks.",
+  "description": "This template takes a minimum set of parameters and deploys a Standard SKU Service Fabric managed cluster with 2 node types. One node type contains Ephemeral OS disks VMs.",
+  "summary": "This template takes a minimum set of parameters and deploys a Standard SKU Service Fabric managed cluster with 2 node types. One node type contains Ephemeral OS Disks.",
+  "githubUsername": "saketharsh",
+  "dateUpdated": "2022-06-06"
+}
+
+

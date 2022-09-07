@@ -1,0 +1,104 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "location": {
+            "type": "string",
+            "defaultValue": "[resourceGroup().location]",
+            "metadata": {
+                "description": "Location for the resources."
+            }
+        },
+        "zoneId": {
+            "type": "int",
+            "defaultValue": 1,
+            "metadata": {
+                "description": "Zone where the host group will be pinned to. Needs to be the same as the service fabric node type."
+            }
+        },
+        "numberOfHosts": {
+            "type": "int",
+            "defaultValue": 5,
+            "metadata": {
+                "description": "How many hosts to create per zone. Minimum 5: at least 1 on each FD."
+            }
+        },
+        "hostGroupName": {
+            "type": "string",
+            "metadata": {
+                "description": "Host group name."
+            }
+        },
+        "dedicatedHostNamePrefix": {
+            "type": "string",
+            "metadata": {
+                "description": "Name (prefix) for your host ."
+            }
+        },
+        "dedicatedHostSKU": {
+            "type": "string",
+            "defaultValue": "DSv3-Type1",
+            "metadata": {
+                "description": "The type (family and generation) for your host ."
+            }
+        },
+        "SFRPAadServicePrincipalId": {
+            "type": "string"
+        },
+        "hostGroupRoleAssignmentId": {
+            "type": "string",
+            "metadata": {
+                "description": "Host Group Id has to be a unique GUID"
+            }
+        }
+    },
+    "variables": {
+        "numberOfFDs": 5,
+        "authorizationApiVersion": "2018-01-01-preview",
+        "contributorRoleId": "b24988ac-6180-42a0-ab88-20f7382dd24c"
+    },
+    "resources": [
+        {
+            "name": "[parameters('hostGroupName')]",
+            "type": "Microsoft.Compute/HostGroups",
+            "apiVersion": "2021-11-01",
+            "location": "[parameters('location')]",
+            "zones": [ "[parameters('zoneId')]" ],
+            "properties": {
+                "platformFaultDomainCount": "[variables('numberOfFDs')]",
+                "supportAutomaticPlacement": true
+            }
+        },
+        {
+            "name": "[concat(parameters('hostGroupName'), '/', parameters('dedicatedHostNamePrefix'), copyindex())]",
+            "type": "Microsoft.Compute/Hostgroups/hosts",
+            "apiVersion": "2021-11-01",
+            "location": "[parameters('location')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Compute/hostGroups', parameters('hostGroupName'))]"
+            ],
+            "sku": {
+                "name": "[parameters('dedicatedHostSKU')]"
+            },
+            "copy": {
+                "name": "[parameters('dedicatedHostNamePrefix')]",
+                "count": "[parameters('numberOfHosts')]"
+            },
+            "properties": {
+                "platformFaultDomain": "[mod(copyindex(), variables('numberOfFDs'))]"
+            }
+        },
+        {
+            "apiVersion": "[variables('authorizationApiVersion')]",
+            "type": "Microsoft.Compute/Hostgroups/providers/roleAssignments",
+            "name": "[concat(parameters('hostGroupName'), '/Microsoft.Authorization/', parameters('hostGroupRoleAssignmentId'))]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Compute/hostGroups', parameters('hostGroupName'))]"
+            ],
+            "properties": {
+                "roleDefinitionId": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/', variables('contributorRoleId'))]",
+                "principalId": "[parameters('SFRPAadServicePrincipalId')]"
+            }
+        }
+    ]
+}
