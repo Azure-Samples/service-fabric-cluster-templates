@@ -144,7 +144,7 @@
         "isPrimary": true,
         "vmImagePublisher": "MicrosoftWindowsServer",
         "vmImageOffer": "WindowsServer",
-        "vmImageSku": "2019-Datacenter",
+        "vmImageSku": "2022-Datacenter",
         "vmImageVersion": "latest",
         "vmSize": "[parameters('vmSize')]",
         "vmInstanceCount": "[parameters('vmInstanceCount')]",
