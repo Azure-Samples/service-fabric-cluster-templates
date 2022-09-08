@@ -7,7 +7,7 @@
     <img src="http://armviz.io/visualizebutton.png"/>
 </a>
 
-This template allows you to deploy a Service Fabric managed cluster using the *Standard* SKU. This cluster contains two node types running *Windows Server 2019 Datacenter* on *Standard_D2s_v3* size virtual machine scale sets. 
+This template allows you to deploy a Service Fabric managed cluster using the *Standard* SKU. This cluster contains two node types running *Windows Server 2022 Datacenter* on *Standard_D2s_v3* size virtual machine scale sets. 
 
 This repo also contains an example autoscale configuration for scale up and scale down rules and enables them. For more details on how to use this, please see [Configure autoscaling on a managed cluster](https://docs.microsoft.com/azure/service-fabric/how-to-managed-cluster-autoscale)
 

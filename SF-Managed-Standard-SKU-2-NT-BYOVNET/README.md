@@ -7,7 +7,7 @@
     <img src="http://armviz.io/visualizebutton.png"/>
 </a>
 
-This template allows you to deploy a Service Fabric managed cluster in to an existing subnet using the *Standard* SKU. This cluster contains two node types running *Windows Server 2019 Datacenter* on *Standard_D2s_v3* size virtual machine scale sets.
+This template allows you to deploy a Service Fabric managed cluster in to an existing subnet using the *Standard* SKU. This cluster contains two node types running *Windows Server 2022 Datacenter* on *Standard_D2s_v3* size virtual machine scale sets.
 
 You *must* have an existing subnet for this to work. See [Bring your own virtual network documentation](https://docs.microsoft.com/azure/service-fabric/how-to-managed-cluster-networking#bring-your-own-virtual-network) for more details.
 

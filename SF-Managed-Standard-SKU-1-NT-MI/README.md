@@ -11,7 +11,7 @@ This example has 2 templates:
 
 1.  **Managed identity and role assignment**: Template to create the managed identity and the role assignment to allow Service Fabric RP to assign the identity to the managed cluster's virtual machine scale set. This should be deployed only once before using the managed identity on the node type resource.
 
-2. **Managed cluster and node type**: Template for the service fabric managed cluster using the *Standard* SKU and containing a single node type type running *Windows Server 2019 Datacenter* on a *Standard_D2s_v3* size virtual machine scale set resources, using the user-assigned managed identity created before.
+2. **Managed cluster and node type**: Template for the service fabric managed cluster using the *Standard* SKU and containing a single node type type running *Windows Server 2022 Datacenter* on a *Standard_D2s_v3* size virtual machine scale set resources, using the user-assigned managed identity created before.
 
 ## Use Powershell to deploy your cluster
 
