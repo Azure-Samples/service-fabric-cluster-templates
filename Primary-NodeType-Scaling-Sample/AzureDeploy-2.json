@@ -46,7 +46,7 @@
     },
     "vmImageSku": {
       "type": "string",
-      "defaultValue": "2016-Datacenter-with-Containers",
+      "defaultValue": "2016-Datacenter",
       "metadata": {
         "description": "VM image SKU"
       }
@@ -74,7 +74,7 @@
     },
     "vmImageSku1": {
       "type": "string",
-      "defaultValue": "2019-Datacenter-with-Containers",
+      "defaultValue": "2019-Datacenter",
       "metadata": {
         "description": "VM image SKU"
       }
