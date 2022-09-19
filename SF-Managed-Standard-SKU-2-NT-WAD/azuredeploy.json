@@ -401,7 +401,7 @@
         "[resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', parameters('userAssignedIdentity'))]"
       ],
       "properties": {
-        "isPrimary": true,
+        "isPrimary": false,
         "vmImagePublisher": "MicrosoftWindowsServer",
         "vmImageOffer": "WindowsServer",
         "vmImageSku": "2019-Datacenter",
