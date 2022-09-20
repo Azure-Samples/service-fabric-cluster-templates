@@ -88,7 +88,7 @@
     },
     "vmImageSku": {
       "type": "string",
-      "defaultValue": "2016-Datacenter-with-Containers"
+      "defaultValue": "2019-Datacenter"
     },
     "vmImageVersion": {
       "type": "string",

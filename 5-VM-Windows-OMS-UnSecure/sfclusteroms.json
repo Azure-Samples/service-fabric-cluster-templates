@@ -1,5 +1,5 @@
 {
-    "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json",
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
         "clusterName": {
@@ -129,9 +129,9 @@
         "lbIPName": "[concat('lb', uniqueString(resourceGroup().Id))]",
         "storageAccountType": "Standard_LRS",
         "vmImageVersion": "latest",
-        "vmImageSku": "2012-R2-Datacenter",
+        "vmImageSku": "2019-Datacenter",
         "vmImageOffer": "WindowsServer",
-        "vmNodeType0Size": "Standard_D1_v2",
+        "vmNodeType0Size": "Standard_D2_v2",
         "vmNodeType0Name": "omssf",
         "vmImagePublisher": "MicrosoftWindowsServer",
         "supportLogStorageAccountType": "Standard_LRS",
