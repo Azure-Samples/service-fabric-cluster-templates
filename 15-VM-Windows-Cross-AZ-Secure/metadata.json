@@ -1,7 +1,7 @@
 {
   "itemDisplayName": "Deploy a 15-Node, cross Availability Zone, secure Service Fabric Cluster on Azure",
-  "description": "This template allows you to deploy a 15-Node, cross AZ Service Fabric Cluster running Windows Server 2016 Datacenter with containers on 3 Standard_D2_V2 size VM ScaleSets, with network security groups enabled.",
+  "description": "This template allows you to deploy a 15-Node, cross AZ Service Fabric Cluster running Windows Server 2019 Datacenter on 3 Standard_D2_V2 size VM ScaleSets, with network security groups enabled.",
   "summary": "This template takes a minimum amount of parameters and deploys a 15-Node, cross Availability Zone Service Fabric Cluster",
   "githubUsername": "linmeng08",
-  "dateUpdated": "2020-09-29"
+  "dateUpdated": "2022-9-20""2020-09-29"
 }
