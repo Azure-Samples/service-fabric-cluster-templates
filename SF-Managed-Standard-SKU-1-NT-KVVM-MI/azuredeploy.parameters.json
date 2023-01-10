@@ -1,0 +1,74 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "adminPassword": {
+            "value": ""
+        },
+        "adminUserName": {
+            "value": ""
+        },
+        "certificateUrls": {
+            "value": [
+                ""
+            ],
+            "metadata": {
+                "description": "https://<vault name>.vault.azure.net/secrets/<certificate Name>"
+            }
+        },
+        "clientCertificateThumbprint": {
+            "value": ""
+        },
+        "clusterName": {
+            "value": ""
+        },
+        "clusterSku": {
+            "value": "Standard"
+        },
+        "dataDiskSizeGB": {
+            "value": 128
+        },
+        "keyVaultResourceId": {
+            "value": "",
+            "metadata": {
+                "description": "Optionally provide key vault resource id to update key vault access policy with user managed identity. format: /subscriptions/<subscription Id>/resourceGroups/<resource group>/providers/Microsoft.KeyVault/vaults/<vault name>"
+            }
+        },
+        "managedDataDiskType": {
+            "value": "StandardSSD_LRS"
+        },
+        "managedIdentityProviderGuid": {
+            "value": "f1a07417-d97a-45cb-824c-7a7467783830",
+            "metadata": {
+                "description": "https://docs.microsoft.com/en-us/azure/role-based-access-control/built-in-roles"
+            }
+        },
+        "nodeTypeName": {
+            "value": "NT1"
+        },
+        "sfrpProviderGuid": {
+            "value": "",
+            "metadata": {
+                "description": "subscription specific. ps Get-AzADServicePrincipal -DisplayName 'Azure Service Fabric Resource Provider'"
+            }
+        },
+        "userAssignedIdentityName": {
+            "value": ""
+        },
+        "vmIdentityRoleNameGuid": {
+            "value": "",
+            "metadata": {
+                "description": "ps [guid]::newguid() one time. https://docs.microsoft.com/en-us/azure/service-fabric/how-to-managed-identity-managed-cluster-virtual-machine-scale-sets"
+            }
+        },
+        "vmImageSku": {
+            "value": "2022-Datacenter"
+        },
+        "vmInstanceCount": {
+            "value": 6
+        },
+        "vmSize": {
+            "value": "Standard_D2s_v3"
+        }
+    }
+}
