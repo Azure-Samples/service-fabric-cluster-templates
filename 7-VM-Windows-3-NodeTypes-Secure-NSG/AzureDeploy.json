@@ -509,195 +509,197 @@
       }
     },
     {
-      "apiVersion": "2018-08-01",
-      "type": "Microsoft.Network/networkSecurityGroups",
-      "name": "[concat('nsg', variables('subnet0Name'))]",
-      "location": "[resourceGroup().location]",
-      "properties": {
-        "securityRules": [
-          {
-            "name": "Azure Portal",
+            "type": "Microsoft.Network/networkSecurityGroups",
+            "apiVersion": "2018-08-01",
+            "name": "[concat('nsg', variables('subnet0Name'))]",
+            "location": "[resourceGroup().location]",
+            "tags": {
+                "resourceType": "Service Fabric",
+                "clusterName": "[parameters('clusterName')]"
+            },
             "properties": {
-              "access": "Allow",
-              "sourceAddressPrefix": "ServiceFabric",
-              "sourcePortRange": "*",
-              "sourcePortRanges": [],
-              "destinationAddressPrefix": "*",
-              "destinationPortRange": "19080",
-              "destinationPortRanges": [],
-              "direction": "Inbound",
-              "priority": 3900,
-              "protocol": "Tcp",
-              "description": ""
+                "securityRules": [
+                    {
+                        "name": "Azure Portal",
+                        "properties": {
+                            "access": "Allow",
+                            "sourceAddressPrefix": "ServiceFabric",
+                            "sourcePortRange": "*",
+                            "sourcePortRanges": [],
+                            "destinationAddressPrefix": "*",
+                            "destinationPortRange": "19080",
+                            "destinationPortRanges": [],
+                            "direction": "Inbound",
+                            "priority": 3900,
+                            "protocol": "Tcp",
+                            "description": ""
+                        }
+                    },
+                    {
+                        "name": "Client API",
+                        "properties": {
+                            "access": "Deny",
+                            "sourceAddressPrefix": "Internet",
+                            "sourcePortRange": "*",
+                            "sourcePortRanges": [],
+                            "destinationAddressPrefix": "*",
+                            "destinationPortRange": "19000",
+                            "destinationPortRanges": [],
+                            "direction": "Inbound",
+                            "priority": 3910,
+                            "protocol": "Tcp",
+                            "description": ""
+                        }
+                    },
+                    {
+                        "name": "SFX  Client API",
+                        "properties": {
+                            "access": "Deny",
+                            "sourceAddressPrefix": "Internet",
+                            "sourcePortRange": "*",
+                            "sourcePortRanges": [],
+                            "destinationAddressPrefix": "*",
+                            "destinationPortRange": "19080",
+                            "destinationPortRanges": [],
+                            "direction": "Inbound",
+                            "priority": 3920,
+                            "protocol": "Tcp",
+                            "description": ""
+                        }
+                    },
+                    {
+                        "name": "Cluster",
+                        "properties": {
+                            "access": "Allow",
+                            "sourceAddressPrefix": "VirtualNetwork",
+                            "sourcePortRange": "*",
+                            "sourcePortRanges": [],
+                            "destinationAddressPrefix": "*",
+                            "destinationPortRange": "1025-1027",
+                            "destinationPortRanges": [],
+                            "direction": "Inbound",
+                            "priority": 3930,
+                            "protocol": "Tcp",
+                            "description": ""
+                        }
+                    },
+                    {
+                        "name": "Ephemeral",
+                        "properties": {
+                            "access": "Allow",
+                            "sourceAddressPrefix": "VirtualNetwork",
+                            "sourcePortRange": "*",
+                            "sourcePortRanges": [],
+                            "destinationAddressPrefix": "*",
+                            "destinationPortRange": "49152-65534",
+                            "destinationPortRanges": [],
+                            "direction": "Inbound",
+                            "priority": 3940,
+                            "protocol": "Tcp",
+                            "description": ""
+                        }
+                    },
+                    {
+                        "name": "Application",
+                        "properties": {
+                            "access": "Allow",
+                            "sourceAddressPrefix": "VirtualNetwork",
+                            "sourcePortRange": "*",
+                            "sourcePortRanges": [],
+                            "destinationAddressPrefix": "*",
+                            "destinationPortRange": "2000-3000",
+                            "destinationPortRanges": [],
+                            "direction": "Inbound",
+                            "priority": 3950,
+                            "protocol": "Tcp",
+                            "description": ""
+                        }
+                    },
+                    {
+                        "name": "RDP",
+                        "properties": {
+                            "access": "Deny",
+                            "sourceAddressPrefix": "Internet",
+                            "sourcePortRange": "*",
+                            "sourcePortRanges": [],
+                            "destinationAddressPrefix": "*",
+                            "destinationPortRange": "3389-3488",
+                            "destinationPortRanges": [],
+                            "direction": "Inbound",
+                            "priority": 3960,
+                            "protocol": "Tcp",
+                            "description": ""
+                        }
+                    },
+                    {
+                        "name": "SSH",
+                        "properties": {
+                            "access": "Deny",
+                            "sourceAddressPrefix": "Internet",
+                            "sourcePortRange": "*",
+                            "sourcePortRanges": [],
+                            "destinationAddressPrefix": "*",
+                            "destinationPortRange": "22",
+                            "destinationPortRanges": [],
+                            "direction": "Inbound",
+                            "priority": 3970,
+                            "protocol": "Tcp",
+                            "description": ""
+                        }
+                    },
+                    {
+                        "name": "Custom Endpoint",
+                        "properties": {
+                            "access": "Deny",
+                            "sourceAddressPrefix": "Internet",
+                            "sourcePortRange": "*",
+                            "sourcePortRanges": [],
+                            "destinationAddressPrefix": "*",
+                            "destinationPortRange": "80",
+                            "destinationPortRanges": [],
+                            "direction": "Inbound",
+                            "priority": 3980,
+                            "protocol": "Tcp",
+                            "description": ""
+                        }
+                    },
+                    {
+                        "name": "Resource Provider",
+                        "properties": {
+                            "access": "Allow",
+                            "sourceAddressPrefix": "*",
+                            "sourcePortRange": "*",
+                            "sourcePortRanges": [],
+                            "destinationAddressPrefix": "ServiceFabric",
+                            "destinationPortRange": "443",
+                            "destinationPortRanges": [],
+                            "direction": "Outbound",
+                            "priority": 4000,
+                            "protocol": "Tcp",
+                            "description": ""
+                        }
+                    },
+                    {
+                        "name": "Download Binaries",
+                        "properties": {
+                            "access": "Allow",
+                            "sourceAddressPrefix": "*",
+                            "sourcePortRange": "*",
+                            "sourcePortRanges": [],
+                            "destinationAddressPrefix": "AzureFrontDoor.FirstParty",
+                            "destinationPortRange": "",
+                            "destinationPortRanges": [
+                                "443"
+                            ],
+                            "direction": "Outbound",
+                            "priority": 4010,
+                            "protocol": "Tcp",
+                            "description": ""
+                        }
+                    }
+                ]
             }
-          },
-          {
-            "name": "Client API",
-            "properties": {
-              "access": "Deny",
-              "sourceAddressPrefix": "Internet",
-              "sourcePortRange": "*",
-              "sourcePortRanges": [],
-              "destinationAddressPrefix": "*",
-              "destinationPortRange": "19000",
-              "destinationPortRanges": [],
-              "direction": "Inbound",
-              "priority": 3910,
-              "protocol": "Tcp",
-              "description": ""
-            }
-          },
-          {
-            "name": "SFX + Client API",
-            "properties": {
-              "access": "Deny",
-              "sourceAddressPrefix": "Internet",
-              "sourcePortRange": "*",
-              "sourcePortRanges": [],
-              "destinationAddressPrefix": "*",
-              "destinationPortRange": "19080",
-              "destinationPortRanges": [],
-              "direction": "Inbound",
-              "priority": 3920,
-              "protocol": "Tcp",
-              "description": ""
-            }
-          },
-          {
-            "name": "Cluster",
-            "properties": {
-              "access": "Allow",
-              "sourceAddressPrefix": "VirtualNetwork",
-              "sourcePortRange": "*",
-              "sourcePortRanges": [],
-              "destinationAddressPrefix": "*",
-              "destinationPortRange": "1025-1027",
-              "destinationPortRanges": [],
-              "direction": "Inbound",
-              "priority": 3930,
-              "protocol": "Tcp",
-              "description": ""
-            }
-          },
-          {
-            "name": "Ephemeral",
-            "properties": {
-              "access": "Allow",
-              "sourceAddressPrefix": "VirtualNetwork",
-              "sourcePortRange": "*",
-              "sourcePortRanges": [],
-              "destinationAddressPrefix": "*",
-              "destinationPortRange": "49152-65534",
-              "destinationPortRanges": [],
-              "direction": "Inbound",
-              "priority": 3940,
-              "protocol": "Tcp",
-              "description": ""
-            }
-          },
-          {
-            "name": "Application",
-            "properties": {
-              "access": "Allow",
-              "sourceAddressPrefix": "VirtualNetwork",
-              "sourcePortRange": "*",
-              "sourcePortRanges": [],
-              "destinationAddressPrefix": "*",
-              "destinationPortRange": "2000-3000",
-              "destinationPortRanges": [],
-              "direction": "Inbound",
-              "priority": 3950,
-              "protocol": "Tcp",
-              "description": ""
-            }
-          },
-          {
-            "name": "RDP",
-            "properties": {
-              "access": "Deny",
-              "sourceAddressPrefix": "Internet",
-              "sourcePortRange": "*",
-              "sourcePortRanges": [],
-              "destinationAddressPrefix": "*",
-              "destinationPortRange": "3389-3488",
-              "destinationPortRanges": [],
-              "direction": "Inbound",
-              "priority": 3960,
-              "protocol": "Tcp",
-              "description": ""
-            }
-          },
-          {
-            "name": "SSH",
-            "properties": {
-              "access": "Deny",
-              "sourceAddressPrefix": "Internet",
-              "sourcePortRange": "*",
-              "sourcePortRanges": [],
-              "destinationAddressPrefix": "*",
-              "destinationPortRange": "22",
-              "destinationPortRanges": [],
-              "direction": "Inbound",
-              "priority": 3970,
-              "protocol": "Tcp",
-              "description": ""
-            }
-          },
-          {
-            "name": "Custom Endpoint",
-            "properties": {
-              "access": "Deny",
-              "sourceAddressPrefix": "Internet",
-              "sourcePortRange": "*",
-              "sourcePortRanges": [],
-              "destinationAddressPrefix": "*",
-              "destinationPortRange": "80",
-              "destinationPortRanges": [],
-              "direction": "Inbound",
-              "priority": 3980,
-              "protocol": "Tcp",
-              "description": ""
-            }
-          },
-          {
-            "name": "Resource Provider",
-            "properties": {
-              "access": "Allow",
-              "sourceAddressPrefix": "*",
-              "sourcePortRange": "*",
-              "sourcePortRanges": [],
-              "destinationAddressPrefix": "ServiceFabric",
-              "destinationPortRange": "443",
-              "destinationPortRanges": [],
-              "direction": "Outbound",
-              "priority": 4000,
-              "protocol": "Tcp",
-              "description": ""
-            }
-          },
-          {
-            "name": "Download Binaries",
-            "properties": {
-              "access": "Allow",
-              "sourceAddressPrefix": "*",
-              "sourcePortRange": "*",
-              "sourcePortRanges": [],
-              "destinationAddressPrefix": "AzureFrontDoor.FirstParty",
-              "destinationPortRange": "",
-              "destinationPortRanges": ["443"], 
-              "direction": "Outbound",
-              "priority": 4010,
-              "protocol": "Tcp",
-              "description": ""
-            }
-          }
-        ]
-      },
-      "tags": {
-        "resourceType": "Service Fabric",
-        "clusterName": "[parameters('clusterName')]"
-      }
-    },
+        },
     {
       "apiVersion": "2018-10-01",
       "type": "Microsoft.Compute/virtualMachineScaleSets",
