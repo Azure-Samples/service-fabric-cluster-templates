@@ -508,199 +508,160 @@
         "clusterName": "[parameters('clusterName')]"
       }
     },
-    {
-            "type": "Microsoft.Network/networkSecurityGroups",
-            "apiVersion": "2018-08-01",
-            "name": "[concat('nsg', variables('subnet0Name'))]",
-            "location": "[resourceGroup().location]",
-            "tags": {
-                "resourceType": "Service Fabric",
-                "clusterName": "[parameters('clusterName')]"
-            },
+     {
+      "apiVersion": "2018-08-01",
+      "type": "Microsoft.Network/networkSecurityGroups",
+      "name": "[concat('nsg', variables('subnet0Name'))]",
+      "location": "[resourceGroup().location]",
+      "properties": {
+        "securityRules": [
+          {
+            "name": "allowSvcFabCluser",
             "properties": {
-                "securityRules": [
-                    {
-                        "name": "Azure Portal",
-                        "properties": {
-                            "access": "Allow",
-                            "sourceAddressPrefix": "ServiceFabric",
-                            "sourcePortRange": "*",
-                            "sourcePortRanges": [],
-                            "destinationAddressPrefix": "*",
-                            "destinationPortRange": "19080",
-                            "destinationPortRanges": [],
-                            "direction": "Inbound",
-                            "priority": 3900,
-                            "protocol": "Tcp",
-                            "description": ""
-                        }
-                    },
-                    {
-                        "name": "Client API",
-                        "properties": {
-                            "access": "Deny",
-                            "sourceAddressPrefix": "Internet",
-                            "sourcePortRange": "*",
-                            "sourcePortRanges": [],
-                            "destinationAddressPrefix": "*",
-                            "destinationPortRange": "19000",
-                            "destinationPortRanges": [],
-                            "direction": "Inbound",
-                            "priority": 3910,
-                            "protocol": "Tcp",
-                            "description": ""
-                        }
-                    },
-                    {
-                        "name": "SFX  Client API",
-                        "properties": {
-                            "access": "Deny",
-                            "sourceAddressPrefix": "Internet",
-                            "sourcePortRange": "*",
-                            "sourcePortRanges": [],
-                            "destinationAddressPrefix": "*",
-                            "destinationPortRange": "19080",
-                            "destinationPortRanges": [],
-                            "direction": "Inbound",
-                            "priority": 3920,
-                            "protocol": "Tcp",
-                            "description": ""
-                        }
-                    },
-                    {
-                        "name": "Cluster",
-                        "properties": {
-                            "access": "Allow",
-                            "sourceAddressPrefix": "VirtualNetwork",
-                            "sourcePortRange": "*",
-                            "sourcePortRanges": [],
-                            "destinationAddressPrefix": "*",
-                            "destinationPortRange": "1025-1027",
-                            "destinationPortRanges": [],
-                            "direction": "Inbound",
-                            "priority": 3930,
-                            "protocol": "Tcp",
-                            "description": ""
-                        }
-                    },
-                    {
-                        "name": "Ephemeral",
-                        "properties": {
-                            "access": "Allow",
-                            "sourceAddressPrefix": "VirtualNetwork",
-                            "sourcePortRange": "*",
-                            "sourcePortRanges": [],
-                            "destinationAddressPrefix": "*",
-                            "destinationPortRange": "49152-65534",
-                            "destinationPortRanges": [],
-                            "direction": "Inbound",
-                            "priority": 3940,
-                            "protocol": "Tcp",
-                            "description": ""
-                        }
-                    },
-                    {
-                        "name": "Application",
-                        "properties": {
-                            "access": "Allow",
-                            "sourceAddressPrefix": "VirtualNetwork",
-                            "sourcePortRange": "*",
-                            "sourcePortRanges": [],
-                            "destinationAddressPrefix": "*",
-                            "destinationPortRange": "2000-3000",
-                            "destinationPortRanges": [],
-                            "direction": "Inbound",
-                            "priority": 3950,
-                            "protocol": "Tcp",
-                            "description": ""
-                        }
-                    },
-                    {
-                        "name": "RDP",
-                        "properties": {
-                            "access": "Deny",
-                            "sourceAddressPrefix": "Internet",
-                            "sourcePortRange": "*",
-                            "sourcePortRanges": [],
-                            "destinationAddressPrefix": "*",
-                            "destinationPortRange": "3389-3488",
-                            "destinationPortRanges": [],
-                            "direction": "Inbound",
-                            "priority": 3960,
-                            "protocol": "Tcp",
-                            "description": ""
-                        }
-                    },
-                    {
-                        "name": "SSH",
-                        "properties": {
-                            "access": "Deny",
-                            "sourceAddressPrefix": "Internet",
-                            "sourcePortRange": "*",
-                            "sourcePortRanges": [],
-                            "destinationAddressPrefix": "*",
-                            "destinationPortRange": "22",
-                            "destinationPortRanges": [],
-                            "direction": "Inbound",
-                            "priority": 3970,
-                            "protocol": "Tcp",
-                            "description": ""
-                        }
-                    },
-                    {
-                        "name": "Custom Endpoint",
-                        "properties": {
-                            "access": "Deny",
-                            "sourceAddressPrefix": "Internet",
-                            "sourcePortRange": "*",
-                            "sourcePortRanges": [],
-                            "destinationAddressPrefix": "*",
-                            "destinationPortRange": "80",
-                            "destinationPortRanges": [],
-                            "direction": "Inbound",
-                            "priority": 3980,
-                            "protocol": "Tcp",
-                            "description": ""
-                        }
-                    },
-                    {
-                        "name": "Resource Provider",
-                        "properties": {
-                            "access": "Allow",
-                            "sourceAddressPrefix": "*",
-                            "sourcePortRange": "*",
-                            "sourcePortRanges": [],
-                            "destinationAddressPrefix": "ServiceFabric",
-                            "destinationPortRange": "443",
-                            "destinationPortRanges": [],
-                            "direction": "Outbound",
-                            "priority": 4000,
-                            "protocol": "Tcp",
-                            "description": ""
-                        }
-                    },
-                    {
-                        "name": "Download Binaries",
-                        "properties": {
-                            "access": "Allow",
-                            "sourceAddressPrefix": "*",
-                            "sourcePortRange": "*",
-                            "sourcePortRanges": [],
-                            "destinationAddressPrefix": "AzureFrontDoor.FirstParty",
-                            "destinationPortRange": "",
-                            "destinationPortRanges": [
-                                "443"
-                            ],
-                            "direction": "Outbound",
-                            "priority": 4010,
-                            "protocol": "Tcp",
-                            "description": ""
-                        }
-                    }
-                ]
+              "access": "Allow",
+              "destinationAddressPrefix": "*",
+              "destinationPortRange": "1025-1027",
+              "direction": "Inbound",
+              "priority": 3920,
+              "protocol": "*",
+              "sourceAddressPrefix": "VirtualNetwork",
+              "sourcePortRange": "*",
+              "description": "allow ports within vnet that are used by the fabric to talk between nodes"
             }
-        },
-    {
+          },
+          {
+            "name": "allowSvcFabEphemeral",
+            "properties": {
+              "access": "Allow",
+              "destinationAddressPrefix": "*",
+              "destinationPortRange": "[concat(variables('nt1ephemeralStartPort'), '-', variables('nt1ephemeralEndPort'))]",
+              "direction": "Inbound",
+              "priority": 3930,
+              "protocol": "*",
+              "sourceAddressPrefix": "VirtualNetwork",
+              "sourcePortRange": "*",
+              "description": "allow fabric ephemeral ports within the vnet"
+            }
+          },
+          {
+            "name": "allowSvcFabPortal",
+            "properties": {
+              "access": "Allow",
+              "destinationAddressPrefix": "*",
+              "destinationPortRange": "[variables('nt1fabricHttpGatewayPort')]",
+              "direction": "Inbound",
+              "priority": 3900,
+              "protocol": "*",
+              "sourceAddressPrefix": "*",
+              "sourcePortRange": "*",
+              "description": "allow port used to access the fabric cluster web portal"
+            }
+          },
+          {
+            "name": "allowSvcFabClient",
+            "properties": {
+              "access": "Allow",
+              "destinationAddressPrefix": "*",
+              "destinationPortRange": "[variables('nt1fabricTcpGatewayPort')]",
+              "direction": "Inbound",
+              "priority": 3910,
+              "protocol": "*",
+              "sourceAddressPrefix": "*",
+              "sourcePortRange": "*",
+              "description": "allow port used by the fabric client (includes powershell)"
+            }
+          },
+          {
+            "name": "allowSvcFabApplication",
+            "properties": {
+              "access": "Allow",
+              "destinationAddressPrefix": "*",
+              "destinationPortRange": "[concat(variables('nt1applicationStartPort'), '-', variables('nt1applicationEndPort'))]",
+              "direction": "Inbound",
+              "priority": 3940,
+              "protocol": "*",
+              "sourceAddressPrefix": "*",
+              "sourcePortRange": "*",
+              "description": "allow fabric application ports within the vnet"
+            }
+          },
+          {
+            "name": "blockAll",
+            "properties": {
+              "access": "Deny",
+              "destinationAddressPrefix": "*",
+              "destinationPortRange": "*",
+              "direction": "Inbound",
+              "priority": 4095,
+              "protocol": "*",
+              "sourceAddressPrefix": "*",
+              "sourcePortRange": "*",
+              "description": "block all traffic except what we've explicitly allowed"
+            }
+          },
+          {
+            "name": "allowVNetRDP",
+            "properties": {
+              "access": "Allow",
+              "destinationAddressPrefix": "*",
+              "destinationPortRange": "3389",
+              "direction": "Inbound",
+              "priority": 3960,
+              "protocol": "*",
+              "sourceAddressPrefix": "*",
+              "sourcePortRange": "*",
+              "description": "allow RDP within the net"
+            }
+          },
+          {
+            "name": "allowSvcFabReverseProxy",
+            "properties": {
+              "access": "Allow",
+              "destinationAddressPrefix": "*",
+              "destinationPortRange": "[variables('nt1reverseProxyEndpointPort')]",
+              "direction": "Inbound",
+              "priority": 3980,
+              "protocol": "*",
+              "sourceAddressPrefix": "*",
+              "sourcePortRange": "*",
+              "description": "allow port used to access the fabric cluster using reverse proxy"
+            }
+          },
+          {
+            "name": "allowAppPort1",
+            "properties": {
+              "access": "Allow",
+              "destinationAddressPrefix": "*",
+              "destinationPortRange": "[parameters('loadBalancedAppPort1')]",
+              "direction": "Inbound",
+              "priority": 2001,
+              "protocol": "*",
+              "sourceAddressPrefix": "*",
+              "sourcePortRange": "*",
+              "description": "allow public application port 1"
+            }
+          },
+          {
+            "name": "allowAppPort2",
+            "properties": {
+              "access": "Allow",
+              "destinationAddressPrefix": "*",
+              "destinationPortRange": "[parameters('loadBalancedAppPort2')]",
+              "direction": "Inbound",
+              "priority": 2002,
+              "protocol": "*",
+              "sourceAddressPrefix": "*",
+              "sourcePortRange": "*",
+              "description": "allow public application port 2"
+            }
+          }
+        ]
+      },
+      "tags": {
+        "resourceType": "Service Fabric",
+        "clusterName": "[parameters('clusterName')]"
+      }
+    },
       "apiVersion": "2018-10-01",
       "type": "Microsoft.Compute/virtualMachineScaleSets",
       "name": "[variables('vmNodeType0Name')]",
