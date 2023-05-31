@@ -38,19 +38,12 @@ of your Service Fabric cluster.
         using for cluster & navigating to subnet. Click on the subnet &
         enable the Microsoft.Storage service endpoint.
 
-> ![A screenshot of a computer screen Description automatically
-> generated with medium
-> confidence](vertopal_b62b3062a7fa43bb99068aae71938462/media/image1.png){width="4.988120078740158in"
-> height="2.5631397637795277in"}
 
 -   Get your subnet ID at resources.azure.com \> select your
     subscription \> Existing VNet Resource group \> Micosoft.Network\>
     VNET \> Subnet, which is needed to be whitelisted.
 
-![A screenshot of a computer Description automatically generated with
-low
-confidence](vertopal_b62b3062a7fa43bb99068aae71938462/media/image2.png){width="6.268055555555556in"
-height="1.4in"}
+
 
 -   For securing the Storage account from public network access, include
     the below definition on your storage account definition -\>
@@ -89,14 +82,9 @@ height="1.4in"}
 >
 >             }
 >
-> Attaching a snapshot for reference:
->
-> ![A screen shot of a computer program Description automatically
-> generated with low
-> confidence](vertopal_b62b3062a7fa43bb99068aae71938462/media/image3.png){width="5.400468066491689in"
-> height="5.917179571303587in"}
 
-## [Key Parameters]{.underline}
+
+## Key Parameters
 
 existingVNetRGName: Existing VNET's Resource group name.
 
