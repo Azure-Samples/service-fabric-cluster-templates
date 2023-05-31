@@ -1,0 +1,129 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "clusterLocation": {
+      "value": "westus"
+    },
+    "clusterName": {
+      "value": "GEN-UNIQUE"
+    },
+    "nt0applicationStartPort": {
+      "value": 20000
+    },
+    "nt0applicationEndPort": {
+      "value": 30000
+    },
+    "nt0ephemeralStartPort": {
+      "value": 49152
+    },
+    "nt0ephemeralEndPort": {
+      "value": 65534
+    },
+    "nt0fabricTcpGatewayPort": {
+      "value": 19000
+    },
+    "nt0fabricHttpGatewayPort": {
+      "value": 19080
+    },
+    "subnet0Name": {
+      "value": "Subnet-0"
+    },
+    "existingVNetRGName": {
+      "value": "pvt004"
+    },
+    "existingVNetName": {
+      "value": "Vnet"
+    },
+    "computeLocation": {
+      "value": null
+    },
+    "publicIPAddressName": {
+      "value": "PublicIP-VM"
+    },
+    "publicIPAddressType": {
+      "value": "Dynamic"
+    },
+    "vmStorageAccountContainerName": {
+      "value": "vhds"
+    },
+    "adminUserName": {
+      "value": "testadm"
+    },
+    "adminPassword": {
+      "value": null
+    },
+    "virtualNetworkName": {
+      "value": "VNet"
+    },
+    "addressPrefix": {
+      "value": "10.0.0.0/16"
+    },
+    "dnsName": {
+      "value": null
+    },
+    "nicName": {
+      "value": "NIC"
+    },
+    "lbName": {
+      "value": "LoadBalancer"
+    },
+    "lbIPName": {
+      "value": "PublicIP-LB-FE"
+    },
+    "overProvision": {
+      "value": "false"
+    },
+    "vmImagePublisher": {
+      "value": "MicrosoftWindowsServer"
+    },
+    "vmImageOffer": {
+      "value": "WindowsServer"
+    },
+    "vmImageSku": {
+      "value": "2016-Datacenter-with-Containers"
+    },
+    "vmImageVersion": {
+      "value": "latest"
+    },
+    "sourceVaultValue": {
+      "value": "GEN-KEYVAULT-RESOURCE-ID"
+    },
+    "certificateUrlValue": {
+      "value": "GEN-KEYVAULT-SSL-SECRET-URI"
+    },
+    "clusterProtectionLevel": {
+      "value": "EncryptAndSign"
+    },
+    "certificateStoreValue": {
+      "value": "My"
+    },
+    "certificateThumbprint": {
+      "value": "GEN-CUSTOM-DOMAIN-SSLCERT-THUMBPRINT"
+    },
+    "storageAccountType": {
+      "value": "Standard_LRS"
+    },
+    "supportLogStorageAccountType": {
+      "value": "Standard_LRS"
+    },
+    "supportLogStorageAccountName": {
+      "value": "[toLower( concat('sflogs', uniqueString(resourceGroup().id),'2'))]"
+    },
+    "applicationDiagnosticsStorageAccountType": {
+      "value": "Standard_LRS"
+    },
+    "applicationDiagnosticsStorageAccountName": {
+      "value": "[toLower(concat('wad',uniqueString(resourceGroup().id), '3' ))]"
+    },
+    "nt0InstanceCount": {
+      "value": 3
+    },
+    "vmNodeType0Name": {
+      "value": "Type16"
+    },
+    "vmNodeType0Size": {
+      "value": "Standard_D2_v2"
+    }
+  }
+}
