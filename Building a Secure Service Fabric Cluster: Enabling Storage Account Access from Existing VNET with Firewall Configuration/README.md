@@ -37,12 +37,14 @@ of your Service Fabric cluster.
     -   From Azure portal go the existing Virtual network you will be
         using for cluster & navigating to subnet. Click on the subnet &
         enable the Microsoft.Storage service endpoint.
+![image](https://github.com/radhusharma11/service-fabric-cluster-templates/assets/113444108/bebfd584-a7c4-4fc2-92ef-c59a833017d7)
 
 
 -   Get your subnet ID at resources.azure.com \> select your
     subscription \> Existing VNet Resource group \> Micosoft.Network\>
     VNET \> Subnet, which is needed to be whitelisted.
 
+![image](https://github.com/radhusharma11/service-fabric-cluster-templates/assets/113444108/e18d8993-38c8-4af1-b7de-56f7adadd011)
 
 
 -   For securing the Storage account from public network access, include
@@ -83,6 +85,7 @@ of your Service Fabric cluster.
 >             }
 >
 
+![image](https://github.com/radhusharma11/service-fabric-cluster-templates/assets/113444108/cb1874a2-06b6-496a-b12d-644ddc42317c)
 
 ## Key Parameters
 
