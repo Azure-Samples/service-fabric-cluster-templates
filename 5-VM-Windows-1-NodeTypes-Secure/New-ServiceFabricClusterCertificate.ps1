@@ -1,4 +1,4 @@
-﻿#Requires -Module AzureRM.KeyVault
+﻿#Requires -Module Az.KeyVault
 
 # Use this script to create a certificate that you can use to secure a Service Fabric Cluster
 # This script requires an existing KeyVault that is EnabledForDeployment.  The vault must be in the same region as the cluster.
