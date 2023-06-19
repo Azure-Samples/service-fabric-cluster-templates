@@ -1,13 +1,13 @@
 ﻿#Requires -Module Az.KeyVault
 
 # Use this script to create a certificate that you can use to secure a Service Fabric Cluster
-# This script requires an existing KeyVault that is EnabledForDeployment.  The vault must be in the same region as the cluster.
-# To create a new vault and set the EnabledForDeployment property run:
+# This script requires an existing KeyVault that is EnabledForDeployment and EnabledForTemplateDeployment.  The vault must be in the same region as the cluster.
+# To create a new vault, set the EnabledForDeployment, and set EnabledForTemplateDeployment property run:
 #
 #$keyvaultRG="mykevaultrg"
 #$KeyVaultName="mykevaultname"
 #New-AzResourceGroup -Name $KeyvaultRG -Location WestUS
-#New-AzKeyVault -VaultName $KeyVaultName -ResourceGroupName $KeyvaultRG -Location WestUS -EnabledForDeployment
+#New-AzKeyVault -VaultName $KeyVaultName -ResourceGroupName $KeyvaultRG -Location WestUS -EnabledForDeployment -EnabledForTemplateDeployment
 #
 # Once the certificate is created and stored in the vault, the script will provide the parameter values needed for template deployment
 # 
