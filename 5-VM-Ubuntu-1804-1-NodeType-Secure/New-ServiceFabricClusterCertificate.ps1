@@ -39,7 +39,7 @@ $ContentBytes = [System.Text.Encoding]::UTF8.GetBytes($JSONBlob)
 $Content = [System.Convert]::ToBase64String($ContentBytes)
 
 $SecretValue = ConvertTo-SecureString -String $Content -AsPlainText -Force
-$NewSecret = Set-AzureKeyVaultSecret -VaultName $KeyVaultName -Name $KeyVaultSecretName -SecretValue $SecretValue -Verbose
+$NewSecret = Set-AzKeyVaultSecret -VaultName $KeyVaultName -Name $KeyVaultSecretName -SecretValue $SecretValue -Verbose
 
 Write-Host
 Write-Host "Source Vault Resource Id: "$(Get-AzKeyVault -VaultName $KeyVaultName).ResourceId
