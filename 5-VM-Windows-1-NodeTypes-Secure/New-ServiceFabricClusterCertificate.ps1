@@ -6,8 +6,8 @@
 #
 #$keyvaultRG="mykevaultrg"
 #$KeyVaultName="mykevaultname"
-#New-AzureRmResourceGroup -Name $KeyvaultRG -Location WestUS
-#New-AzureRmKeyVault -VaultName $KeyVaultName -ResourceGroupName $KeyvaultRG -Location WestUS -EnabledForDeployment
+#New-AzResourceGroup -Name $KeyvaultRG -Location WestUS
+#New-AzKeyVault -VaultName $KeyVaultName -ResourceGroupName $KeyvaultRG -Location WestUS -EnabledForDeployment
 #
 # Once the certificate is created and stored in the vault, the script will provide the parameter values needed for template deployment
 # 
@@ -42,6 +42,6 @@ $SecretValue = ConvertTo-SecureString -String $Content -AsPlainText -Force
 $NewSecret = Set-AzureKeyVaultSecret -VaultName $KeyVaultName -Name $KeyVaultSecretName -SecretValue $SecretValue -Verbose
 
 Write-Host
-Write-Host "Source Vault Resource Id: "$(Get-AzureRmKeyVault -VaultName $KeyVaultName).ResourceId
+Write-Host "Source Vault Resource Id: "$(Get-AzKeyVault -VaultName $KeyVaultName).ResourceId
 Write-Host "Certificate URL : "$NewSecret.Id
 Write-Host "Certificate Thumbprint : "$NewCert.Thumbprint
