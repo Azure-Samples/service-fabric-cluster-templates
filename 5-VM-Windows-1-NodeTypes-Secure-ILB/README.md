@@ -9,6 +9,8 @@
 
 This template allows you to deploy an internal (private IP address) secure 5 node, Single Node Type Service Fabric Cluster running Windows Server 2022 Datacenter on a Standard_D2_v2 Size Virtual Machine Scale set with Azure Diagnostics turned on.
 
+**NOTE: All nodes in the cluster need to resolve and connect outbound to the configured public regional Service Fabric Resource Provider (SFRP) https url on port 443 for the cluster to function.**
+
 ## Certificate needed for the template if using the 'Deploy to Azure' button above
 
 This template assumes that you already have certificates uploaded to your key vault. Production clusters should always use a CA signed certificate. If needing a certificate for testing, a .pfx certificate can be generated directly in the key vault or if you want to create a new certificate run the **New-ServiceFabricClusterCertificate.ps1** file in this sample. That script will output the values necessary for deployment via the parameters file.
