@@ -19,7 +19,7 @@ This template assumes that you already have certificates uploaded to your key va
 
 You can download the .PFX from the key vault from the portal
 
-- Got to the keyvalut resource [Key vaults](https://ms.portal.azure.com/#browse/Microsoft.KeyVault%2Fvaults)
+- Go to the key vault resource [Key vaults](https://ms.portal.azure.com/#browse/Microsoft.KeyVault%2Fvaults)
 - Navigate to the 'Certificates' object, select the current certificate version, and download the .pfx
 
 ![DownloadCert]
