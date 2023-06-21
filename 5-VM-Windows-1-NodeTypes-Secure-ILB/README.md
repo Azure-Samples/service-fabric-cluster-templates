@@ -13,9 +13,9 @@ This template allows you to deploy an internal (private IP address) secure 5 nod
 
 ## Certificate needed for the template if using the 'Deploy to Azure' button above
 
-This template assumes that you already have certificates uploaded to your key vault. Production clusters should always use a CA signed certificate. If needing a certificate for testing, a .pfx certificate can be generated directly in the key vault or if you want to create a new certificate run the **New-ServiceFabricClusterCertificate.ps1** file in this sample. That script will output the values necessary for deployment via the parameters file.
+This template assumes that you already have certificates uploaded to your key vault. Production clusters should always use a CA signed certificate. If needing a certificate for testing, a .pfx certificate can be generated directly in the key vault or if you want to create a new certificate run the [New-ServiceFabricClusterCertificate.ps1](../scripts/New-ServiceFabricClusterCertificate.ps1) file in this repository. That script will output the values necessary for deployment via the parameters file.
 
-**NOTE: Azure Key vault 'Access Configuration' should have 'Azure Virtual Machines for deployment' and 'Azure Resource Manager for template deployment' enabled for node key vault access during template deployment.
+**NOTE: Azure Key vault 'Access Configuration' should have 'Azure Virtual Machines for deployment' and 'Azure Resource Manager for template deployment' enabled for node key vault access during template deployment.**
 
 You can download the .PFX from the key vault from the portal
 
@@ -43,5 +43,5 @@ If you are wanting to create a custom ARM template for your cluster, then you ha
 Unzip the downloaded .zip on your local machine, make any changes to template or the parameter file as you need.
 
 <!--Image references-->
-[DownloadTemplate]: ./DownloadTemplate.png
-[DownloadCert]: ./DownloadCert.PNG
+[DownloadTemplate]: ../media//DownloadTemplate.png
+[DownloadCert]: ../media/DownloadCert.PNG
