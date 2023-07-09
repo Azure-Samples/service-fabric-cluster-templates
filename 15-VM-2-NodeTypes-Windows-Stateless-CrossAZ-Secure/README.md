@@ -7,7 +7,7 @@
     <img src="http://armviz.io/visualizebutton.png"/>
 </a>
 
-This test template allows you to deploy a secure 10 node, 2 node type Service Fabric Cluster, with non-primary type optimized for running stateless workloads, running Windows Server 2022 Datacenter on a Standard_D2_v2 Size Virtual Machine Scale set.
+This test template allows you to deploy a secure 10 node, 2 node type Service Fabric Cluster, with non-primary type optimized for running stateless workloads, running Windows Server 2022 Datacenter on a Standard_D2_v2 SKU size on Azure Virtual Machine Scale Set.
 
 The main intent for this template is to show how you can specify node types to host only stateless workloads. 
 

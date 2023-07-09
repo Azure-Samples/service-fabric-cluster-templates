@@ -7,7 +7,7 @@
     <img src="http://armviz.io/visualizebutton.png"/>
 </a>
 
-This template allows you to deploy a Service Fabric managed cluster using the *Standard* SKU. This cluster contains two node types running *Windows Server 2022 Datacenter* on *Standard_D2s_v3* size virtual machine scale sets. One of the node types is configured to run only stateless services which enables faster node scaling.
+This template allows you to deploy a Service Fabric managed cluster using the *Standard* SKU. This cluster contains two node types running *Windows Server 2022 Datacenter* on *Standard_D2s_v3* SKU size on Azure Virtual Machine Scale Sets. One of the node types is configured to run only stateless services which enables faster node scaling.
 
 ## Use Powershell to deploy your cluster
 
