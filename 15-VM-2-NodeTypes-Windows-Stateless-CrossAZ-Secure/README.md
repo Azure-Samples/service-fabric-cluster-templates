@@ -1,4 +1,4 @@
-# 15VM- 2 node type, Stateless CrossAZ Secure Windows Service Fabric Cluster
+# 15VM- 2 node type, stateless CrossAZ Secure Windows Service Fabric Cluster
 
 <a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAzure-Samples%2Fservice-fabric-cluster-templates%2Fmaster%2F15-VM-2-NodeTypes-Windows-Stateless-CrossAZ-Secure%2FAzureDeploy.json" target="_blank">
     <img src="http://azuredeploy.net/deploybutton.png"/>
@@ -7,13 +7,13 @@
     <img src="http://armviz.io/visualizebutton.png"/>
 </a>
 
-This test template allows you to deploy a secure 10 node, 2 node type Service Fabric Cluster, with non-primary type optimized for running Stateless workloads, running Windows Server 2022 Datacenter on a Standard_D2_v2 Size Virtual Machine Scale set.
+This test template allows you to deploy a secure 10 node, 2 node type Service Fabric Cluster, with non-primary type optimized for running stateless workloads, running Windows Server 2022 Datacenter on a Standard_D2_v2 Size Virtual Machine Scale set.
 
-The main intent for this template is to show how you can specify node types to host only Stateless workloads. 
+The main intent for this template is to show how you can specify node types to host only stateless workloads. 
 
-## Note on Stateless Node Type Support
-1. Stateless only Node Type is supported only on SF cluster code version 7.1.409 and above.
-2. Durability of the Node Type for Stateless support should be Bronze.
+## Note on stateless Node Type Support
+1. stateless only Node Type is supported only on SF cluster code version 7.1.409 and above.
+2. Durability of the Node Type for stateless support should be Bronze.
 
 
 ## Use Powershell to deploy your cluster
