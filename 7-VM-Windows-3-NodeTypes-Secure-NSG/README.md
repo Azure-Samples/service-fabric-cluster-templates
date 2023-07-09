@@ -7,7 +7,7 @@
     <img src="http://armviz.io/visualizebutton.png"/>
 </a>
 
-This template allows you to deploy a secure 7 node, Three Node Type Service Fabric Cluster running Windows Server 2022 Datacenter on a Standard_D2_v2 Size Virtual Machine Scale set with Azure Diagnostics turned on and network security groups enabled. 
+This template allows you to deploy a secure 7 node, Three node type Service Fabric Cluster running Windows Server 2022 Datacenter on a Standard_D2_v2 Size Virtual Machine Scale set with Azure Diagnostics turned on and network security groups enabled. 
 
 The main intent for this template is to show how to set up multinodetype clusters.   
 

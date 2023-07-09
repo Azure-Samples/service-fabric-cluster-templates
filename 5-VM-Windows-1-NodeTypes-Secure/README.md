@@ -7,7 +7,7 @@
     <img src="http://armviz.io/visualizebutton.png"/>
 </a>
 
-This template allows you to deploy a secure 5 node, Single Node Type Service Fabric Cluster running Windows Server 2022 Datacenter on a Standard_D2_v2 Size Virtual Machine Scale set with Azure Diagnostics turned on; template last tested on 08/28/2018. 
+This template allows you to deploy a secure 5 node, Single node type Service Fabric Cluster running Windows Server 2022 Datacenter on a Standard_D2_v2 Size Virtual Machine Scale set with Azure Diagnostics turned on; template last tested on 08/28/2018. 
 
 ## Certificate needed for the template if using the 'Deploy to Azure' button above
 This template assumes that you already have certificates uploaded to your keyvault.  If you want to create a new certificate run the **New-ServiceFabricClusterCertificate.ps1** file in this sample.  That script will output the values necessary for deployment via the parameters file. 
