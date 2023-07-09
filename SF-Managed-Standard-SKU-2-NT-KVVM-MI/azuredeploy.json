@@ -1,0 +1,466 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "adminPassword": {
+            "type": "securestring"
+        },
+        "adminUserName": {
+            "type": "string",
+            "defaultValue": "vmadmin"
+        },
+        "certificatePermissions": {
+            "type": "array",
+            "allowedValues": [
+                "all",
+                "backup",
+                "create",
+                "delete",
+                "deleteissuers",
+                "get",
+                "getissuers",
+                "import",
+                "list",
+                "listissuers",
+                "managecontacts",
+                "manageissuers",
+                "purge",
+                "recover",
+                "restore",
+                "setissuers",
+                "update"
+            ],
+            "defaultValue": [
+                "list",
+                "get"
+            ],
+            "metadata": {
+                "description": "Specifies the permissions to certificates in the vault. Valid values are: all,  create, delete, update, deleteissuers, get, getissuers, import, list, listissuers, managecontacts, manageissuers,  recover, backup, restore, setissuers, and purge."
+            }
+        },
+        "certificateUrls": {
+            "type": "array",
+            "metadata": {
+                "description": "https://<vault name>.vault.azure.net/secrets/<certificate Name>"
+            }
+        },
+        "clientCertificateThumbprint": {
+            "type": "string"
+        },
+        "clusterName": {
+            "type": "string",
+            "minLength": 4,
+            "maxLength": 23,
+            "metadata": {
+                "description": "Name of your cluster - Between 3 and 23 characters. Letters and numbers only"
+            }
+        },
+        "clusterSku": {
+            "type": "string",
+            "allowedValues": [
+                "Basic",
+                "Standard"
+            ],
+            "defaultValue": "Basic"
+        },
+        "keysPermissions": {
+            "type": "array",
+            "allowedValues": [
+                "all",
+                "backup",
+                "create",
+                "decrypt",
+                "delete",
+                "encrypt",
+                "get",
+                "getrotationpolicy",
+                "import",
+                "list",
+                "purge",
+                "recover",
+                "release",
+                "restore",
+                "rotate",
+                "setrotationpolicy",
+                "sign",
+                "unwrapKey",
+                "update",
+                "verify",
+                "wrapKey"
+            ],
+            "defaultValue": [
+                "list",
+                "get"
+            ],
+            "metadata": {
+                "description": "Specifies the permissions to keys in the vault. Valid values are: all, encrypt, decrypt, wrapKey, unwrapKey, sign, verify, get, list, create, update, import, delete, backup, restore, recover, and purge."
+            }
+        },
+        "keyVaultResourceId": {
+            "type": "string",
+            "metadata": {
+                "description": "Optionally provide key vault resource id to update key vault access policy with user managed identity. format: /subscriptions/<subscription Id>/resourceGroups/<resource group>/providers/Microsoft.KeyVault/vaults/<vault name>"
+            }
+        },
+        "managedIdentityProviderGuid": {
+            "type": "string",
+            "defaultValue": "f1a07417-d97a-45cb-824c-7a7467783830",
+            "metadata": {
+                "description": "https://docs.microsoft.com/en-us/azure/role-based-access-control/built-in-roles"
+            }
+        },
+        "secretsPermissions": {
+            "type": "array",
+            "allowedValues": [
+                "all",
+                "backup",
+                "delete",
+                "get",
+                "list",
+                "purge",
+                "recover",
+                "restore",
+                "set"
+            ],
+            "defaultValue": [
+                "list",
+                "get"
+            ],
+            "metadata": {
+                "description": "Specifies the permissions to secrets in the vault. Valid values are: all, get, list, set, delete, backup, restore, recover, and purge."
+            }
+        },
+        "sfrpProviderGuid": {
+            "type": "string",
+            "defaultValue": "",
+            "metadata": {
+                "description": "subscription specific. ps Get-AzADServicePrincipal -DisplayName 'Azure Service Fabric Resource Provider'"
+            }
+        },
+        "userAssignedIdentityName": {
+            "type": "string",
+            "defaultValue": "[concat(resourceGroup().name,'UserAssignedIdentity')]"
+        },
+        "vmIdentityRoleNameGuid": {
+            "type": "string",
+            "defaultValue": "",
+            "metadata": {
+                "description": "ps [guid]::newguid() one time. https://docs.microsoft.com/en-us/azure/service-fabric/how-to-managed-identity-managed-cluster-virtual-machine-scale-sets"
+            }
+        },
+        "nodeType1DataDiskSizeGB": {
+            "type": "int",
+            "defaultValue": 256
+        },
+        "nodeType1managedDataDiskType": {
+            "type": "string",
+            "allowedValues": [
+                "Standard_LRS",
+                "StandardSSD_LRS",
+                "Premium_LRS"
+            ],
+            "defaultValue": "StandardSSD_LRS"
+        },
+        "nodeType1Name": {
+            "type": "string",
+            "maxLength": 9,
+            "defaultValue": "NT1"
+        },
+        "nodeType1VmInstanceCount": {
+            "type": "int",
+            "defaultValue": 5
+        },
+        "nodeType1VmSize": {
+            "type": "string",
+            "defaultValue": "Standard_D2s_v3"
+        },
+        "nodeType2DataDiskSizeGB": {
+            "type": "int",
+            "defaultValue": 128
+        },
+        "nodeType2managedDataDiskType": {
+            "type": "string",
+            "allowedValues": [
+                "Standard_LRS",
+                "StandardSSD_LRS",
+                "Premium_LRS"
+            ],
+            "defaultValue": "StandardSSD_LRS"
+        },
+        "nodeType2Name": {
+            "type": "string",
+            "maxLength": 9,
+            "defaultValue": "NT2"
+        },
+        "nodeType2VmInstanceCount": {
+            "type": "int",
+            "defaultValue": 3
+        },
+        "nodeType2VmSize": {
+            "type": "string",
+            "defaultValue": "Standard_D2s_v3"
+        }
+    },
+    "variables": {
+        "sfApiVersion": "2022-06-01-preview",
+        "msiApiVersion": "2018-11-30",
+        "updateKeyvault": "[greater(length(parameters('keyVaultResourceId')), 0)]",
+        "kvIndexStart": "[if(variables('updateKeyvault'), add(lastIndexOf(parameters('keyVaultResourceId'),'/'), 1), 0)]",
+        "kvIndexEnd": "[length(parameters('keyVaultResourceId'))]",
+        "kvRgIndexStart": "[if(variables('updateKeyvault'), add(indexOf(parameters('keyVaultResourceId'),'/resourceGroups/'), 16), 0)]",
+        "kvRgIndexEnd": "[if(variables('updateKeyvault'), indexOf(parameters('keyVaultResourceId'),'/providers/'), 0)]",
+        "keyvaultName": "[substring(parameters('keyVaultResourceId'), variables('kvIndexStart'), sub(variables('kvIndexEnd'), variables('kvIndexStart')))]",
+        "keyvaultResourceGroup": "[substring(parameters('keyVaultResourceId'), variables('kvRgIndexStart'), sub(variables('kvRgIndexEnd'), variables('kvRgIndexStart')))]",
+        "kvSubIndexStart": "[if(variables('updateKeyvault'), add(indexOf(parameters('keyVaultResourceId'),'/subscriptions/'), 15), 0)]",
+        "kvSubIndexEnd": "[if(variables('updateKeyvault'), indexOf(parameters('keyVaultResourceId'),'/resourceGroups/'), 0)]",
+        "keyvaultSubscriptionId": "[substring(parameters('keyVaultResourceId'), variables('kvSubIndexStart'), sub(variables('kvSubIndexEnd'), variables('kvSubIndexStart')))]"
+    },
+    "resources": [
+        {
+            "condition": "[equals(variables('updateKeyvault'), bool('true'))]",
+            "apiVersion": "2021-04-01",
+            "name": "nestedTemplate",
+            "type": "Microsoft.Resources/deployments",
+            "resourceGroup": "[variables('keyvaultResourceGroup')]",
+            "subscriptionId": "[variables('keyvaultSubscriptionId')]",
+            "dependsOn": [
+                "[concat('Microsoft.ManagedIdentity/userAssignedIdentities/', parameters('userAssignedIdentityName'))]"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "debugSetting": {
+                    "detailLevel": "requestContent,responseContent"
+                },
+                "expressionEvaluationOptions": {
+                    "scope": "Outer"
+                },
+                "template": {
+                    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+                    "contentVersion": "1.0.0.0",
+                    "parameters": {},
+                    "variables": {},
+                    "resources": [
+                        {
+                            "type": "Microsoft.KeyVault/vaults/accessPolicies",
+                            "name": "[concat(variables('keyVaultName'), '/add')]",
+                            "apiVersion": "2019-09-01",
+                            "properties": {
+                                "accessPolicies": [
+                                    {
+                                        "tenantId": "[subscription().tenantId]",
+                                        "objectId": "[reference(resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', parameters('userAssignedIdentityName')), variables('msiApiVersion')).principalId]",
+                                        "permissions": {
+                                            "keys": "[parameters('keysPermissions')]",
+                                            "secrets": "[parameters('secretsPermissions')]",
+                                            "certificates": "[parameters('certificatePermissions')]"
+                                        }
+                                    }
+                                ]
+                            }
+                        }
+                    ]
+                },
+                "parameters": {}
+            }
+        },
+        {
+            "type": "Microsoft.ManagedIdentity/userAssignedIdentities",
+            "name": "[parameters('userAssignedIdentityName')]",
+            "apiVersion": "[variables('msiApiVersion')]",
+            "location": "[resourceGroup().location]"
+        },
+        {
+            "type": "Microsoft.Authorization/roleAssignments",
+            "apiVersion": "2020-04-01-preview",
+            "name": "[parameters('vmIdentityRoleNameGuid')]",
+            "scope": "[concat('Microsoft.ManagedIdentity/userAssignedIdentities', '/', parameters('userAssignedIdentityName'))]",
+            "dependsOn": [
+                "[concat('Microsoft.ManagedIdentity/userAssignedIdentities/', parameters('userAssignedIdentityName'))]"
+            ],
+            "properties": {
+                "roleDefinitionId": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/',parameters('managedIdentityProviderGuid'))]",
+                "principalId": "[parameters('sfrpProviderGuid')]"
+            }
+        },
+        {
+            "apiVersion": "[variables('sfApiVersion')]",
+            "type": "Microsoft.ServiceFabric/managedclusters",
+            "name": "[parameters('clusterName')]",
+            "location": "[resourcegroup().location]",
+            "sku": {
+                "name": "[parameters('clusterSku')]"
+            },
+            "properties": {
+                "dnsName": "[toLower(parameters('clusterName'))]",
+                "adminUserName": "[parameters('adminUserName')]",
+                "adminPassword": "[parameters('adminPassword')]",
+                "allowRdpAccess": false,
+                "clientConnectionPort": 19000,
+                "httpGatewayConnectionPort": 19080,
+                "clients": [
+                    {
+                        "isAdmin": true,
+                        "thumbprint": "[parameters('clientCertificateThumbprint')]"
+                    }
+                ],
+                "loadBalancingRules": [
+                    {
+                        "frontendPort": 8080,
+                        "backendPort": 8080,
+                        "protocol": "tcp",
+                        "probeProtocol": "tcp"
+                    }
+                ]
+            }
+        },
+        {
+            "apiVersion": "[variables('sfApiVersion')]",
+            "type": "Microsoft.ServiceFabric/managedclusters/nodetypes",
+            "name": "[concat(parameters('clusterName'), '/', parameters('nodeType1Name'))]",
+            "location": "[resourcegroup().location]",
+            "dependsOn": [
+                "[concat('Microsoft.ManagedIdentity/userAssignedIdentities/', parameters('userAssignedIdentityName'))]",
+                "[concat('Microsoft.ServiceFabric/managedclusters/', parameters('clusterName'))]"
+            ],
+            "properties": {
+                "isPrimary": true,
+                "vmImagePublisher": "MicrosoftWindowsServer",
+                "vmImageOffer": "WindowsServer",
+                "vmImageSku": "2022-Datacenter",
+                "vmImageVersion": "latest",
+                "vmSize": "[parameters('nodeType1VmSize')]",
+                "vmInstanceCount": "[parameters('nodeType1VmInstanceCount')]",
+                "dataDiskSizeGB": "[parameters('nodeType1DataDiskSizeGB')]",
+                "dataDiskType": "[parameters('nodeType1managedDataDiskType')]",
+                "dataDiskLetter": "S",
+                "vmManagedIdentity": {
+                    "userAssignedIdentities": [
+                        "[resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', parameters('userAssignedIdentityName'))]"
+                    ]
+                },
+                "vmExtensions": [
+                    {
+                        "name": "KVVMExtensionForWindows",
+                        "properties": {
+                            "publisher": "Microsoft.Azure.KeyVault",
+                            "type": "KeyVaultForWindows",
+                            "typeHandlerVersion": "1.0",
+                            "autoUpgradeMinorVersion": true,
+                            "settings": {
+                                "secretsManagementSettings": {
+                                    "pollingIntervalInS": "3600",
+                                    "certificateStoreName": "MY",
+                                    "linkOnRenewal": false,
+                                    "certificateStoreLocation": "LocalMachine",
+                                    "requireInitialSync": false,
+                                    "observedCertificates": "[parameters('certificateUrls')]"
+                                },
+                                "authenticationSettings": {
+                                    "msiEndpoint": "http://169.254.169.254/metadata/identity/oauth2/token",
+                                    "msiClientId": "[reference(resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', parameters('userAssignedIdentityName')), variables('msiApiVersion')).clientId]"
+                                }
+                            }
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "type": "Microsoft.ServiceFabric/managedClusters/nodetypes",
+            "apiVersion": "2022-01-01",
+            "name": "[concat(parameters('clusterName'), '/', parameters('nodeType2Name'))]",
+            "location": "[resourceGroup().location]",
+            "dependsOn": [
+                "[resourceId('Microsoft.ServiceFabric/managedClusters', parameters('clusterName'))]"
+            ],
+            "properties": {
+                "isPrimary": false,
+                "vmImagePublisher": "MicrosoftWindowsServer",
+                "vmImageOffer": "WindowsServer",
+                "vmImageSku": "2022-Datacenter",
+                "vmImageVersion": "latest",
+                "vmSize": "[parameters('nodeType2VmSize')]",
+                "vmInstanceCount": "[parameters('nodeType2VmInstanceCount')]",
+                "dataDiskSizeGB": "[parameters('nodeType2DataDiskSizeGB')]",
+                "dataDiskType": "[parameters('nodeType2managedDataDiskType')]",
+                "dataDiskLetter": "S",
+                "placementProperties": {},
+                "capacities": {},
+                "applicationPorts": {
+                    "startPort": 20000,
+                    "endPort": 30000
+                },
+                "ephemeralPorts": {
+                    "startPort": 49152,
+                    "endPort": 65534
+                },
+                "vmSecrets": [],
+                "vmManagedIdentity": {
+                    "userAssignedIdentities": [
+                        "[resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', parameters('userAssignedIdentityName'))]"
+                    ]
+                },
+                "vmExtensions": [
+                    {
+                        "name": "KVVMExtensionForWindows",
+                        "properties": {
+                            "publisher": "Microsoft.Azure.KeyVault",
+                            "type": "KeyVaultForWindows",
+                            "typeHandlerVersion": "1.0",
+                            "autoUpgradeMinorVersion": true,
+                            "settings": {
+                                "secretsManagementSettings": {
+                                    "pollingIntervalInS": "3600",
+                                    "certificateStoreName": "MY",
+                                    "linkOnRenewal": false,
+                                    "certificateStoreLocation": "LocalMachine",
+                                    "requireInitialSync": false,
+                                    "observedCertificates": "[parameters('certificateUrls')]"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "isStateless": false,
+                "multiplePlacementGroups": false,
+                "enableEncryptionAtHost": false,
+                "enableAcceleratedNetworking": false,
+                "useTempDataDisk": false
+            }
+        }
+    ],
+    "outputs": {
+        "serviceFabricExplorer": {
+            "value": "[concat('https://', reference(parameters('clusterName')).fqdn, ':', reference(parameters('clusterName')).httpGatewayConnectionPort)]",
+            "type": "string"
+        },
+        "clientConnectionEndpoint": {
+            "value": "[concat(reference(parameters('clusterName')).fqdn, ':', reference(parameters('clusterName')).clientConnectionPort)]",
+            "type": "string"
+        },
+        "clusterProperties": {
+            "value": "[reference(parameters('clusterName'))]",
+            "type": "object"
+        },
+        "keyvaultName": {
+            "value": "[variables('keyvaultName')]",
+            "type": "string"
+        },
+        "keyvaultResourceGroup": {
+            "value": "[variables('keyvaultResourceGroup')]",
+            "type": "string"
+        },
+        "keyvaultSubscriptionId": {
+            "value": "[variables('keyvaultSubscriptionId')]",
+            "type": "string"
+        },
+        "updateKeyvault": {
+            "value": "[equals(variables('updateKeyvault'), bool('true'))]",
+            "type": "bool"
+        },
+        "kvresourceId": {
+            "value": "[if(variables('updateKeyvault'), resourceid(variables('keyvaultSubscriptionId'), variables('keyvaultResourceGroup'), 'Microsoft.KeyVault/vaults', variables('keyvaultName')), '')]",
+            "type": "string"
+        }
+    }
+}
