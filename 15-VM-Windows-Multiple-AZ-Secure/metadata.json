@@ -1,6 +1,6 @@
 {
   "itemDisplayName": "Deploy a 15 Node, cross Azure Zone, secure Windows Service Fabric Cluster ",
-  "description": "This template allows you to deploy an secure 15Node, cross AZ Service Fabric Cluster running Windows Server 2019 Datacenter on a Standard_D2_V2 Size VMSS, with network security groups enabled.",
+  "description": "This template allows you to deploy an secure 15Node, cross AZ Service Fabric Cluster running Windows Server 2022 Datacenter on a Standard_D2_V2 Size VMSS, with network security groups enabled.",
   "summary": "This template takes a minimum amount of parameters and deploys a 15 Node, cross Azure Zone Windows Service Fabric Cluster",
   "githubUsername": "anantshankar17",
   "dateUpdated": "2022-9-20"

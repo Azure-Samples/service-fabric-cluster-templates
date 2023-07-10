@@ -1,4 +1,4 @@
-# 15 Node, Cross AZ secure Windows Service Fabric Cluster
+# 15 Node, cross AZ secure Windows Service Fabric Cluster
 
 <a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAzure-Samples%2Fservice-fabric-cluster-templates%2Fmaster%2F9-VM-Windows-Cross-AZ-UnSecure%2Fazuredeploy.json" target="_blank">
     <img src="http://azuredeploy.net/deploybutton.png"/>
@@ -7,7 +7,7 @@
     <img src="http://armviz.io/visualizebutton.png"/>
 </a>
 
-This test template allows you to deploy a secure 15 node, Cross AZ Service Fabric Cluster running Windows Server 2019 Datacenter on a Standard_D2_v2 Size Virtual Machine Scale set.
+This test template allows you to deploy a secure 15 node, cross AZ Service Fabric Cluster running Windows Server 2022 Datacenter on a Standard_D2_v2 SKU size on Azure Virtual Machine Scale Set.
 
 The main intent for this template is to show how you can stitch a cluster across three Azure Zones. 
 

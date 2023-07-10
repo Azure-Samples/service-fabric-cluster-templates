@@ -1,4 +1,4 @@
-# Multiple Node Types Secure Ubuntu Service Fabric Cluster
+# Multiple node types Secure Ubuntu Service Fabric Cluster
 
 This template allows you to create multiple node types with each node type having different number of VMSS Instances
 
@@ -19,7 +19,7 @@ The endpoint can be exposed through a public load balancer or Application Gatewa
 
 
 ### Notes
-This ARM template uses resource loops to create multiple node types, public ip addresses and load balancers and adds the node types to the Service Fabric Cluster. Each Node Type is associated with a Load Balancer using the loop index.
+This ARM template uses resource loops to create multiple node types, public ip addresses and load balancers and adds the node types to the Service Fabric Cluster. Each node type is associated with a Load Balancer using the loop index.
 Each nodetype can be deployed into it's own subnet. 
 
 ### Key Parameters
@@ -30,7 +30,7 @@ certificateThumbprint - Thumb print from filename.crt, stored in local machine's
 
 loopCount - Number of Nodetypes to create with index 0 being the primary node type
 
-vmNodeTypeSize - Specify VM size for each Node Type
+vmNodeTypeSize - Specify VM size for each node type
 
 subnetNames - Array of subnet names for each node type. This array length should match the node type loop count
 
@@ -38,4 +38,4 @@ subnetNames - Array of subnet names for each node type. This array length should
 
 ### Key Variables
 
-ntProperties - Specify array of Node Type placement properties for each node type. 
+ntProperties - Specify array of node type placement properties for each node type. 

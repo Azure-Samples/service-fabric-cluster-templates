@@ -7,7 +7,7 @@
     <img src="http://armviz.io/visualizebutton.png"/>
 </a>
 
-This template allows you to deploy a secure 5 node, Single Node Type Service Fabric Cluster running Windows Server 2019 Datacenter on a Standard_D2_v2 Size Virtual Machine Scale set with Azure Diagnostics turned on and network security groups enabled. 
+This template allows you to deploy a secure 5 node, Single node type Service Fabric Cluster running Windows Server 2022 Datacenter on a Standard_D2_v2 SKU size on Azure Virtual Machine Scale Set with Azure Diagnostics turned on and network security groups enabled.
 
 ## Certificate needed for the template if using the 'Deploy to Azure' button above
 This template assumes that you already have certificates uploaded to your keyvault.  If you want to create a new certificate run the **New-ServiceFabricClusterCertificate.ps1** file in this sample.  That script will output the values necessary for deployment via the parameters file. 
@@ -29,10 +29,10 @@ The following **inbound traffic rules** are enabled. You can change the port val
 
 - ClientConnectionEndpoint (TCP): 19000
 - HttpGatewayEndpoint (HTTP/TCP): 19080
-- Internodecommunication - 1025, 1026, 1027
-- Ephemeral Port range – 49152 to 65534 (need a min of 256 ports )
+- InternodeCommunication - 1025, 1026, 1027
+- Ephemeral Port range - 49152 to 65534 (need a min of 256 ports )
 - Ports for application use: 80 and 443
-- Application port range – 49152 to 65534 (used for service to service communication and unlike are not opened on the Load balancer )
+- Application port range - 49152 to 65534 (used for service to service communication and unlike are not opened on the Load balancer )
 - Block all other ports
 
 If you decide to use any other application ports are needed, then you will need to adjust the  Microsoft.Network/loadBalancers resource and the Microsoft.Network/networkSecurityGroups resource to allow the traffic in.

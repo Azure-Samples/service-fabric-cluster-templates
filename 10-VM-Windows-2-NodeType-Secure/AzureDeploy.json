@@ -46,7 +46,7 @@
     },
     "vmImageSku": {
       "type": "string",
-      "defaultValue": "2019-Datacenter",
+      "defaultValue": "2022-Datacenter",
       "metadata": {
         "description": "VM image SKU"
       }

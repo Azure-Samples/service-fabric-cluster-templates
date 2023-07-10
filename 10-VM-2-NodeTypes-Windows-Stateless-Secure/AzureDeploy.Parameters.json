@@ -21,7 +21,7 @@
       "value": "WindowsServer"
     },
     "vmImageSku": {
-      "value": "2019-Datacenter"
+      "value": "2022-Datacenter"
     },
     "vmImageVersion": {
       "value": "latest"
