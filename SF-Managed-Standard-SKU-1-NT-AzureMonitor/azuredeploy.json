@@ -97,11 +97,11 @@
         "vmSecrets": [],
         "vmExtensions": [
           {
-            "name": "[concat('AzureMonitorWindowsAgent', '-', variables('nodeTypeName'))]",
+            "name": "AzureMonitorWindowsAgent",
             "properties": {
               "publisher": "Microsoft.Azure.Monitor",
               "type": "AzureMonitorWindowsAgent",
-              "typeHandlerVersion": "1.2",
+              "typeHandlerVersion": "1.0",
               "autoUpgradeMinorVersion": true,
               "enableAutomaticUpgrade": true
             }
