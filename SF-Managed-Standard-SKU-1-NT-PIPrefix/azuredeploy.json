@@ -1,0 +1,124 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "clusterName": {
+            "type": "string"
+        },
+        "clusterSku": {
+            "type": "string",
+            "allowedValues": [
+                "Standard"
+            ]
+        },
+        "clusterLocation": {
+            "type": "string",
+            "defaultValue": "[resourcegroup().location]"
+        },
+        "adminUserName": {
+            "type": "string",
+            "defaultValue": "vmadmin"
+        },
+        "adminPassword": {
+            "type": "securestring"
+        },
+        "nodeTypeName": {
+            "type": "string"
+        },
+        "vmImagePublisher": {
+            "type": "string",
+            "defaultValue": "MicrosoftWindowsServer"
+        },
+        "vmImageOffer": {
+            "type": "string",
+            "defaultValue": "WindowsServer"
+        },
+        "vmImageSku": {
+            "type": "string",
+            "defaultValue": "2022-Datacenter"
+        },
+        "vmImageVersion": {
+            "type": "string",
+            "defaultValue": "latest"
+        },
+        "vmSize": {
+            "type": "string",
+            "defaultValue": "Standard_D2s_v3"
+        },
+        "vmInstanceCount": {
+            "type": "int",
+            "defaultValue": 6
+        },
+        "dataDiskSizeGB": {
+            "type": "int",
+            "defaultValue": 120
+        },
+        "certificateSource": {
+            "type": "string",
+            "defaultValue": "KeyVault"
+        }
+    },
+    "variables": {
+        "sfApiVersion": "2023-03-01-preview",
+        "ipPrefixName": "YourIpPrefixName",
+        "ipPrefixID": "[concat('/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/sampleRg/providers/Microsoft.Network/publicIPPrefixes/', variables('ipPrefixName'))]",
+        "ipPrefixRoleAssignmentID": "[guid(variables('ipPrefixID'), 'SFRP-Role')]"
+    },
+    "resources": [
+        {
+            "apiVersion": "[variables('sfApiVersion')]",
+            "type": "Microsoft.ServiceFabric/managedclusters",
+            "name": "[parameters('clusterName')]",
+            "location": "[parameters('clusterLocation')]",
+            "sku": {
+                "name" : "[parameters('clusterSku')]"
+            },
+            "tags": {},
+            "properties": {
+                "dnsName": "[toLower(parameters('clusterName'))]",
+                "adminUserName": "[parameters('adminUserName')]",
+                "adminPassword": "[parameters('adminPassword')]",
+                "clientConnectionPort": 19000,
+                "httpGatewayConnectionPort": 19080,
+                "zonalResiliency": false,
+                "publicIPPrefixId": "[variables('ipPrefixID')]",
+                "networkSecurityRules" : []
+            }
+        },
+        {
+            "apiVersion": "[variables('sfApiVersion')]",
+            "type": "Microsoft.ServiceFabric/managedclusters/nodetypes",
+            "name": "[concat(parameters('clusterName'), '/', 'NT1')]",
+            "location": "[resourceGroup().location]",
+            "dependsOn": [
+              "[resourceId('Microsoft.ServiceFabric/managedclusters', parameters('clusterName'))]"
+            ],
+            "properties": {
+              "isPrimary": true,
+              "vmImagePublisher": "[parameters('vmImagePublisher')]",
+              "vmImageOffer": "[parameters('vmImageOffer')]",
+              "vmImageSku": "[parameters('vmImageSku')]",
+              "vmImageVersion": "[parameters('vmImageVersion')]",
+              "vmSize": "[parameters('vmSize')]",
+              "vmInstanceCount": 5,
+              "dataDiskSizeGB": "[parameters('dataDiskSizeGB')]"
+            }
+        },
+        {
+            "type": "Microsoft.Authorization/roleAssignments",
+            "apiVersion": "2020-04-01-preview",
+            "name": "[variables('ipPrefixRoleAssignmentID')]",
+            "scope": "[concat('Microsoft.Network/publicIPPrefixes/', variables('ipPrefixName'))]",
+            "properties": {
+                "roleDefinitionId": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/4d97b98b-1d4f-4787-a291-c67834d212e7')]",
+                "principalId": "00000000-0000-0000-0000-000000000000"
+            }
+        }
+    ],
+    "outputs": {
+        "clusterProperties": {
+            "value": "[reference(parameters('clusterName'))]",
+            "type": "object"
+        }
+    }
+}
