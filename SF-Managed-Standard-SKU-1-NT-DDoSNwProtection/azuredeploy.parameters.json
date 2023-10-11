@@ -1,0 +1,45 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "clusterName": {
+      "value": "GEN-UNIQUE"
+    },
+    "clusterSku": {
+      "value": "Standard"
+    },
+    "adminUserName": {
+      "value": "GEN-UNIQUE"
+    },
+    "adminPassword": {
+      "value": "GEN-PASSWORD"
+    },
+    "nodeTypeName": {
+      "value": "NT1"
+    },
+    "vmImagePublisher": {
+      "value": "MicrosoftWindowsServer"
+    },
+    "vmImageOffer": {
+      "value": "WindowsServer"
+    },
+    "vmImageSku": {
+      "value": "2022-Datacenter"
+    },
+    "vmImageVersion": {
+      "value": "latest"
+    },
+    "vmSize": {
+      "value": "Standard_D2s_v3"
+    },
+    "vmInstanceCount": {
+      "value": 5
+    },
+    "dataDiskSizeGB": {
+      "value": 100
+    },
+    "certificateSource": {
+      "value": "KeyVault"
+    }
+  }
+}
