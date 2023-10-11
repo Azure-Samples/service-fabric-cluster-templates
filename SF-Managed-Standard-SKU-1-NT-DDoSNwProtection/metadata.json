@@ -1,0 +1,9 @@
+{
+    "$schema": "https://aka.ms/azure-quickstart-templates-metadata-schema#",
+    "type": "QuickStart",
+    "itemDisplayName": "Use Azure DDoS Protection in a Service Fabric managed cluster",
+    "description": "This template takes a minimum set of parameters and deploys a Standard SKU Service Fabric managed cluster with 1 node type and Azure DDoS Network Protection Plan",
+    "summary": "This template takes a minimum set of parameters and deploys a Standard SKU Service Fabric managed cluster with 1 node type and Azure DDoS Network Protection Plan",
+    "githubUsername": "ankurjain007",
+    "dateUpdated": "2023-09-05"
+  }
