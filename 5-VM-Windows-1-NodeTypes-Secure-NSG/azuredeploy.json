@@ -440,7 +440,7 @@
       "properties": {
         "securityRules": [
           {
-            "name": "Azure Portal",
+            "name": "AzurePortal",
             "properties": {
               "access": "Allow",
               "sourceAddressPrefix": "ServiceFabric",
@@ -456,7 +456,7 @@
             }
           },
           {
-            "name": "Client API",
+            "name": "ClientAPI",
             "properties": {
               "access": "Deny",
               "sourceAddressPrefix": "Internet",
@@ -472,7 +472,7 @@
             }
           },
           {
-            "name": "SFX + Client API",
+            "name": "SFXClientAPI",
             "properties": {
               "access": "Deny",
               "sourceAddressPrefix": "Internet",
@@ -568,7 +568,7 @@
             }
           },
           {
-            "name": "Custom Endpoint",
+            "name": "CustomEndpoint",
             "properties": {
               "access": "Deny",
               "sourceAddressPrefix": "Internet",
@@ -584,7 +584,7 @@
             }
           },
           {
-            "name": "Resource Provider",
+            "name": "ResourceProvider",
             "properties": {
               "access": "Allow",
               "sourceAddressPrefix": "*",
@@ -600,7 +600,7 @@
             }
           },
           {
-            "name": "Download Binaries",
+            "name": "DownloadBinaries",
             "properties": {
               "access": "Allow",
               "sourceAddressPrefix": "*",
