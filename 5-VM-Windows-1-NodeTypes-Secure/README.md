@@ -25,7 +25,7 @@ Go through the process of creating the cluster as described in [Creating Service
 
 ## Creating a custom ARM template
 
-If you are wanting to create a custom ARM template for your cluster, then you have two choices.
+If you want to create a custom ARM template for your cluster, you have two options.
 
 1. You can acquire this sample template make changes to it. 
 2. Log into the azure portal and use the service fabric portal pages to generate the template for you to customize.
