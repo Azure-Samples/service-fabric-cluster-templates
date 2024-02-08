@@ -1,0 +1,385 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "clusterName": {
+      "type": "string",
+      "metadata": {
+        "description": "Name of your cluster - Between 3 and 23 characters. Letters and numbers only"
+      }
+    },
+    "adminUserName": {
+      "type": "string",
+      "defaultValue": "vmadmin"
+    },
+    "adminPassword": {
+      "type": "securestring"
+    },
+    "clientCertificateCommonName": {
+      "type": "string",
+      "defaultValue": "admin.warp-test-winfabrp-southcentralus.trafficmanager.net"
+    },
+    "nodeTypeName": {
+      "type": "string",
+      "defaultValue": "SF"
+    },
+    "vmImagePublisher": {
+      "type": "string",
+      "defaultValue": "MicrosoftWindowsServer"
+    },
+    "vmImageOffer": {
+      "type": "string",
+      "defaultValue": "WindowsServer"
+    },
+    "vmImageSku": {
+      "type": "string",
+      "defaultValue": "2022-Datacenter"
+    },
+    "vmImageVersion": {
+      "type": "string",
+      "defaultValue": "latest"
+    },
+    "vmSize": {
+      "type": "string",
+      "defaultValue": "Standard_D2s_v3"
+    },
+    "vmInstanceCount": {
+      "type": "int",
+      "defaultValue": 5
+    },
+    "dataDiskSizeGB": {
+      "type": "int",
+      "defaultValue": 120
+    },
+    "nodeType2Name": {
+      "type": "string",
+      "defaultValue": "BE"
+    },
+    "nodeType2vmSize": {
+      "type": "string",
+      "defaultValue": "Standard_D2s_v3"
+    },
+    "nodeType2vmInstanceCount": {
+      "type": "int",
+      "defaultValue": 3
+    },
+    "nodeType2DataDiskSizeGB": {
+      "type": "int",
+      "defaultValue": 120
+    },
+    "enableAppGateway": {
+      "type": "bool",
+      "defaultValue": true
+    },
+    "sfrpPrincipalId": {
+      "type": "string",
+      "defaultValue": "fbc587f2-66f5-4459-a027-bcd908b9d278"
+    },
+    "clusterTestNameTag": {
+      "type": "string",
+      "defaultValue": "SfmcE2E-AppGateway",
+      "metadata": {
+        "description": "Name of test using the template"
+      }
+    }
+  },
+  "variables": {
+    "sfApiVersion": "2022-08-01-preview",
+    "networkApiVersion": "2020-08-01",
+    "clusterResourceId": "[resourceId('Microsoft.ServiceFabric/managedclusters', parameters('clusterName'))]",
+    "rgRoleAssignmentId": "[guid(resourceGroup().id, 'SFRP-NetworkContributor')]",
+    "auxSubnetName": "AppGateway",
+    "auxSubnetNsgName": "AppGatewayNsg",
+    "auxSubnetNsgID": "[resourceId('Microsoft.Network/networkSecurityGroups', variables('auxSubnetNsgName'))]",
+    "frontendIPName": "[concat(parameters('clusterName'), '-AppGW-IP')]",
+    "appGatewayName": "[concat(parameters('clusterName'), '-AppGW')]",
+    "appGatewayDnsName": "[concat(parameters('clusterName'), '-appgw')]",
+    "appGatewayResourceId": "[resourceId('Microsoft.Network/applicationGateways', variables('appGatewayName'))]",
+    "appGatewayFrontendPort": 80,
+    "appGatewayBackendPort": 8000,
+    "appGatewayBackendPool": "AppGatewayBackendPool",
+    "frontendConfigAppGateway": [
+      {
+        "applicationGatewayBackendAddressPoolId": "[resourceId('Microsoft.Network/applicationGateways/backendAddressPools', variables('appGatewayName'), variables('appGatewayBackendPool'))]"
+      }
+    ],
+    "primaryNTFrontendConfig": "[if(parameters('enableAppGateway'), variables('frontendConfigAppGateway'), createArray())]",
+    "secondaryNTFrontendConfig": "[if(parameters('enableAppGateway'), variables('frontendConfigAppGateway'), createArray())]"
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Authorization/roleAssignments",
+      "apiVersion": "2020-04-01-preview",
+      "name": "[variables('rgRoleAssignmentId')]",
+      "properties": {
+        "roleDefinitionId": "[concat('/subscriptions/', subscription().subscriptionId, '/providers/Microsoft.Authorization/roleDefinitions/4d97b98b-1d4f-4787-a291-c67834d212e7')]",
+        "principalId": "[parameters('sfrpPrincipalId')]"
+      }
+    },
+    {
+      "apiVersion": "[variables('networkApiVersion')]",
+      "type": "Microsoft.Network/publicIPAddresses",
+      "name": "[variables('frontendIPName')]",
+      "location": "[resourcegroup().location]",
+      "sku": {
+        "name": "Standard"
+      },
+      "properties": {
+        "dnsSettings": {
+          "domainNameLabel": "[variables('appGatewayDnsName')]"
+        },
+        "publicIPAllocationMethod": "Static"
+      }
+    },
+    {
+      "apiVersion": "[variables('networkApiVersion')]",
+      "type": "Microsoft.Network/applicationGateways",
+      "name": "[variables('appGatewayName')]",
+      "location": "[resourcegroup().location]",
+      "dependsOn": [
+        "[variables('clusterResourceId')]",
+        "[resourceId('Microsoft.Network/publicIPAddresses', variables('frontendIPName'))]"
+      ],
+      "properties": {
+        "sku": {
+          "name": "Standard_v2",
+          "tier": "Standard_v2",
+          "capacity": 10
+        },
+        "gatewayIPConfigurations": [
+          {
+            "name": "appGatewayIpConfig",
+            "properties": {
+              "subnet": {
+                "id": "[concat(subscription().id, '/resourcegroups/SFC_', reference(variables('clusterResourceId')).clusterId, '/providers/Microsoft.Network/virtualNetworks/VNet-', parameters('clusterName'), '/subnets/', variables('auxSubnetName'))]"
+              }
+            }
+          }
+        ],
+        "frontendIPConfigurations": [
+          {
+            "name": "appGatewayFrontendIP",
+            "properties": {
+              "PublicIPAddress": {
+                "id": "[resourceId('Microsoft.Network/publicIPAddresses', variables('frontendIPName'))]"
+              }
+            }
+          }
+        ],
+        "frontendPorts": [
+          {
+            "name": "appGatewayFrontendPort",
+            "properties": {
+              "Port": "[variables('appGatewayFrontendPort')]"
+            }
+          }
+        ],
+        "backendAddressPools": [
+          {
+            "name": "[variables('appGatewayBackendPool')]"
+          }
+        ],
+        "backendHttpSettingsCollection": [
+          {
+            "name": "appGatewayBackendHttpSettings",
+            "properties": {
+              "Port": "[variables('appGatewayBackendPort')]",
+              "Protocol": "Http",
+              "CookieBasedAffinity": "Disabled"
+            }
+          }
+        ],
+        "httpListeners": [
+          {
+            "name": "appGatewayHttpListener",
+            "properties": {
+              "FrontendIPConfiguration": {
+                "Id": "[resourceId('Microsoft.Network/applicationGateways/frontendIPConfigurations', variables('appGatewayName'), 'appGatewayFrontendIP')]"
+              },
+              "FrontendPort": {
+                "Id": "[resourceId('Microsoft.Network/applicationGateways/frontendPorts', variables('appGatewayName'), 'appGatewayFrontendPort' )]"
+              },
+              "Protocol": "Http"
+            }
+          }
+        ],
+        "requestRoutingRules": [
+          {
+            "Name": "rule1",
+            "properties": {
+              "RuleType": "Basic",
+              "httpListener": {
+                "id": "[resourceId('Microsoft.Network/applicationGateways/httpListeners', variables('appGatewayName'), 'appGatewayHttpListener')]"
+              },
+              "backendAddressPool": {
+                "id": "[resourceId('Microsoft.Network/applicationGateways/backendAddressPools/', variables('appGatewayName'), variables('appGatewayBackendPool'))]"
+              },
+              "backendHttpSettings": {
+                "id": "[resourceId('Microsoft.Network/applicationGateways/backendHttpSettingsCollection/', variables('appGatewayName'), 'appGatewayBackendHttpSettings')]"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "2020-05-01",
+      "type": "Microsoft.Network/networkSecurityGroups",
+      "name": "[variables('auxSubnetNsgName')]",
+      "location": "[resourceGroup().location]",
+      "properties": {
+        "securityRules": [
+          {
+            "name": "AppGatewayRequired",
+            "properties": {
+              "protocol": "*",
+              "sourcePortRange": "*",
+              "destinationPortRange": "65200-65535",
+              "sourceAddressPrefix": "GatewayManager",
+              "destinationAddressPrefix": "*",
+              "access": "Allow",
+              "priority": 1000,
+              "direction": "Inbound"
+            }
+          },
+          {
+            "name": "AppGatewayLoadBalancerProbe",
+            "properties": {
+              "protocol": "*",
+              "sourcePortRange": "*",
+              "destinationPortRange": "*",
+              "sourceAddressPrefix": "AzureLoadBalancer",
+              "destinationAddressPrefix": "*",
+              "access": "Allow",
+              "priority": 1001,
+              "direction": "Inbound"
+            }
+          },
+          {
+            "name": "AppPort",
+            "properties": {
+              "protocol": "Tcp",
+              "sourcePortRange": "*",
+              "destinationPortRange": "80",
+              "sourceAddressPrefix": "Internet",
+              "destinationAddressPrefix": "VirtualNetwork",
+              "access": "Allow",
+              "priority": 1010,
+              "direction": "Inbound"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "[variables('sfApiVersion')]",
+      "type": "Microsoft.ServiceFabric/managedclusters",
+      "name": "[parameters('clusterName')]",
+      "location": "[resourcegroup().location]",
+      "sku": {
+        "name": "Standard"
+      },
+      "dependsOn": [
+        "[concat('Microsoft.Network/networkSecurityGroups/', variables('auxSubnetNsgName'))]",
+        "[concat('Microsoft.Authorization/roleAssignments/', variables('rgRoleAssignmentId'))]"
+      ],
+      "tags": {
+        "SFRP.TestName": "[parameters('clusterTestNameTag')]"
+      },
+      "properties": {
+        "dnsName": "[toLower(parameters('clusterName'))]",
+        "adminUserName": "[parameters('adminUserName')]",
+        "adminPassword": "[parameters('adminPassword')]",
+        "clientConnectionPort": 19000,
+        "httpGatewayConnectionPort": 19080,
+        "enableAutoOSUpgrade": true,
+        "allowRdpAccess": true,
+        "networkSecurityRules" : [
+          {
+            "name": "AllowRDPFromCorpNet",
+            "protocol": "TCP",
+            "sourcePortRange": "*",
+            "sourceAddressPrefix": "CorpNetPublic",
+            "destinationAddressPrefix": "VirtualNetwork",
+            "destinationPortRange": "3389",
+            "access": "Allow",
+            "priority": 2000,
+            "direction": "Inbound",
+            "description": "Allow RDP access from CorpNet IP ranges."
+          },
+          {
+              "name": "sftestinfra-19000",
+              "protocol": "Tcp",
+              "sourcePortRange": "*",
+              "sourceAddressPrefix": "SFTestInfraTag",
+              "destinationAddressPrefix": "*",
+              "destinationPortRange": "19000",
+              "access": "Allow",
+              "priority": 2005,
+              "direction": "Inbound"
+          }
+        ],
+        "clients": [
+          {
+            "isAdmin": true,
+            "commonName": "[parameters('clientCertificateCommonName')]"
+          }
+        ],
+        "auxiliarySubnets": [
+          {
+            "name": "[variables('auxSubnetName')]",
+            "networkSecurityGroupId": "[variables('auxSubnetNsgID')]"
+          }
+        ]
+      }
+    },
+    {
+      "apiVersion": "[variables('sfApiVersion')]",
+      "type": "Microsoft.ServiceFabric/managedclusters/nodetypes",
+      "name": "[concat(parameters('clusterName'), '/', parameters('nodeTypeName'))]",
+      "location": "[resourceGroup().location]",
+      "dependsOn": [
+        "[variables('clusterResourceId')]",
+        "[variables('appGatewayResourceId')]"
+      ],
+      "properties": {
+        "isPrimary": true,
+        "vmImagePublisher": "[parameters('vmImagePublisher')]",
+        "vmImageOffer": "[parameters('vmImageOffer')]",
+        "vmImageSku": "[parameters('vmImageSku')]",
+        "vmImageVersion": "[parameters('vmImageVersion')]",
+        "vmSize": "[parameters('vmSize')]",
+        "vmInstanceCount": "[parameters('vmInstanceCount')]",
+        "dataDiskSizeGB": "[parameters('dataDiskSizeGB')]",
+        "frontendConfigurations": "[variables('primaryNTFrontendConfig')]"
+      }
+    },
+    {
+      "apiVersion": "[variables('sfApiVersion')]",
+      "type": "Microsoft.ServiceFabric/managedclusters/nodetypes",
+      "name": "[concat(parameters('clusterName'), '/', parameters('nodeType2Name'))]",
+      "location": "[resourceGroup().location]",
+      "dependsOn": [
+        "[variables('clusterResourceId')]",
+        "[variables('appGatewayResourceId')]"
+      ],
+      "properties": {
+        "isPrimary": false,
+        "vmImagePublisher": "[parameters('vmImagePublisher')]",
+        "vmImageOffer": "[parameters('vmImageOffer')]",
+        "vmImageSku": "[parameters('vmImageSku')]",
+        "vmImageVersion": "[parameters('vmImageVersion')]",
+        "vmSize": "[parameters('nodeType2vmSize')]",
+        "vmInstanceCount": "[parameters('nodeType2vmInstanceCount')]",
+        "dataDiskSizeGB": "[parameters('nodeType2DataDiskSizeGB')]",
+        "frontendConfigurations": "[variables('secondaryNTFrontendConfig')]"
+      }
+    }
+  ],
+  "outputs": {
+    "clusterProperties": {
+      "value": "[reference(parameters('clusterName'))]",
+      "type": "object"
+    }
+  }
+}
