@@ -481,7 +481,7 @@
                     }
                   },
                   "enableAutomaticUpgrade": true,
-                  "typeHandlerVersion": "1.1"
+                  "typeHandlerVersion": "2.0"
                 }
               },
               {
