@@ -550,7 +550,8 @@
                       "x509StoreName": "[parameters('certificateStoreValue')]"
                     }
                   },
-                  "typeHandlerVersion": "1.1"
+                  "enableAutomaticUpgrade": true,
+                  "typeHandlerVersion": "2.0"
                 }
               },
               {
@@ -864,7 +865,8 @@
                       "x509StoreName": "[parameters('certificateStoreValue')]"
                     }
                   },
-                  "typeHandlerVersion": "1.1"
+                  "enableAutomaticUpgrade": true,
+                  "typeHandlerVersion": "2.0"
                 }
               },
               {
@@ -1178,7 +1180,8 @@
                       "x509StoreName": "[parameters('certificateStoreValue')]"
                     }
                   },
-                  "typeHandlerVersion": "1.1"
+                  "enableAutomaticUpgrade": true,
+                  "typeHandlerVersion": "2.0"
                 }
               },
               {
