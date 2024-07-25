@@ -480,6 +480,7 @@
                       "x509StoreName": "[parameters('certificateStoreValue')]"
                     }
                   },
+                  "enableAutomaticUpgrade": true,
                   "typeHandlerVersion": "1.1"
                 }
               },
