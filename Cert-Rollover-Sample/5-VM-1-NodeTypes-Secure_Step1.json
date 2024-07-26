@@ -497,12 +497,11 @@
               "version": "[variables('vmImageVersion')]"
             },
             "osDisk": {
-              "vhdContainers": [
-                "[concat('http://',variables('vmStorageAccountName'),'.blob.core.windows.net/',variables('vmStorageAccountContainerName'))]"
-              ],
-              "name": "vmssosdisk",
               "caching": "ReadOnly",
-              "createOption": "FromImage"
+              "createOption": "FromImage",
+              "managedDisk": {
+                  "storageAccountType": "[parameters('storageAccountType')]"
+              }
             }
           }
         }
