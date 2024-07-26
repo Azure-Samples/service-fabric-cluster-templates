@@ -614,16 +614,11 @@
                             "version": "[parameters('vmImageVersion')]"
                         },
                         "osDisk": {
-                            "vhdContainers": [
-                                "[concat(reference(concat('Microsoft.Storage/storageAccounts/', variables('uniqueStringArray0')[0]), variables('storageApiVersion')).primaryEndpoints.blob, variables('vmStorageAccountContainerName'))]",
-                                "[concat(reference(concat('Microsoft.Storage/storageAccounts/', variables('uniqueStringArray0')[1]), variables('storageApiVersion')).primaryEndpoints.blob, variables('vmStorageAccountContainerName'))]",
-                                "[concat(reference(concat('Microsoft.Storage/storageAccounts/', variables('uniqueStringArray0')[2]), variables('storageApiVersion')).primaryEndpoints.blob, variables('vmStorageAccountContainerName'))]",
-                                "[concat(reference(concat('Microsoft.Storage/storageAccounts/', variables('uniqueStringArray0')[3]), variables('storageApiVersion')).primaryEndpoints.blob, variables('vmStorageAccountContainerName'))]",
-                                "[concat(reference(concat('Microsoft.Storage/storageAccounts/', variables('uniqueStringArray0')[4]), variables('storageApiVersion')).primaryEndpoints.blob, variables('vmStorageAccountContainerName'))]"
-                            ],
-                            "name": "vmssosdisk",
                             "caching": "ReadOnly",
-                            "createOption": "FromImage"
+                            "createOption": "FromImage",
+                            "managedDisk": {
+                                "storageAccountType": "[parameters('storageAccountType')]"
+                            }
                         }
                     }
                 }

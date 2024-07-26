@@ -558,16 +558,11 @@
                             "version": "[variables('vmImageVersion')]"
                         },
                         "osDisk": {
-                            "vhdContainers": [
-                                "[concat('https://', variables('uniqueStringArray0')[0], '.blob.core.windows.net/', variables('vmStorageAccountContainerName'))]",
-                                "[concat('https://', variables('uniqueStringArray0')[1], '.blob.core.windows.net/', variables('vmStorageAccountContainerName'))]",
-                                "[concat('https://', variables('uniqueStringArray0')[2], '.blob.core.windows.net/', variables('vmStorageAccountContainerName'))]",
-                                "[concat('https://', variables('uniqueStringArray0')[3], '.blob.core.windows.net/', variables('vmStorageAccountContainerName'))]",
-                                "[concat('https://', variables('uniqueStringArray0')[4], '.blob.core.windows.net/', variables('vmStorageAccountContainerName'))]"
-                            ],
-                            "name": "vmssosdisk",
-                            "caching": "ReadWrite",
-                            "createOption": "FromImage"
+                            "caching": "ReadOnly",
+                            "createOption": "FromImage",
+                            "managedDisk": {
+                                "storageAccountType": "[parameters('storageAccountType')]"
+                            }
                         }
                     }
                 }
