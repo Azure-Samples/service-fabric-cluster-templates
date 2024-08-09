@@ -280,7 +280,7 @@
           {
             "name": "[variables('subnet1Name')]",
             "properties": {
-                "addressPrefix": "[variables('subnet1Prefix')]",
+              "addressPrefix": "[variables('subnet1Prefix')]",
               "networkSecurityGroup": {
                 "id": "[resourceId('Microsoft.Network/networkSecurityGroups', concat('nsg', variables('subnet1Name')))]"
               }
@@ -518,15 +518,19 @@
       }
     },
     {
-      "apiVersion": "2019-12-01",
+      "apiVersion": "2020-08-01",
       "type": "Microsoft.Network/publicIPAddresses",
       "name": "[concat(variables('lbIPName'),'-',variables('vmNodeType0Name'))]",
+      "sku": {
+        "name": "Standard"
+      },
       "location": "[variables('computeLocation')]",
+      "zones": [ "1", "2", "3" ],
       "properties": {
         "dnsSettings": {
-          "domainNameLabel": "[variables('dnsName')]"
+          "domainNameLabel": "[concat(variables('dnsName'),'-','nt0')]"
         },
-        "publicIPAllocationMethod": "Dynamic"
+        "publicIPAllocationMethod": "Static"
       },
       "tags": {
         "resourceType": "Service Fabric",
@@ -537,6 +541,9 @@
       "apiVersion": "2019-12-01",
       "type": "Microsoft.Network/loadBalancers",
       "name": "[concat('LB','-', parameters('clusterName'),'-',variables('vmNodeType0Name'))]",
+      "sku": {
+        "name": "Standard"
+      },
       "location": "[variables('computeLocation')]",
       "dependsOn": [
         "[concat('Microsoft.Network/publicIPAddresses/',concat(variables('lbIPName'),'-',variables('vmNodeType0Name')))]"
@@ -682,7 +689,7 @@
               "frontendIPConfiguration": {
                 "id": "[variables('lbIPConfig0')]"
               },
-              "frontendPortRangeEnd": "3395",
+              "frontendPortRangeEnd": "3404",
               "frontendPortRangeStart": "3389",
               "protocol": "tcp"
             }
@@ -705,7 +712,7 @@
         "[concat('Microsoft.Storage/storageAccounts/', variables('supportLogStorageAccountName'))]",
         "[concat('Microsoft.Storage/storageAccounts/', variables('applicationDiagnosticsStorageAccountName'))]"
       ],
-      "zones": ["1", "2", "3"]
+      "zones": [ "1", "2", "3" ],
       "properties": {
         "overprovision": "[variables('overProvision')]",
         "upgradePolicy": {
@@ -795,28 +802,28 @@
                 }
               },
               {
-                  "name": "[concat('VMIaaSAntimalware','_vmNodeType0Name')]",
-                  "properties": {
-                      "publisher": "Microsoft.Azure.Security",
-                      "type": "IaaSAntimalware",
-                      "typeHandlerVersion": "1.5",
-                      "settings": {
-                         "AntimalwareEnabled": "true",
-                         "Exclusions": {
-                           "Paths": "D:\\SvcFab;D:\\SvcFab\\Log;C:\\Program Files\\Microsoft Service Fabric",
-                           "Processes": "Fabric.exe;FabricHost.exe;FabricInstallerService.exe;FabricSetup.exe;FabricDeployer.exe;ImageBuilder.exe;FabricGateway.exe;FabricDCA.exe;FabricFAS.exe;FabricUOS.exe;FabricRM.exe;FileStoreService.exe"
-                         },
-                         "RealtimeProtectionEnabled": "true",
-                         "ScheduledScanSettings": {
-                           "isEnabled": "true",
-                           "scanType": "Quick",
-                           "day": "7",
-                           "time": "120"
-                         }
-                      },
-                      "protectedSettings": null
-                   }
+                "name": "[concat('VMIaaSAntimalware','_vmNodeType0Name')]",
+                "properties": {
+                  "publisher": "Microsoft.Azure.Security",
+                  "type": "IaaSAntimalware",
+                  "typeHandlerVersion": "1.5",
+                  "settings": {
+                    "AntimalwareEnabled": "true",
+                    "Exclusions": {
+                      "Paths": "D:\\SvcFab;D:\\SvcFab\\Log;C:\\Program Files\\Microsoft Service Fabric",
+                      "Processes": "Fabric.exe;FabricHost.exe;FabricInstallerService.exe;FabricSetup.exe;FabricDeployer.exe;ImageBuilder.exe;FabricGateway.exe;FabricDCA.exe;FabricFAS.exe;FabricUOS.exe;FabricRM.exe;FileStoreService.exe"
+                    },
+                    "RealtimeProtectionEnabled": "true",
+                    "ScheduledScanSettings": {
+                      "isEnabled": "true",
+                      "scanType": "Quick",
+                      "day": "7",
+                      "time": "120"
+                    }
+                  },
+                  "protectedSettings": null
                 }
+              }
             ]
           },
           "networkProfile": {
@@ -902,7 +909,7 @@
         "name": "Standard"
       },
       "location": "[variables('computeLocation')]",
-      "zones": ["1","2","3"],
+      "zones": [ "1", "2", "3" ],
       "properties": {
         "dnsSettings": {
           "domainNameLabel": "[concat(variables('dnsName'),'-','nt1')]"
@@ -1089,7 +1096,7 @@
         "[concat('Microsoft.Storage/storageAccounts/', variables('supportLogStorageAccountName'))]",
         "[concat('Microsoft.Storage/storageAccounts/', variables('applicationDiagnosticsStorageAccountName'))]"
       ],
-      "zones": ["1", "2", "3"],
+      "zones": [ "1", "2", "3" ],
       "properties": {
         "overprovision": "[variables('overProvision')]",
         "upgradePolicy": {
@@ -1193,28 +1200,28 @@
                 }
               },
               {
-                  "name": "[concat('VMIaaSAntimalware','_vmNodeType1Name')]",
-                  "properties": {
-                      "publisher": "Microsoft.Azure.Security",
-                      "type": "IaaSAntimalware",
-                      "typeHandlerVersion": "1.5",
-                      "settings": {
-                         "AntimalwareEnabled": "true",
-                         "Exclusions": {
-                           "Paths": "D:\\SvcFab;D:\\SvcFab\\Log;C:\\Program Files\\Microsoft Service Fabric",
-                           "Processes": "Fabric.exe;FabricHost.exe;FabricInstallerService.exe;FabricSetup.exe;FabricDeployer.exe;ImageBuilder.exe;FabricGateway.exe;FabricDCA.exe;FabricFAS.exe;FabricUOS.exe;FabricRM.exe;FileStoreService.exe"
-                         },
-                         "RealtimeProtectionEnabled": "true",
-                         "ScheduledScanSettings": {
-                           "isEnabled": "true",
-                           "scanType": "Quick",
-                           "day": "7",
-                           "time": "120"
-                         }
-                      },
-                      "protectedSettings": null
-                   }
+                "name": "[concat('VMIaaSAntimalware','_vmNodeType1Name')]",
+                "properties": {
+                  "publisher": "Microsoft.Azure.Security",
+                  "type": "IaaSAntimalware",
+                  "typeHandlerVersion": "1.5",
+                  "settings": {
+                    "AntimalwareEnabled": "true",
+                    "Exclusions": {
+                      "Paths": "D:\\SvcFab;D:\\SvcFab\\Log;C:\\Program Files\\Microsoft Service Fabric",
+                      "Processes": "Fabric.exe;FabricHost.exe;FabricInstallerService.exe;FabricSetup.exe;FabricDeployer.exe;ImageBuilder.exe;FabricGateway.exe;FabricDCA.exe;FabricFAS.exe;FabricUOS.exe;FabricRM.exe;FileStoreService.exe"
+                    },
+                    "RealtimeProtectionEnabled": "true",
+                    "ScheduledScanSettings": {
+                      "isEnabled": "true",
+                      "scanType": "Quick",
+                      "day": "7",
+                      "time": "120"
+                    }
+                  },
+                  "protectedSettings": null
                 }
+              }
             ]
           },
           "networkProfile": {
