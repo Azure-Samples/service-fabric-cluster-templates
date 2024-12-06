@@ -6,13 +6,13 @@
       "value": "centraluseuap"
     },
     "clusterName": {
-      "value": "alsantamcuseuapsil"
+      "value": "PLACEHOLDER_NAME"
     },
     "adminUserName": {
       "value": "vmadmin"
     },
     "adminPassword": {
-      "value": "Password123!@#"
+      "value": ""
     },
     "vmImagePublisher": {
       "value": "MicrosoftWindowsServer"
