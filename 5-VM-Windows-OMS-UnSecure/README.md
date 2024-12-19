@@ -20,10 +20,10 @@ This test template allows you to deploy an unsecure 5 node cluster with OMS Log 
 
 You can go through the process of creating the cluster as described in [Creating Service Fabric Cluster via ARM](https://docs.microsoft.com/azure/service-fabric/service-fabric-cluster-creation-via-arm)
 
-You can also use the `New-AzureRmResourceGroupDeployment` Powershell command if you have the Azure PowerShell prerequisites in the link above. 
+You can also use the `New-AzResourceGroupDeployment` Powershell command if you have the Azure PowerShell prerequisites in the link above. 
 
 ```Powershell
-New-AzureRmResourceGroupDeployment -ResourceGroupName "<resourceGroupName>" -TemplateFile "<templatefile>.json"
+New-AzResourceGroupDeployment -ResourceGroupName "<resourceGroupName>" -TemplateFile "<templatefile>.json"
 ```
 
 ## Creating a custom ARM template
