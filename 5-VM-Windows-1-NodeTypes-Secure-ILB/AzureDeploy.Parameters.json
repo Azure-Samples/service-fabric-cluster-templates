@@ -1,0 +1,60 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "addressPrefix": {
+            "value": "10.0.0.0/16"
+        },
+        "adminPassword": {
+            "value": "GEN-PASSWORD"
+        },
+        "adminUserName": {
+            "value": "GEN-UNIQUE"
+        },
+        "certificateThumbprint": {
+            "value": "GEN-CUSTOM-DOMAIN-SSLCERT-THUMBPRINT"
+        },
+        "certificateUrlValue": {
+            "value": "GEN-KEYVAULT-SSL-SECRET-URI"
+        },
+        "clusterName": {
+            "value": "GEN-UNIQUE"
+        },
+        "nicName": {
+            "value": "NIC"
+        },
+        "nt0InstanceCount": {
+            "value": 5
+        },
+        "privateIpAddress": {
+            "value": "10.0.0.250"
+        },
+        "privateIPAddressType": {
+            "value": "Static"
+        },
+        "sourceVaultValue": {
+            "value": "GEN-KEYVAULT-RESOURCE-ID"
+        },
+        "subnet0Name": {
+            "value": "Subnet-0"
+        },
+        "subnet0Prefix": {
+            "value": "10.0.0.0/24"
+        },
+        "virtualNetworkName": {
+            "value": "VNet"
+        },
+        "vmImageSku": {
+            "value": "2022-Datacenter"
+        },
+        "vmImageVersion": {
+            "value": "latest"
+        },
+        "vmNodeType0Name": {
+            "value": "nt0"
+        },
+        "vmNodeType0Size": {
+            "value": "Standard_D2_v2"
+        }
+    }
+}
