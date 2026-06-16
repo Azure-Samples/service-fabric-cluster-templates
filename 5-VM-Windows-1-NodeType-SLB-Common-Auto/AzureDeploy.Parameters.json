@@ -1,0 +1,62 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "addressPrefix": {
+            "value": "10.0.0.0/16"
+        },
+        "adminPassword": {
+            "value": "GEN-PASSWORD"
+        },
+        "adminUsername": {
+            "value": "GEN-UNIQUE"
+        },
+        "certificateCommonName": {
+            "value": null
+        },
+        "certificateIssuerThumbprint": {
+            "value": null
+        },
+        "certificateUrls": {
+            "value": [
+                "GEN-KEYVAULT-SECRET-URL"
+            ],
+            "metadata": {
+                "description": "Array of URL certificates in Key Vault: [\"https://vaultname.vault.azure.net/secrets/cert1\",\"https://vaultname.vault.azure.net/secrets/cert2\"]"
+            }
+        },
+        "clusterName": {
+            "value": "GEN-UNIQUE"
+        },
+        "dnsName": {
+            "value": "GEN-UNIQUE"
+        },
+        "enableAutomaticOSUpgrade": {
+            "value": true
+        },
+        "keyVaultResourceId": {
+            "value": "GEN-KEYVAULT-RESOURCE-ID"
+        },
+        "nt0InstanceCount": {
+            "value": 5
+        },
+        "subnet0Name": {
+            "value": "Subnet-0"
+        },
+        "subnet0Prefix": {
+            "value": "10.0.0.0/24"
+        },
+        "virtualNetworkName": {
+            "value": "VNet"
+        },
+        "vmImageSku": {
+            "value": "2022-Datacenter"
+        },
+        "vmNodeType0Name": {
+            "value": "nodetype0"
+        },
+        "vmNodeType0Size": {
+            "value": "Standard_DS4_v2"
+        }
+    }
+}

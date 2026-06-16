@@ -7,7 +7,7 @@
 #$keyvaultRG="mykevaultrg"
 #$KeyVaultName="mykevaultname"
 #New-AzResourceGroup -Name $KeyvaultRG -Location WestUS
-#New-AzKeyVault -VaultName $KeyVaultName -ResourceGroupName $KeyvaultRG -Location WestUS -EnabledForDeployment -EnabledForTemplateDeployment -EnabledForTemplateDeployment
+#New-AzKeyVault -VaultName $KeyVaultName -ResourceGroupName $KeyvaultRG -Location WestUS -EnabledForDeployment -EnabledForTemplateDeployment
 #
 # Once the certificate is created and stored in the vault, the script will provide the parameter values needed for template deployment
 # 
