@@ -1,11 +1,7 @@
 # 7 Node, 3 nodetype secure ubuntu Service Fabric Cluster with Azure Diagnostics enabled
 
-<a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAzure-Samples%2Fservice-fabric-cluster-templates%2Fmaster%2F7-VM-Ubuntu-3-NodeTypes-Secure%2FAzureDeploy.json" target="_blank">
-    <img src="http://azuredeploy.net/deploybutton.png"/>
-</a>
-<a href="http://armviz.io/#/?load=https%3A%2F%2Fraw.githubusercontent.com%2FAzure-Samples%2Fservice-fabric-cluster-templates%2Fmaster%2F7-VM-Ubuntu-3-NodeTypes-Secure%2FAzureDeploy.json" target="_blank">
-    <img src="http://armviz.io/visualizebutton.png"/>
-</a>
+[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAzure-Samples%2Fservice-fabric-cluster-templates%2Fmaster%2F7-VM-Ubuntu-3-NodeTypes-Secure%2FAzureDeploy.json)
+[![Visualize](http://armviz.io/visualizebutton.png)](http://armviz.io/#/?load=https%3A%2F%2Fraw.githubusercontent.com%2FAzure-Samples%2Fservice-fabric-cluster-templates%2Fmaster%2F7-VM-Ubuntu-3-NodeTypes-Secure%2FAzureDeploy.json)
 
 This template allows you to deploy a secure 7 Node,three node type Service Fabric Cluster running Ubuntu Server on a Standard_D2_v2 SKU size on Azure Virtual Machine Scale Set with Azure Diagnostics turned on. 
 

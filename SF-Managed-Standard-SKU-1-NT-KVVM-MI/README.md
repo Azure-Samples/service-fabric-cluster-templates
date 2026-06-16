@@ -1,11 +1,7 @@
 # Standard SKU Service Fabric managed cluster, 1 node type with Key Vault virtual machine extension (KVVM) enabled
 
-<a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAzure-Samples%2Fservice-fabric-cluster-templates%2Fmaster%2FSF-Managed-Standard-SKU-1-NT-KVVM-MI%2Fazuredeploy.json" target="_blank">
-    <img src="http://azuredeploy.net/deploybutton.png"/>
-</a>
-<a href="http://armviz.io/#/?load=https%3A%2F%2Fraw.githubusercontent.com%2FAzure-Samples%2Fservice-fabric-cluster-templates%2Fmaster%2FSF-Managed-Standard-SKU-1-NT-KVVM-MI%2Fazuredeploy.json" target="_blank">
-    <img src="http://armviz.io/visualizebutton.png"/>
-</a>
+[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FAzure-Samples%2Fservice-fabric-cluster-templates%2Fmaster%2FSF-Managed-Standard-SKU-1-NT-KVVM-MI%2Fazuredeploy.json)
+[![Visualize](http://armviz.io/visualizebutton.png)](http://armviz.io/#/?load=https%3A%2F%2Fraw.githubusercontent.com%2FAzure-Samples%2Fservice-fabric-cluster-templates%2Fmaster%2FSF-Managed-Standard-SKU-1-NT-KVVM-MI%2Fazuredeploy.json)
 
 This template allows you to deploy a Service Fabric managed cluster using the *Standard* SKU. This cluster contains a single node type running *Windows Server 2022 Datacenter* on a *Standard_D2s_v3* size virtual machine scale set with [Key Vault virtual machine extension](https://docs.microsoft.com/azure/virtual-machines/extensions/key-vault-windows) enabled. KVVM extension provides certificate provisioning and management for certificates in Azure key vault. To provision entirely in ARM only 'User assigned managed identity' is supported in ARM templates for managed clusters. System assigned identity can be used but must be provisioned outside of ARM template deployment. See [../SF-Managed-Standard-SKU-1-NT-KVVM/README.md](../SF-Managed-Standard-SKU-1-NT-KVVM/README.md) to use KVVM with 'System assigned managed identity'. This template will provision a user assigned managed identity in addition to the KVVM extension. If providing a value for parameter 'keyVaultResourceId' the new user assigned identity will be added to the specified key vault resource id with configured permissions. See [Resources](#resources) for additional information.
 
