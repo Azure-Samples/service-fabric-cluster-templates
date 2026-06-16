@@ -1,0 +1,61 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "certificateUrls": {
+            "value": [
+            ],
+            "metadata": {
+                "description": "List of client / application certificate URLs to be used in the cluster. The list should contain the URLs of the certificates in the format: https://<keyvault name>.vault.azure.net/secrets/<secret name>"
+            }
+        },
+        "clusterName": {
+            "value": "GEN-UNIQUE"
+        },
+        "adminUsername": {
+            "value": "GEN-UNIQUE"
+        },
+        "adminPassword": {
+            "value": "GEN-PASSWORD"
+        },
+        "clientCertificateThumbprint": {
+            "value": "GEN-SF-CERT-THUMBPRINT"
+        },
+        "keyVaultResourceId": {
+            "value": "GEN-UNIQUE",
+            "metadata": {
+                "description": "Key Vault resource ID. /subscriptions/<subscriptionId>/resourceGroups/<resourceGroupName>/providers/Microsoft.KeyVault/vaults/<vaultName>"
+            }
+        },
+        "nodeType1Name": {
+            "value": "NT1"
+        },
+        "nodeType1VmSize": {
+            "value": "Standard_D2s_v3"
+        },
+        "nodeType1VmInstanceCount": {
+            "value": 5
+        },
+        "nodeType1DataDiskSizeGB": {
+            "value": 256
+        },
+        "nodeType1managedDataDiskType": {
+            "value": "StandardSSD_LRS"
+        },
+        "nodeType1vmImageSku": {
+            "value": "2022-Datacenter"
+        },
+        "sfrpProviderGuid": {
+            "value": "GEN-UNIQUE",
+            "metadata": {
+                "description": "subscription specific. ps Get-AzADServicePrincipal -DisplayName 'Azure Service Fabric Resource Provider'"
+            }
+        },
+        "subnetId": {
+            "value": "",
+            "metadata": {
+                "description": "optional: leave empty unless using an existing vnet. example: /subscriptions/<subscription id>/resourceGroups/<resource group name>/providers/Microsoft.Network/virtualNetworks/<vnet name>/subnets/<subnet name>"
+            }
+        }
+    }
+}

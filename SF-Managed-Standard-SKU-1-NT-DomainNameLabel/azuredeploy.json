@@ -1,0 +1,256 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "clusterName": {
+            "type": "string",
+            "minLength": 4,
+            "maxLength": 23,
+            "metadata": {
+                "description": "Name of your cluster - Between 3 and 23 characters. Letters and numbers only"
+            }
+        },
+        "clusterSku": {
+            "type": "string",
+            "allowedValues": [
+                "Basic",
+                "Standard"
+            ],
+            "defaultValue": "Standard"
+        },
+        "adminUsername": {
+            "type": "string",
+            "defaultValue": "vmadmin"
+        },
+        "adminPassword": {
+            "type": "securestring"
+        },
+        "clientCertificateThumbprint": {
+            "type": "string"
+        },
+        "managedIdentityAssignmentName": {
+            "type": "string",
+            "defaultValue": "[guid(resourceGroup().name)]"
+        },
+        "nodeType1Name": {
+            "type": "string",
+            "maxLength": 9,
+            "defaultValue": "NT1"
+        },
+        "nodeType1VmSize": {
+            "type": "string",
+            "defaultValue": "Standard_D2s_v3"
+        },
+        "nodeType1VmInstanceCount": {
+            "type": "int",
+            "defaultValue": 5
+        },
+        "nodeType1DataDiskSizeGB": {
+            "type": "int",
+            "defaultValue": 256
+        },
+        "nodeType1managedDataDiskType": {
+            "type": "string",
+            "allowedValues": [
+                "Standard_LRS",
+                "StandardSSD_LRS",
+                "Premium_LRS"
+            ],
+            "defaultValue": "StandardSSD_LRS"
+        },
+        "nodeType1vmImagePublisher": {
+            "type": "string",
+            "defaultValue": "MicrosoftWindowsServer"
+        },
+        "nodeType1vmImageOffer": {
+            "type": "string",
+            "defaultValue": "WindowsServer"
+        },
+        "nodeType1vmImageSku": {
+            "type": "string",
+            "defaultValue": "2022-Datacenter"
+        },
+        "nodeType1vmImageVersion": {
+            "type": "string",
+            "defaultValue": "latest"
+        },
+        "sfrpProviderGuid": {
+            "type": "string",
+            "metadata": {
+                "description": "subscription specific. ps Get-AzADServicePrincipal -DisplayName 'Azure Service Fabric Resource Provider'"
+            }
+        },
+        "subnetId": {
+            "type": "string",
+            "defaultValue": "",
+            "metadata": {
+                "description": "optional: leave empty unless using an existing vnet. example: /subscriptions/<subscription id>/resourceGroups/<resource group name>/providers/Microsoft.Network/virtualNetworks/<vnet name>/subnets/<subnet name>"
+            }
+        }
+    },
+    "variables": {
+        "updateSubnet": "[greater(length(parameters('subnetId')), 0)]",
+        "sfApiVersion": "2024-09-01-preview",
+        "subnetRgIndexStart": "[if(variables('updateSubnet'), add(indexOf(parameters('subnetId'),'/resourceGroups/'), 16), 0)]",
+        "subnetRgIndexEnd": "[if(variables('updateSubnet'), indexOf(parameters('subnetId'),'/providers/'), 0)]",
+        "subnetResourceGroup": "[substring(parameters('subnetId'), variables('subnetRgIndexStart'), sub(variables('subnetRgIndexEnd'), variables('subnetRgIndexStart')))]"
+    },
+    "resources": [
+        {
+            "condition": "[equals(variables('updateSubnet'), bool('true'))]",
+            "apiVersion": "2024-11-01",
+            "name": "subnetNestedTemplate",
+            "type": "Microsoft.Resources/deployments",
+            "resourceGroup": "[variables('subnetResourceGroup')]",
+            "dependsOn": [
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "debugSetting": {
+                    "detailLevel": "requestContent,responseContent"
+                },
+                "expressionEvaluationOptions": {
+                    "scope": "Inner"
+                },
+                "template": {
+                    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+                    "contentVersion": "1.0.0.0",
+                    "parameters": {
+                        "sfrpProviderGuid": {
+                            "type": "string"
+                        },
+                        "subnetId": {
+                            "type": "string"
+                        }
+                    },
+                    "variables": {
+                        "networkContributorId": "[resourceId('Microsoft.Authorization/roleDefinitions', '4d97b98b-1d4f-4787-a291-c67834d212e7')]", // network contributor
+                        "networkContributorAssignmentName": "[guid(concat(variables('networkContributorId'), resourceGroup().name))]"
+                    },
+                    "resources": [
+                        {
+                            "type": "Microsoft.Authorization/roleAssignments",
+                            "apiVersion": "2022-04-01",
+                            "name": "[variables('networkContributorAssignmentName')]",
+                            "scope": "[parameters('subnetId')]",
+                            "dependsOn": [],
+                            "properties": {
+                                "roleDefinitionId": "[variables('networkContributorId')]",
+                                "principalId": "[parameters('sfrpProviderGuid')]"
+                            }
+                        }
+                    ]
+                },
+                "parameters": {
+                    "sfrpProviderGuid": {
+                        "value": "[parameters('sfrpProviderGuid')]"
+                    },
+                    "subnetId": {
+                        "value": "[parameters('subnetId')]"
+                    }
+                }
+            }
+        },
+        {
+            "apiVersion": "[variables('sfApiVersion')]",
+            "type": "Microsoft.ServiceFabric/managedclusters",
+            "name": "[parameters('clusterName')]",
+            "location": "[resourcegroup().location]",
+            "dependsOn": [
+                "subnetNestedTemplate"
+            ],
+            "sku": {
+                "name": "[parameters('clusterSku')]"
+            },
+            "properties": {
+                "autoGeneratedDomainNameLabelScope": "ResourceGroupReuse",
+                "subnetId": "[if(variables('updateSubnet'), parameters('subnetId'),json('null'))]",
+                // "useCustomVnet": "[if(variables('updateSubnet'), bool('true'), bool('false'))]",
+                "dnsName": "[toLower(parameters('clusterName'))]",
+                "adminUsername": "[parameters('adminUsername')]",
+                "adminPassword": "[parameters('adminPassword')]",
+                "clientConnectionPort": 19000,
+                "httpGatewayConnectionPort": 19080,
+                "allowRdpAccess": false,
+                "enableAutoOSUpgrade": true,
+                "enableIpv6": false,
+                "addonFeatures": [
+                    "DnsService"
+                ],
+                "clients": [
+                    {
+                        "isAdmin": true,
+                        "thumbprint": "[parameters('clientCertificateThumbprint')]"
+                    }
+                ],
+                "loadBalancingRules": [
+                    {
+                        "frontendPort": 443,
+                        "backendPort": 443,
+                        "protocol": "tcp",
+                        "probeProtocol": "tcp"
+                    },
+                    {
+                        "frontendPort": 8080,
+                        "backendPort": 8080,
+                        "protocol": "tcp",
+                        "probeProtocol": "tcp"
+                    }
+                ]
+            },
+            "tags": {
+                "resourceType": "Service Fabric",
+                "clusterName": "[parameters('clusterName')]"
+            }
+        },
+        {
+            "apiVersion": "[variables('sfApiVersion')]",
+            "type": "Microsoft.ServiceFabric/managedclusters/nodetypes",
+            "name": "[concat(parameters('clusterName'), '/', parameters('nodeType1Name'))]",
+            "location": "[resourcegroup().location]",
+            "dependsOn": [
+                "[concat('Microsoft.ServiceFabric/managedclusters/', parameters('clusterName'))]"
+            ],
+            "properties": {
+                "isPrimary": true,
+                // "subnetId": "[if(variables('updateSubnet'), parameters('subnetId'),json('null'))]",
+                "vmImagePublisher": "[parameters('nodeType1vmImagePublisher')]",
+                "vmImageOffer": "[parameters('nodeType1vmImageOffer')]",
+                "vmImageSku": "[parameters('nodeType1vmImageSku')]",
+                "vmImageVersion": "[parameters('nodeType1vmImageVersion')]",
+                "vmSize": "[parameters('nodeType1VmSize')]",
+                "vmInstanceCount": "[parameters('nodeType1VmInstanceCount')]",
+                "dataDiskSizeGB": "[parameters('nodeType1DataDiskSizeGB')]",
+                "dataDiskType": "[parameters('nodeType1managedDataDiskType')]",
+                "applicationPorts": {
+                    "startPort": 20000,
+                    "endPort": 30000
+                },
+                "ephemeralPorts": {
+                    "startPort": 49152,
+                    "endPort": 65534
+                },
+                "vmExtensions": [
+                ],
+                "vmManagedIdentity": {
+                    "userAssignedIdentities": [
+                    ]
+                }
+            }
+        }
+    ],
+    "outputs": {
+        "serviceFabricExplorer": {
+            "value": "[concat('https://', reference(parameters('clusterName')).fqdn, ':', reference(parameters('clusterName')).httpGatewayConnectionPort)]",
+            "type": "string"
+        },
+        "clientConnectionEndpoint": {
+            "value": "[concat(reference(parameters('clusterName')).fqdn, ':', reference(parameters('clusterName')).clientConnectionPort)]",
+            "type": "string"
+        },
+        "clusterProperties": {
+            "value": "[reference(parameters('clusterName'))]",
+            "type": "object"
+        }
+    }
+}
