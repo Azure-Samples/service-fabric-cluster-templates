@@ -547,6 +547,7 @@
                 "properties": {
                   "type": "ServiceFabricNode",
                   "autoUpgradeMinorVersion": true,
+                  "enableAutomaticUpgrade": true,
                   "protectedSettings": {
                     "StorageAccountKey1": "[listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('diagnosticsStorageAccountName')),'2015-05-01-preview').key1]",
                     "StorageAccountKey2": "[listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('diagnosticsStorageAccountName')),'2015-05-01-preview').key2]"
@@ -725,6 +726,7 @@
                 "properties": {
                   "type": "ServiceFabricNode",
                   "autoUpgradeMinorVersion": true,
+                  "enableAutomaticUpgrade": true,
                   "protectedSettings": {
                     "StorageAccountKey1": "[listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('diagnosticsStorageAccountName')),'2015-05-01-preview').key1]",
                     "StorageAccountKey2": "[listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('diagnosticsStorageAccountName')),'2015-05-01-preview').key2]"
@@ -903,6 +905,7 @@
                 "properties": {
                   "type": "ServiceFabricNode",
                   "autoUpgradeMinorVersion": true,
+                  "enableAutomaticUpgrade": true,
                   "protectedSettings": {
                     "StorageAccountKey1": "[listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('diagnosticsStorageAccountName')),'2015-05-01-preview').key1]",
                     "StorageAccountKey2": "[listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('diagnosticsStorageAccountName')),'2015-05-01-preview').key2]"
